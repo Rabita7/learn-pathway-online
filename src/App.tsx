@@ -24,6 +24,7 @@ import Register from "@/pages/auth/Register";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import TeacherDashboard from "@/pages/teacher/TeacherDashboard";
 import StudentDashboard from "@/pages/student/StudentDashboard";
+import ViewGrades from "@/pages/student/ViewGrades";
 import ParentDashboard from "@/pages/parent/ParentDashboard";
 
 const queryClient = new QueryClient();
@@ -68,7 +69,7 @@ const App = () => (
               
               {/* Student routes */}
               <Route path="/student" element={<StudentDashboard />} />
-              <Route path="/student/view-grades" element={<div>View Grades Page</div>} />
+              <Route path="/student/view-grades" element={<ViewGrades />} />
               <Route path="/student/view-attendance" element={<div>View Attendance Page</div>} />
               <Route path="/student/class-schedule" element={<div>Class Schedule Page</div>} />
               <Route path="/student/assignments" element={<div>Assignments Page</div>} />
