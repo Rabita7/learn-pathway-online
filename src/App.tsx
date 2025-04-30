@@ -20,8 +20,16 @@ import NotFound from "@/pages/NotFound";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 
-// Role-specific Dashboards
+// Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
+import ManageStudents from "@/pages/admin/ManageStudents";
+import ManageTeachers from "@/pages/admin/ManageTeachers";
+import ManageParents from "@/pages/admin/ManageParents";
+import ManageClasses from "@/pages/admin/ManageClasses";
+import ViewReports from "@/pages/admin/ViewReports";
+import PostAnnouncement from "@/pages/admin/PostAnnouncement";
+
+// Role-specific Dashboards
 import TeacherDashboard from "@/pages/teacher/TeacherDashboard";
 import StudentDashboard from "@/pages/student/StudentDashboard";
 import ViewGrades from "@/pages/student/ViewGrades";
@@ -52,12 +60,12 @@ const App = () => (
             <Route element={<DashboardLayout />}>
               {/* Admin routes */}
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/manage-students" element={<div>Manage Students Page</div>} />
-              <Route path="/admin/manage-teachers" element={<div>Manage Teachers Page</div>} />
-              <Route path="/admin/manage-parents" element={<div>Manage Parents Page</div>} />
-              <Route path="/admin/manage-classes" element={<div>Manage Classes Page</div>} />
-              <Route path="/admin/view-reports" element={<div>View Reports Page</div>} />
-              <Route path="/admin/post-announcement" element={<div>Post Announcement Page</div>} />
+              <Route path="/admin/manage-students" element={<ManageStudents />} />
+              <Route path="/admin/manage-teachers" element={<ManageTeachers />} />
+              <Route path="/admin/manage-parents" element={<ManageParents />} />
+              <Route path="/admin/manage-classes" element={<ManageClasses />} />
+              <Route path="/admin/view-reports" element={<ViewReports />} />
+              <Route path="/admin/post-announcement" element={<PostAnnouncement />} />
               
               {/* Teacher routes */}
               <Route path="/teacher" element={<TeacherDashboard />} />
