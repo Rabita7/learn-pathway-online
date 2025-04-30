@@ -26,6 +26,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+// Define allowed audience types explicitly to exclude 'guest'
+type AnnouncementAudience = 'all' | 'admin' | 'teacher' | 'student' | 'parent';
+
 // Form schema for announcement creation
 const formSchema = z.object({
   title: z.string().min(5, {
@@ -129,7 +132,7 @@ const PostAnnouncement = () => {
                           type="button"
                           variant={field.value === value ? "default" : "outline"}
                           className="capitalize"
-                          onClick={() => form.setValue("audience", value as "all" | UserRole)}
+                          onClick={() => form.setValue("audience", value as AnnouncementAudience)}
                         >
                           {value}
                         </Button>
