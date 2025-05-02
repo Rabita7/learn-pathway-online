@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
@@ -104,6 +103,21 @@ const schoolImages = [
 ];
 
 const ImageCarousel = () => {
+  const [api, setApi] = useState<any>(null);
+  
+  // Setup autoplay functionality using useEffect
+  useEffect(() => {
+    if (!api) return;
+    
+    // Set an interval for autoplay
+    const autoplayInterval = setInterval(() => {
+      api.scrollNext();
+    }, 5000);
+    
+    // Clear interval on component unmount
+    return () => clearInterval(autoplayInterval);
+  }, [api]);
+
   return (
     <div className="w-full py-12 bg-white">
       <div className="container mx-auto px-4">
@@ -111,7 +125,11 @@ const ImageCarousel = () => {
           Our School Life
         </h2>
         <div className="relative mx-auto max-w-5xl">
-          <Carousel className="w-full" opts={{ loop: true, align: "start" }} autoplay={true}>
+          <Carousel 
+            className="w-full" 
+            opts={{ loop: true, align: "start" }}
+            setApi={setApi}
+          >
             <CarouselContent>
               {schoolImages.map((image, index) => (
                 <CarouselItem key={index} className="md:basis-full">
