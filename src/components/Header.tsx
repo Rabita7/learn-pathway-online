@@ -15,7 +15,6 @@ import { UserRole } from '@/types';
 import { 
   LogOut, 
   User, 
-  BookOpen, 
   Users, 
   Home,
   Bell,
@@ -40,15 +39,18 @@ const Header = () => {
     <header className="border-b border-gray-200 bg-white sticky top-0 z-30">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
-          <BookOpen className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold">HighSchool Portal</span>
+          <img 
+            src="/lovable-uploads/33647297-d0f6-4d63-a45d-d86289d50d70.png" 
+            alt="Bright Future School" 
+            className="h-12" 
+          />
         </Link>
         
         <nav className="hidden md:flex items-center space-x-4">
-          <Link to="/" className="text-gray-600 hover:text-primary transition-colors">Home</Link>
-          <Link to="/services" className="text-gray-600 hover:text-primary transition-colors">Services</Link>
-          <Link to="/about" className="text-gray-600 hover:text-primary transition-colors">About</Link>
-          <Link to="/contact" className="text-gray-600 hover:text-primary transition-colors">Contact</Link>
+          <Link to="/" className="text-gray-600 hover:text-[#00a7b0] transition-colors">Home</Link>
+          <Link to="/services" className="text-gray-600 hover:text-[#00a7b0] transition-colors">Services</Link>
+          <Link to="/about" className="text-gray-600 hover:text-[#00a7b0] transition-colors">About</Link>
+          <Link to="/contact" className="text-gray-600 hover:text-[#00a7b0] transition-colors">Contact</Link>
         </nav>
         
         <div className="flex items-center space-x-4">
@@ -111,10 +113,10 @@ const Header = () => {
             </>
           ) : (
             <div className="flex space-x-2">
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" asChild className="hover:text-[#00a7b0]">
                 <Link to="/auth/login">Login</Link>
               </Button>
-              <Button asChild>
+              <Button asChild className="bg-[#00a7b0] hover:bg-[#008a92]">
                 <Link to="/auth/register">Register</Link>
               </Button>
             </div>
