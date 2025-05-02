@@ -9,14 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import * as z from "zod";
+import { AnnouncementFormValues } from './announcementSchema';
 
 interface TitleFieldProps {
-  form: UseFormReturn<{
-    title: string;
-    content: string;
-    audience: "all" | "admin" | "teacher" | "student" | "parent";
-  }>;
+  form: UseFormReturn<AnnouncementFormValues>;
 }
 
 export const TitleField: React.FC<TitleFieldProps> = ({ form }) => {

@@ -9,16 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
-import * as z from "zod";
-
-type AnnouncementAudience = 'all' | 'admin' | 'teacher' | 'student' | 'parent';
+import { AnnouncementAudience, AnnouncementFormValues } from './announcementSchema';
 
 interface AudienceFieldProps {
-  form: UseFormReturn<{
-    title: string;
-    content: string;
-    audience: AnnouncementAudience;
-  }>;
+  form: UseFormReturn<AnnouncementFormValues>;
 }
 
 export const AudienceField: React.FC<AudienceFieldProps> = ({ form }) => {
@@ -38,7 +32,7 @@ export const AudienceField: React.FC<AudienceFieldProps> = ({ form }) => {
                 type="button"
                 variant={field.value === value ? "default" : "outline"}
                 className="capitalize"
-                onClick={() => form.setValue("audience", value as AnnouncementAudience)}
+                onClick={() => form.setValue("audience", value)}
               >
                 {value}
               </Button>

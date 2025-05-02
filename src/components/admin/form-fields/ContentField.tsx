@@ -9,14 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
-import * as z from "zod";
+import { AnnouncementFormValues } from './announcementSchema';
 
 interface ContentFieldProps {
-  form: UseFormReturn<{
-    title: string;
-    content: string;
-    audience: "all" | "admin" | "teacher" | "student" | "parent";
-  }>;
+  form: UseFormReturn<AnnouncementFormValues>;
 }
 
 export const ContentField: React.FC<ContentFieldProps> = ({ form }) => {
