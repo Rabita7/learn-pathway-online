@@ -20,6 +20,7 @@ import Services from "@/pages/Services";
 // Auth Pages
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
+import ManagerRegister from "@/pages/auth/ManagerRegister";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -29,6 +30,10 @@ import ManageParents from "@/pages/admin/ManageParents";
 import ManageClasses from "@/pages/admin/ManageClasses";
 import ViewReports from "@/pages/admin/ViewReports";
 import PostAnnouncement from "@/pages/admin/PostAnnouncement";
+
+// Manager Pages
+import ManagerDashboard from "@/pages/manager/ManagerDashboard";
+import ManageStaff from "@/pages/manager/ManageStaff";
 
 // Role-specific Dashboards
 import TeacherDashboard from "@/pages/teacher/TeacherDashboard";
@@ -56,6 +61,7 @@ const App = () => (
               {/* Authentication routes */}
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
+              <Route path="/auth/manager-register" element={<ManagerRegister />} />
             </Route>
             
             {/* Dashboard routes */}
@@ -68,6 +74,13 @@ const App = () => (
               <Route path="/admin/manage-classes" element={<ManageClasses />} />
               <Route path="/admin/view-reports" element={<ViewReports />} />
               <Route path="/admin/post-announcement" element={<PostAnnouncement />} />
+              
+              {/* Manager routes */}
+              <Route path="/manager" element={<ManagerDashboard />} />
+              <Route path="/manager/manage-staff" element={<ManageStaff />} />
+              <Route path="/manager/view-reports" element={<div>Manager Reports Page</div>} />
+              <Route path="/manager/budget" element={<div>Budget Management Page</div>} />
+              <Route path="/manager/announcements" element={<div>Manager Announcements Page</div>} />
               
               {/* Teacher routes */}
               <Route path="/teacher" element={<TeacherDashboard />} />

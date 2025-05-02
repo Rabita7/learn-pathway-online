@@ -50,6 +50,13 @@ const mockUsers: User[] = [
     role: 'parent',
     avatarUrl: '/assets/avatars/parent.jpg',
   },
+  {
+    id: '5',
+    name: 'Manager Wilson',
+    email: 'manager@school.edu',
+    role: 'manager',
+    avatarUrl: '/assets/avatars/manager.jpg',
+  },
 ];
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

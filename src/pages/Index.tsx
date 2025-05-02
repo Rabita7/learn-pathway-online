@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -76,6 +77,14 @@ const userRoles = [
     bgColor: 'bg-parent bg-opacity-10',
     textColor: 'text-parent',
     link: '/auth/login'
+  },
+  {
+    icon: <Briefcase className="w-8 h-8 text-purple-600" />,
+    title: 'Managers',
+    description: 'Oversee staff, resources, and school operations efficiently.',
+    bgColor: 'bg-purple-100',
+    textColor: 'text-purple-600',
+    link: '/auth/manager-register'
   }
 ];
 
@@ -228,7 +237,7 @@ const UserRolesSection = () => {
         <h2 className="text-3xl font-bold text-center mb-12">
           Designed for Everyone
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {userRoles.map((role, index) => (
             <div 
               key={index} 
