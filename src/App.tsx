@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -35,8 +34,15 @@ import PostAnnouncement from "@/pages/admin/PostAnnouncement";
 import ManagerDashboard from "@/pages/manager/ManagerDashboard";
 import ManageStaff from "@/pages/manager/ManageStaff";
 
-// Role-specific Dashboards
+// Teacher Pages
 import TeacherDashboard from "@/pages/teacher/TeacherDashboard";
+import ViewStudents from "@/pages/teacher/ViewStudents";
+import ManageGrades from "@/pages/teacher/ManageGrades";
+import ManageAttendance from "@/pages/teacher/ManageAttendance";
+import PostAssignment from "@/pages/teacher/PostAssignment";
+import Announcements from "@/pages/teacher/Announcements";
+
+// Role-specific Dashboards
 import StudentDashboard from "@/pages/student/StudentDashboard";
 import ViewGrades from "@/pages/student/ViewGrades";
 import ParentDashboard from "@/pages/parent/ParentDashboard";
@@ -84,11 +90,11 @@ const App = () => (
               
               {/* Teacher routes */}
               <Route path="/teacher" element={<TeacherDashboard />} />
-              <Route path="/teacher/view-students" element={<div>View Students Page</div>} />
-              <Route path="/teacher/manage-grades" element={<div>Manage Grades Page</div>} />
-              <Route path="/teacher/manage-attendance" element={<div>Manage Attendance Page</div>} />
-              <Route path="/teacher/post-assignment" element={<div>Post Assignment Page</div>} />
-              <Route path="/teacher/announcements" element={<div>Teacher Announcements Page</div>} />
+              <Route path="/teacher/view-students" element={<ViewStudents />} />
+              <Route path="/teacher/manage-grades" element={<ManageGrades />} />
+              <Route path="/teacher/manage-attendance" element={<ManageAttendance />} />
+              <Route path="/teacher/post-assignment" element={<PostAssignment />} />
+              <Route path="/teacher/announcements" element={<Announcements />} />
               
               {/* Student routes */}
               <Route path="/student" element={<StudentDashboard />} />
