@@ -34,7 +34,9 @@ export const mockStudentAssignments: StudentAssignment[] = [
     dueDate: '2025-06-01',
     status: 'submitted',
     submittedDate: '2025-05-30',
-    grade: 'A'
+    grade: 'A',
+    description: 'Write a detailed report on cell structures and their functions. Include diagrams and examples.',
+    points: 100
   },
   {
     id: '2',
@@ -45,7 +47,9 @@ export const mockStudentAssignments: StudentAssignment[] = [
     dueDate: '2025-06-01',
     status: 'submitted',
     submittedDate: '2025-05-28',
-    grade: 'A-'
+    grade: 'A-',
+    description: 'Write a detailed report on cell structures and their functions. Include diagrams and examples.',
+    points: 100
   },
   {
     id: '3',
@@ -54,7 +58,9 @@ export const mockStudentAssignments: StudentAssignment[] = [
     title: 'Cell Structure Report',
     subject: 'Biology',
     dueDate: '2025-06-01',
-    status: 'pending'
+    status: 'pending',
+    description: 'Write a detailed report on cell structures and their functions. Include diagrams and examples.',
+    points: 100
   },
   {
     id: '4',
@@ -65,7 +71,9 @@ export const mockStudentAssignments: StudentAssignment[] = [
     dueDate: '2025-06-05',
     status: 'submitted',
     submittedDate: '2025-06-03',
-    grade: 'A'
+    grade: 'A',
+    description: 'Analyze the process of DNA replication and explain how errors in this process can lead to mutations.',
+    points: 150
   },
   {
     id: '5',
@@ -75,6 +83,30 @@ export const mockStudentAssignments: StudentAssignment[] = [
     subject: 'Advanced Biology',
     dueDate: '2025-06-05',
     status: 'late',
-    submittedDate: '2025-06-07'
+    submittedDate: '2025-06-07',
+    description: 'Analyze the process of DNA replication and explain how errors in this process can lead to mutations.',
+    points: 150
+  },
+  {
+    id: '6',
+    studentId: 1,
+    studentName: 'Alex Johnson',
+    title: 'Photosynthesis Lab Report',
+    subject: 'Biology',
+    dueDate: '2025-06-15',
+    status: 'pending',
+    description: 'Complete the photosynthesis lab experiment and write a report on your findings.',
+    points: 120
+  },
+  {
+    id: '7',
+    studentId: 2,
+    studentName: 'Emma Smith',
+    title: 'Ecosystem Analysis',
+    subject: 'Biology',
+    dueDate: '2025-06-20',
+    status: 'pending',
+    description: 'Choose a local ecosystem and analyze the interactions between organisms.',
+    points: 100
   }
 ];

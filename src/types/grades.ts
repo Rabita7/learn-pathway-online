@@ -25,4 +25,15 @@ export interface StudentAssignment {
   submittedDate?: string;
   grade?: string;
   file?: string;
+  description?: string;
+  points?: number;
+}
+
+export interface AssignmentSubmission {
+  id: string;
+  assignmentId: string;
+  studentId: number;
+  submittedDate: string;
+  file: string;
+  comments?: string;
 }
