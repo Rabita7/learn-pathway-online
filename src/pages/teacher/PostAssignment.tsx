@@ -39,15 +39,16 @@ import {
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
+// Update the schema to handle points correctly
 const formSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters' }),
   description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
   subject: z.string().min(1, { message: 'Please select a subject' }),
   dueDate: z.date({ required_error: 'Due date is required' }),
-  points: z.string().transform(val => parseInt(val, 10)).refine(val => !isNaN(val) && val > 0, {
-    message: 'Points must be a positive number',
-  }),
+  points: z.coerce.number().positive({ message: 'Points must be a positive number' }),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 const subjects = ['Biology 101', 'Chemistry Lab', 'Advanced Biology', 'Physics'];
 
@@ -56,13 +57,13 @@ const PostAssignment = () => {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: '',
       subject: '',
-      points: '100',
+      points: 100,
     },
   });
 
@@ -70,7 +71,7 @@ const PostAssignment = () => {
     return <div>Access denied. Teacher privileges required.</div>;
   }
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: FormValues) => {
     setSubmitting(true);
     
     // Simulate API call
@@ -84,7 +85,7 @@ const PostAssignment = () => {
         title: '',
         description: '',
         subject: '',
-        points: '100',
+        points: 100,
       });
       
       setSubmitting(false);

@@ -28,8 +28,19 @@ import {
 import { Search, Save, ClipboardList, BookOpen } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Define a type for student grades to ensure consistency
+interface StudentGrades {
+  [subject: string]: string;
+}
+
+interface Student {
+  id: number;
+  name: string;
+  grades: StudentGrades;
+}
+
 // Mock data for student grades
-const mockStudents = [
+const mockStudents: Student[] = [
   { id: 1, name: 'Alex Johnson', grades: { 'Biology': 'A-', 'Chemistry': 'B+', 'Physics': 'A' } },
   { id: 2, name: 'Emma Smith', grades: { 'Biology': 'A', 'Chemistry': 'A', 'Physics': 'A-' } },
   { id: 3, name: 'Michael Brown', grades: { 'Biology': 'B+', 'Chemistry': 'B', 'Physics': 'B+' } },
@@ -47,7 +58,7 @@ const ManageGrades = () => {
   const { toast } = useToast();
   const [selectedSubject, setSelectedSubject] = useState('Biology');
   const [searchTerm, setSearchTerm] = useState('');
-  const [studentGrades, setStudentGrades] = useState(mockStudents);
+  const [studentGrades, setStudentGrades] = useState<Student[]>(mockStudents);
 
   if (!user || user.role !== 'teacher') {
     return <div>Access denied. Teacher privileges required.</div>;
@@ -62,11 +73,18 @@ const ManageGrades = () => {
 
   const handleGradeChange = (studentId: number, newGrade: string) => {
     setStudentGrades(prev => 
-      prev.map(student => 
-        student.id === studentId 
-          ? { ...student, grades: { ...student.grades, [selectedSubject]: newGrade } } 
-          : student
-      )
+      prev.map(student => {
+        if (student.id === studentId) {
+          return {
+            ...student,
+            grades: {
+              ...student.grades,
+              [selectedSubject]: newGrade
+            }
+          };
+        }
+        return student;
+      })
     );
   };
 
