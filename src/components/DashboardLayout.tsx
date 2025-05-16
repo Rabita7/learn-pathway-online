@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import {
@@ -43,6 +42,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ to, icon, label, active }) =>
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   
   if (!user) {
     // Redirect to login if not authenticated
@@ -58,44 +58,115 @@ const DashboardLayout = () => {
       case 'admin':
         return (
           <>
-            <SidebarLink to="/admin" icon={<Home className="w-5 h-5" />} label="Dashboard" />
-            <SidebarLink to="/admin/manage-students" icon={<Users className="w-5 h-5" />} label="Manage Students" />
-            <SidebarLink to="/admin/manage-teachers" icon={<GraduationCap className="w-5 h-5" />} label="Manage Teachers" />
-            <SidebarLink to="/admin/manage-parents" icon={<User className="w-5 h-5" />} label="Manage Parents" />
-            <SidebarLink to="/admin/manage-classes" icon={<School className="w-5 h-5" />} label="Manage Classes" />
-            <SidebarLink to="/admin/view-reports" icon={<ClipboardList className="w-5 h-5" />} label="View Reports" />
-            <SidebarLink to="/admin/post-announcement" icon={<Bell className="w-5 h-5" />} label="Post Announcement" />
+            <SidebarLink 
+              to="/admin" 
+              icon={<Home className="w-5 h-5" />} 
+              label="Dashboard" 
+              active={location.pathname === '/admin'}
+            />
+            <SidebarLink 
+              to="/admin/manage-students" 
+              icon={<Users className="w-5 h-5" />} 
+              label="Manage Students" 
+              active={location.pathname === '/admin/manage-students'}
+            />
+            <SidebarLink 
+              to="/admin/manage-teachers" 
+              icon={<GraduationCap className="w-5 h-5" />} 
+              label="Manage Teachers" 
+              active={location.pathname === '/admin/manage-teachers'}
+            />
+            <SidebarLink 
+              to="/admin/manage-parents" 
+              icon={<User className="w-5 h-5" />} 
+              label="Manage Parents" 
+              active={location.pathname === '/admin/manage-parents'}
+            />
+            <SidebarLink 
+              to="/admin/manage-classes" 
+              icon={<School className="w-5 h-5" />} 
+              label="Manage Classes" 
+              active={location.pathname === '/admin/manage-classes'}
+            />
+            <SidebarLink 
+              to="/admin/view-reports" 
+              icon={<ClipboardList className="w-5 h-5" />} 
+              label="View Reports" 
+              active={location.pathname === '/admin/view-reports'}
+            />
+            <SidebarLink 
+              to="/admin/post-announcement" 
+              icon={<Bell className="w-5 h-5" />} 
+              label="Post Announcement" 
+              active={location.pathname === '/admin/post-announcement'}
+            />
           </>
         );
       case 'teacher':
         return (
           <>
-            <SidebarLink to="/teacher" icon={<Home className="w-5 h-5" />} label="Dashboard" />
-            <SidebarLink to="/teacher/view-students" icon={<Users className="w-5 h-5" />} label="View Students" />
-            <SidebarLink to="/teacher/manage-grades" icon={<ClipboardList className="w-5 h-5" />} label="Manage Grades" />
-            <SidebarLink to="/teacher/manage-attendance" icon={<Calendar className="w-5 h-5" />} label="Manage Attendance" />
-            <SidebarLink to="/teacher/post-assignment" icon={<Book className="w-5 h-5" />} label="Post Assignment" />
-            <SidebarLink to="/teacher/announcements" icon={<Bell className="w-5 h-5" />} label="Announcements" />
+            <SidebarLink 
+              to="/teacher" 
+              icon={<Home className="w-5 h-5" />} 
+              label="Dashboard" 
+              active={location.pathname === '/teacher'}
+            />
+            <SidebarLink 
+              to="/teacher/view-students" 
+              icon={<Users className="w-5 h-5" />} 
+              label="View Students" 
+              active={location.pathname === '/teacher/view-students'}
+            />
+            <SidebarLink 
+              to="/teacher/manage-grades" 
+              icon={<ClipboardList className="w-5 h-5" />} 
+              label="Manage Grades" 
+              active={location.pathname === '/teacher/manage-grades'}
+            />
+            <SidebarLink 
+              to="/teacher/manage-attendance" 
+              icon={<Calendar className="w-5 h-5" />} 
+              label="Manage Attendance" 
+              active={location.pathname === '/teacher/manage-attendance'}
+            />
+            <SidebarLink 
+              to="/teacher/view-assignments" 
+              icon={<Book className="w-5 h-5" />} 
+              label="View Assignments" 
+              active={location.pathname === '/teacher/view-assignments'}
+            />
+            <SidebarLink 
+              to="/teacher/post-assignment" 
+              icon={<Book className="w-5 h-5" />} 
+              label="Post Assignment" 
+              active={location.pathname === '/teacher/post-assignment'}
+            />
+            <SidebarLink 
+              to="/teacher/announcements" 
+              icon={<Bell className="w-5 h-5" />} 
+              label="Announcements" 
+              active={location.pathname === '/teacher/announcements'}
+            />
           </>
         );
       case 'student':
         return (
           <>
-            <SidebarLink to="/student" icon={<Home className="w-5 h-5" />} label="Dashboard" />
-            <SidebarLink to="/student/view-grades" icon={<ClipboardList className="w-5 h-5" />} label="View Grades" />
-            <SidebarLink to="/student/view-attendance" icon={<Calendar className="w-5 h-5" />} label="View Attendance" />
-            <SidebarLink to="/student/class-schedule" icon={<Calendar className="w-5 h-5" />} label="Class Schedule" />
-            <SidebarLink to="/student/assignments" icon={<Book className="w-5 h-5" />} label="Assignments" />
-            <SidebarLink to="/student/announcements" icon={<Bell className="w-5 h-5" />} label="Announcements" />
+            <SidebarLink to="/student" icon={<Home className="w-5 h-5" />} label="Dashboard" active={location.pathname === '/student'} />
+            <SidebarLink to="/student/view-grades" icon={<ClipboardList className="w-5 h-5" />} label="View Grades" active={location.pathname === '/student/view-grades'} />
+            <SidebarLink to="/student/view-attendance" icon={<Calendar className="w-5 h-5" />} label="View Attendance" active={location.pathname === '/student/view-attendance'} />
+            <SidebarLink to="/student/class-schedule" icon={<Calendar className="w-5 h-5" />} label="Class Schedule" active={location.pathname === '/student/class-schedule'} />
+            <SidebarLink to="/student/assignments" icon={<Book className="w-5 h-5" />} label="Assignments" active={location.pathname === '/student/assignments'} />
+            <SidebarLink to="/student/announcements" icon={<Bell className="w-5 h-5" />} label="Announcements" active={location.pathname === '/student/announcements'} />
           </>
         );
       case 'parent':
         return (
           <>
-            <SidebarLink to="/parent" icon={<Home className="w-5 h-5" />} label="Dashboard" />
-            <SidebarLink to="/parent/view-child-grades" icon={<ClipboardList className="w-5 h-5" />} label="View Child's Grades" />
-            <SidebarLink to="/parent/view-child-attendance" icon={<Calendar className="w-5 h-5" />} label="View Child's Attendance" />
-            <SidebarLink to="/parent/announcements" icon={<Bell className="w-5 h-5" />} label="Announcements" />
+            <SidebarLink to="/parent" icon={<Home className="w-5 h-5" />} label="Dashboard" active={location.pathname === '/parent'} />
+            <SidebarLink to="/parent/view-child-grades" icon={<ClipboardList className="w-5 h-5" />} label="View Child's Grades" active={location.pathname === '/parent/view-child-grades'} />
+            <SidebarLink to="/parent/view-child-attendance" icon={<Calendar className="w-5 h-5" />} label="View Child's Attendance" active={location.pathname === '/parent/view-child-attendance'} />
+            <SidebarLink to="/parent/announcements" icon={<Bell className="w-5 h-5" />} label="Announcements" active={location.pathname === '/parent/announcements'} />
           </>
         );
       default:

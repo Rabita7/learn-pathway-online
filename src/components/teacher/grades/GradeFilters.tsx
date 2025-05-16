@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { subjects } from '@/data/mockStudentGrades';
 
 interface GradeFiltersProps {
   searchTerm: string;
@@ -18,6 +17,7 @@ interface GradeFiltersProps {
   selectedSubject: string;
   setSelectedSubject: (subject: string) => void;
   onSaveGrades: () => void;
+  availableSubjects: string[];
 }
 
 const GradeFilters: React.FC<GradeFiltersProps> = ({
@@ -25,7 +25,8 @@ const GradeFilters: React.FC<GradeFiltersProps> = ({
   setSearchTerm,
   selectedSubject,
   setSelectedSubject,
-  onSaveGrades
+  onSaveGrades,
+  availableSubjects
 }) => {
   return (
     <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
@@ -44,7 +45,7 @@ const GradeFilters: React.FC<GradeFiltersProps> = ({
             <SelectValue placeholder="Select Subject" />
           </SelectTrigger>
           <SelectContent>
-            {subjects.map(subject => (
+            {availableSubjects.map(subject => (
               <SelectItem key={subject} value={subject}>{subject}</SelectItem>
             ))}
           </SelectContent>

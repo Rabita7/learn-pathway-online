@@ -40,6 +40,7 @@ import ViewStudents from "@/pages/teacher/ViewStudents";
 import ManageGrades from "@/pages/teacher/ManageGrades";
 import ManageAttendance from "@/pages/teacher/ManageAttendance";
 import PostAssignment from "@/pages/teacher/PostAssignment";
+import ViewAssignments from "@/pages/teacher/ViewAssignments";
 import Announcements from "@/pages/teacher/Announcements";
 
 // Role-specific Dashboards
@@ -94,6 +95,7 @@ const App = () => (
               <Route path="/teacher/manage-grades" element={<ManageGrades />} />
               <Route path="/teacher/manage-attendance" element={<ManageAttendance />} />
               <Route path="/teacher/post-assignment" element={<PostAssignment />} />
+              <Route path="/teacher/view-assignments" element={<ViewAssignments />} />
               <Route path="/teacher/announcements" element={<Announcements />} />
               
               {/* Student routes */}
