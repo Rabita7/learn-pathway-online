@@ -92,13 +92,13 @@ const StudentAssignments = () => {
 
     // In a real app, this would upload the file to a server
     setTimeout(() => {
-      // Update the assignment status
+      // Update the assignment status with the correct type
       if (selectedAssignment) {
         const updatedAssignments = assignments.map(a => 
           a.id === selectedAssignment.id 
             ? {
                 ...a,
-                status: 'submitted',
+                status: 'submitted' as const, // Use const assertion to ensure correct type
                 submittedDate: new Date().toISOString().split('T')[0],
                 file: pdfFile.name
               }
