@@ -44,11 +44,14 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  if (!user) {
-    // Redirect to login if not authenticated
-    React.useEffect(() => {
+  // Move useEffect outside of conditional block to fix hooks order
+  React.useEffect(() => {
+    if (!user) {
       navigate('/auth/login');
-    }, [navigate]);
+    }
+  }, [user, navigate]);
+
+  if (!user) {
     return null;
   }
 
