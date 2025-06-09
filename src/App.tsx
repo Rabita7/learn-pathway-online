@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -49,6 +48,9 @@ import StudentDashboard from "@/pages/student/StudentDashboard";
 import ViewGrades from "@/pages/student/ViewGrades";
 import StudentAssignments from "@/pages/student/StudentAssignments";
 import ParentDashboard from "@/pages/parent/ParentDashboard";
+
+import ViewAttendance from "@/pages/student/ViewAttendance";
+import ClassSchedule from "@/pages/student/ClassSchedule";
 
 const queryClient = new QueryClient();
 
@@ -103,8 +105,8 @@ const App = () => (
               {/* Student routes */}
               <Route path="/student" element={<StudentDashboard />} />
               <Route path="/student/view-grades" element={<ViewGrades />} />
-              <Route path="/student/view-attendance" element={<div>View Attendance Page</div>} />
-              <Route path="/student/class-schedule" element={<div>Class Schedule Page</div>} />
+              <Route path="/student/view-attendance" element={<ViewAttendance />} />
+              <Route path="/student/class-schedule" element={<ClassSchedule />} />
               <Route path="/student/assignments" element={<StudentAssignments />} />
               <Route path="/student/announcements" element={<div>Student Announcements Page</div>} />
               
