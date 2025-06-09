@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, CheckCircle, XCircle, Clock, Book } from 'lucide-react';
+import { Calendar as CalendarIcon, CheckCircle, XCircle, Clock, Book, Users } from 'lucide-react';
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -40,6 +39,7 @@ type Student = {
   id: number;
   name: string;
   studentId: string;
+  section: string;
   attendance: Record<string, AttendanceStatus>;
 };
 
@@ -49,6 +49,7 @@ type Course = {
   code: string;
   schedule: string;
   room: string;
+  sections: string[];
   students: Student[];
 };
 
@@ -59,11 +60,13 @@ const mockCourses: Course[] = [
     code: 'BIO101',
     schedule: 'MWF 9:00-10:00 AM',
     room: 'Science Lab A',
+    sections: ['A', 'B', 'C'],
     students: [
       { 
         id: 1, 
         name: 'Alex Johnson',
         studentId: 'ST001',
+        section: 'A',
         attendance: { 
           '2025-06-09': 'present',
           '2025-06-08': 'present',
@@ -74,6 +77,7 @@ const mockCourses: Course[] = [
         id: 2, 
         name: 'Emma Smith',
         studentId: 'ST002',
+        section: 'A',
         attendance: { 
           '2025-06-09': 'present',
           '2025-06-08': 'absent',
@@ -84,10 +88,33 @@ const mockCourses: Course[] = [
         id: 3, 
         name: 'Michael Brown',
         studentId: 'ST003',
+        section: 'B',
         attendance: { 
           '2025-06-09': 'tardy',
           '2025-06-08': 'present',
           '2025-06-07': 'excused',
+        } 
+      },
+      { 
+        id: 13, 
+        name: 'Sarah Wilson',
+        studentId: 'ST013',
+        section: 'B',
+        attendance: { 
+          '2025-06-09': 'present',
+          '2025-06-08': 'present',
+          '2025-06-07': 'present',
+        } 
+      },
+      { 
+        id: 14, 
+        name: 'David Lee',
+        studentId: 'ST014',
+        section: 'C',
+        attendance: { 
+          '2025-06-09': 'absent',
+          '2025-06-08': 'tardy',
+          '2025-06-07': 'present',
         } 
       },
     ]
@@ -98,11 +125,13 @@ const mockCourses: Course[] = [
     code: 'CHEM201',
     schedule: 'TTh 2:00-4:00 PM',
     room: 'Chemistry Lab B',
+    sections: ['A', 'B'],
     students: [
       { 
         id: 4, 
         name: 'Sophia Davis',
         studentId: 'ST004',
+        section: 'A',
         attendance: { 
           '2025-06-09': 'present',
           '2025-06-08': 'present',
@@ -113,6 +142,7 @@ const mockCourses: Course[] = [
         id: 5, 
         name: 'William Wilson',
         studentId: 'ST005',
+        section: 'A',
         attendance: { 
           '2025-06-09': 'absent',
           '2025-06-08': 'tardy',
@@ -123,6 +153,7 @@ const mockCourses: Course[] = [
         id: 6, 
         name: 'Olivia Taylor',
         studentId: 'ST006',
+        section: 'B',
         attendance: { 
           '2025-06-09': 'present',
           '2025-06-08': 'excused',
@@ -137,11 +168,13 @@ const mockCourses: Course[] = [
     code: 'BIO301',
     schedule: 'MWF 1:00-2:00 PM',
     room: 'Science Lab C',
+    sections: ['A'],
     students: [
       { 
         id: 7, 
         name: 'James Anderson',
         studentId: 'ST007',
+        section: 'A',
         attendance: { 
           '2025-06-09': 'present',
           '2025-06-08': 'present',
@@ -152,6 +185,7 @@ const mockCourses: Course[] = [
         id: 8, 
         name: 'Isabella Martinez',
         studentId: 'ST008',
+        section: 'A',
         attendance: { 
           '2025-06-09': 'tardy',
           '2025-06-08': 'present',
@@ -166,6 +200,7 @@ const ManageAttendance = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedCourseId, setSelectedCourseId] = useState(mockCourses[0].id);
+  const [selectedSection, setSelectedSection] = useState('All Sections');
   const [date, setDate] = useState<Date>(new Date());
   const [courses, setCourses] = useState<Course[]>(mockCourses);
 
@@ -175,6 +210,11 @@ const ManageAttendance = () => {
 
   const selectedCourse = courses.find(course => course.id === selectedCourseId);
   const formattedDate = format(date, 'yyyy-MM-dd');
+
+  // Filter students by selected section
+  const filteredStudents = selectedCourse?.students.filter(student => 
+    selectedSection === 'All Sections' || student.section === selectedSection
+  ) || [];
 
   const handleAttendanceChange = (studentId: number, status: AttendanceStatus) => {
     setCourses(prev => 
@@ -200,10 +240,10 @@ const ManageAttendance = () => {
   };
 
   const handleSaveAttendance = () => {
-    // In a real app, this would save to a database
+    const sectionText = selectedSection === 'All Sections' ? 'all sections' : `section ${selectedSection}`;
     toast({
       title: "Attendance saved successfully",
-      description: `Updated attendance for ${selectedCourse?.name} on ${format(date, 'MMMM d, yyyy')}`,
+      description: `Updated attendance for ${selectedCourse?.name} (${sectionText}) on ${format(date, 'MMMM d, yyyy')}`,
     });
   };
 
@@ -245,7 +285,7 @@ const ManageAttendance = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Manage Course Attendance</h1>
-        <p className="text-muted-foreground">Track and update student attendance records for all your courses</p>
+        <p className="text-muted-foreground">Track and update student attendance records by section</p>
       </div>
 
       {/* Course Overview Cards */}
@@ -263,10 +303,10 @@ const ManageAttendance = () => {
                 </div>
                 <div className="text-right text-sm">
                   <div className="font-medium">{course.students.length} students</div>
-                  <div className="text-muted-foreground">{course.room}</div>
+                  <div className="text-muted-foreground">{course.sections.length} sections</div>
                 </div>
               </div>
-              <div className="mt-2 text-xs text-muted-foreground">{course.schedule}</div>
+              <div className="mt-2 text-xs text-muted-foreground">{course.schedule} | {course.room}</div>
             </CardContent>
           </Card>
         ))}
@@ -307,6 +347,20 @@ const ManageAttendance = () => {
               ))}
             </SelectContent>
           </Select>
+
+          <Select value={selectedSection} onValueChange={setSelectedSection}>
+            <SelectTrigger className="w-full md:w-48">
+              <SelectValue placeholder="Select Section" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="All Sections">All Sections</SelectItem>
+              {selectedCourse?.sections.map(section => (
+                <SelectItem key={section} value={section}>
+                  Section {section}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Button onClick={handleSaveAttendance} className="bg-teacher hover:bg-teacher/90">
@@ -319,10 +373,14 @@ const ManageAttendance = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Book className="h-5 w-5 text-teacher" />
-            {selectedCourse.name} - Attendance for {format(date, 'MMMM d, yyyy')}
+            {selectedCourse.name} - {selectedSection} - {format(date, 'MMMM d, yyyy')}
           </CardTitle>
-          <CardDescription>
-            {selectedCourse.code} | {selectedCourse.schedule} | Room: {selectedCourse.room} | {selectedCourse.students.length} students
+          <CardDescription className="flex items-center gap-4">
+            <span>{selectedCourse.code} | {selectedCourse.schedule} | Room: {selectedCourse.room}</span>
+            <span className="flex items-center gap-1">
+              <Users className="h-4 w-4" />
+              {filteredStudents.length} students
+            </span>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -350,18 +408,24 @@ const ManageAttendance = () => {
               <TableRow>
                 <TableHead>Student ID</TableHead>
                 <TableHead>Student Name</TableHead>
+                <TableHead>Section</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {selectedCourse.students.map((student) => {
+              {filteredStudents.map((student) => {
                 const status = student.attendance[formattedDate] || 'absent';
                 
                 return (
                   <TableRow key={student.id}>
                     <TableCell className="font-medium">{student.studentId}</TableCell>
                     <TableCell className="font-medium">{student.name}</TableCell>
+                    <TableCell>
+                      <span className="px-2 py-1 bg-teacher/10 text-teacher rounded-full text-sm font-medium">
+                        Section {student.section}
+                      </span>
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(status)}
@@ -409,6 +473,13 @@ const ManageAttendance = () => {
                   </TableRow>
                 );
               })}
+              {filteredStudents.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    No students found in the selected section
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
@@ -418,16 +489,18 @@ const ManageAttendance = () => {
       <Card>
         <CardHeader>
           <CardTitle>Attendance Summary</CardTitle>
-          <CardDescription>Overview for {selectedCourse.name} on {format(date, 'MMMM d, yyyy')}</CardDescription>
+          <CardDescription>
+            Overview for {selectedCourse.name} - {selectedSection} on {format(date, 'MMMM d, yyyy')}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(['present', 'absent', 'tardy', 'excused'] as AttendanceStatus[]).map((status) => {
-              const count = selectedCourse.students.filter(student => 
+              const count = filteredStudents.filter(student => 
                 student.attendance[formattedDate] === status
               ).length;
               
-              const percentage = selectedCourse.students.length > 0 ? ((count / selectedCourse.students.length) * 100).toFixed(1) : '0';
+              const percentage = filteredStudents.length > 0 ? ((count / filteredStudents.length) * 100).toFixed(1) : '0';
               
               return (
                 <div key={status} className={`p-4 rounded-lg border ${getStatusColor(status)}`}>
@@ -436,7 +509,7 @@ const ManageAttendance = () => {
                     {getStatusIcon(status)}
                   </div>
                   <div className="mt-2 text-2xl font-bold">{count}</div>
-                  <div className="text-sm">{percentage}% of class</div>
+                  <div className="text-sm">{percentage}% of section</div>
                 </div>
               );
             })}

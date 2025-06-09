@@ -7,10 +7,18 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { BookOpen, Loader } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -19,10 +27,10 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!email || !password || !selectedRole) {
       toast({
         title: 'Error',
-        description: 'Please fill in all fields',
+        description: 'Please fill in all fields and select your role',
         variant: 'destructive',
       });
       return;
@@ -50,6 +58,7 @@ const Login = () => {
 
   // For demo purposes, provide example login credentials
   const fillDemoCredentials = (role: string) => {
+    setSelectedRole(role);
     switch (role) {
       case 'admin':
         setEmail('admin@school.edu');
@@ -92,6 +101,22 @@ const Login = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <Label htmlFor="role">Select Your Role</Label>
+              <Select value={selectedRole} onValueChange={setSelectedRole}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Choose your account type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Administrator</SelectItem>
+                  <SelectItem value="teacher">Teacher</SelectItem>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="parent">Parent</SelectItem>
+                  <SelectItem value="manager">Manager</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div>
               <Label htmlFor="email">Email address</Label>
               <Input
