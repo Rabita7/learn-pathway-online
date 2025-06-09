@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Calendar as CalendarIcon, CheckCircle, XCircle, Clock, Book } from 'lucide-react';
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -39,84 +39,162 @@ type AttendanceStatus = 'present' | 'absent' | 'tardy' | 'excused';
 type Student = {
   id: number;
   name: string;
+  studentId: string;
   attendance: Record<string, AttendanceStatus>;
 };
 
-const mockStudents: Student[] = [
-  { 
-    id: 1, 
-    name: 'Alex Johnson', 
-    attendance: { 
-      '2025-05-14': 'present',
-      '2025-05-15': 'present',
-      '2025-05-16': 'present',
-    } 
+type Course = {
+  id: string;
+  name: string;
+  code: string;
+  schedule: string;
+  room: string;
+  students: Student[];
+};
+
+const mockCourses: Course[] = [
+  {
+    id: '1',
+    name: 'Biology 101',
+    code: 'BIO101',
+    schedule: 'MWF 9:00-10:00 AM',
+    room: 'Science Lab A',
+    students: [
+      { 
+        id: 1, 
+        name: 'Alex Johnson',
+        studentId: 'ST001',
+        attendance: { 
+          '2025-06-09': 'present',
+          '2025-06-08': 'present',
+          '2025-06-07': 'tardy',
+        } 
+      },
+      { 
+        id: 2, 
+        name: 'Emma Smith',
+        studentId: 'ST002',
+        attendance: { 
+          '2025-06-09': 'present',
+          '2025-06-08': 'absent',
+          '2025-06-07': 'present',
+        } 
+      },
+      { 
+        id: 3, 
+        name: 'Michael Brown',
+        studentId: 'ST003',
+        attendance: { 
+          '2025-06-09': 'tardy',
+          '2025-06-08': 'present',
+          '2025-06-07': 'excused',
+        } 
+      },
+    ]
   },
-  { 
-    id: 2, 
-    name: 'Emma Smith', 
-    attendance: { 
-      '2025-05-14': 'present',
-      '2025-05-15': 'present',
-      '2025-05-16': 'present',
-    } 
+  {
+    id: '2',
+    name: 'Chemistry Lab',
+    code: 'CHEM201',
+    schedule: 'TTh 2:00-4:00 PM',
+    room: 'Chemistry Lab B',
+    students: [
+      { 
+        id: 4, 
+        name: 'Sophia Davis',
+        studentId: 'ST004',
+        attendance: { 
+          '2025-06-09': 'present',
+          '2025-06-08': 'present',
+          '2025-06-07': 'present',
+        } 
+      },
+      { 
+        id: 5, 
+        name: 'William Wilson',
+        studentId: 'ST005',
+        attendance: { 
+          '2025-06-09': 'absent',
+          '2025-06-08': 'tardy',
+          '2025-06-07': 'present',
+        } 
+      },
+      { 
+        id: 6, 
+        name: 'Olivia Taylor',
+        studentId: 'ST006',
+        attendance: { 
+          '2025-06-09': 'present',
+          '2025-06-08': 'excused',
+          '2025-06-07': 'present',
+        } 
+      },
+    ]
   },
-  { 
-    id: 3, 
-    name: 'Michael Brown', 
-    attendance: { 
-      '2025-05-14': 'tardy',
-      '2025-05-15': 'present',
-      '2025-05-16': 'absent',
-    } 
-  },
-  { 
-    id: 4, 
-    name: 'Sophia Davis', 
-    attendance: { 
-      '2025-05-14': 'present',
-      '2025-05-15': 'excused',
-      '2025-05-16': 'present',
-    } 
-  },
-  { 
-    id: 5, 
-    name: 'William Wilson', 
-    attendance: { 
-      '2025-05-14': 'present',
-      '2025-05-15': 'tardy',
-      '2025-05-16': 'present',
-    } 
+  {
+    id: '3',
+    name: 'Advanced Biology',
+    code: 'BIO301',
+    schedule: 'MWF 1:00-2:00 PM',
+    room: 'Science Lab C',
+    students: [
+      { 
+        id: 7, 
+        name: 'James Anderson',
+        studentId: 'ST007',
+        attendance: { 
+          '2025-06-09': 'present',
+          '2025-06-08': 'present',
+          '2025-06-07': 'present',
+        } 
+      },
+      { 
+        id: 8, 
+        name: 'Isabella Martinez',
+        studentId: 'ST008',
+        attendance: { 
+          '2025-06-09': 'tardy',
+          '2025-06-08': 'present',
+          '2025-06-07': 'absent',
+        } 
+      },
+    ]
   },
 ];
-
-const classes = ['Biology 101', 'Chemistry Lab', 'Advanced Biology', 'Physics'];
 
 const ManageAttendance = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [selectedClass, setSelectedClass] = useState('Biology 101');
+  const [selectedCourseId, setSelectedCourseId] = useState(mockCourses[0].id);
   const [date, setDate] = useState<Date>(new Date());
-  const [studentAttendance, setStudentAttendance] = useState<Student[]>(mockStudents);
+  const [courses, setCourses] = useState<Course[]>(mockCourses);
 
   if (!user || user.role !== 'teacher') {
     return <div>Access denied. Teacher privileges required.</div>;
   }
 
+  const selectedCourse = courses.find(course => course.id === selectedCourseId);
   const formattedDate = format(date, 'yyyy-MM-dd');
 
   const handleAttendanceChange = (studentId: number, status: AttendanceStatus) => {
-    setStudentAttendance(prev => 
-      prev.map(student => 
-        student.id === studentId 
-          ? { 
-              ...student, 
-              attendance: { 
-                ...student.attendance, 
-                [formattedDate]: status 
-              } 
-            } 
-          : student
+    setCourses(prev => 
+      prev.map(course => 
+        course.id === selectedCourseId 
+          ? {
+              ...course,
+              students: course.students.map(student => 
+                student.id === studentId 
+                  ? { 
+                      ...student, 
+                      attendance: { 
+                        ...student.attendance, 
+                        [formattedDate]: status 
+                      } 
+                    } 
+                  : student
+              )
+            }
+          : course
       )
     );
   };
@@ -125,7 +203,7 @@ const ManageAttendance = () => {
     // In a real app, this would save to a database
     toast({
       title: "Attendance saved successfully",
-      description: `Updated attendance for ${format(date, 'MMMM d, yyyy')}`,
+      description: `Updated attendance for ${selectedCourse?.name} on ${format(date, 'MMMM d, yyyy')}`,
     });
   };
 
@@ -159,13 +237,42 @@ const ManageAttendance = () => {
     }
   };
 
+  if (!selectedCourse) {
+    return <div>Course not found</div>;
+  }
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Manage Attendance</h1>
-        <p className="text-muted-foreground">Track and update student attendance records</p>
+        <h1 className="text-3xl font-bold">Manage Course Attendance</h1>
+        <p className="text-muted-foreground">Track and update student attendance records for all your courses</p>
       </div>
 
+      {/* Course Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {courses.map((course) => (
+          <Card key={course.id} className={`cursor-pointer transition-all ${selectedCourseId === course.id ? 'ring-2 ring-teacher border-teacher' : 'hover:shadow-md'}`} onClick={() => setSelectedCourseId(course.id)}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Book className="h-5 w-5 text-teacher" />
+                  <div>
+                    <div className="font-semibold">{course.name}</div>
+                    <div className="text-sm text-muted-foreground">{course.code}</div>
+                  </div>
+                </div>
+                <div className="text-right text-sm">
+                  <div className="font-medium">{course.students.length} students</div>
+                  <div className="text-muted-foreground">{course.room}</div>
+                </div>
+              </div>
+              <div className="mt-2 text-xs text-muted-foreground">{course.schedule}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Controls */}
       <div className="flex flex-col md:flex-row gap-4 justify-between">
         <div className="flex flex-col md:flex-row gap-4">
           <Popover>
@@ -188,13 +295,15 @@ const ManageAttendance = () => {
             </PopoverContent>
           </Popover>
 
-          <Select value={selectedClass} onValueChange={setSelectedClass}>
-            <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="Select Class" />
+          <Select value={selectedCourseId} onValueChange={setSelectedCourseId}>
+            <SelectTrigger className="w-full md:w-64">
+              <SelectValue placeholder="Select Course" />
             </SelectTrigger>
             <SelectContent>
-              {classes.map(className => (
-                <SelectItem key={className} value={className}>{className}</SelectItem>
+              {courses.map(course => (
+                <SelectItem key={course.id} value={course.id}>
+                  {course.name} ({course.code})
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -205,13 +314,15 @@ const ManageAttendance = () => {
         </Button>
       </div>
 
+      {/* Selected Course Info */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            Attendance for {format(date, 'MMMM d, yyyy')}
+            <Book className="h-5 w-5 text-teacher" />
+            {selectedCourse.name} - Attendance for {format(date, 'MMMM d, yyyy')}
           </CardTitle>
           <CardDescription>
-            {selectedClass} - {studentAttendance.length} students
+            {selectedCourse.code} | {selectedCourse.schedule} | Room: {selectedCourse.room} | {selectedCourse.students.length} students
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -237,17 +348,19 @@ const ManageAttendance = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Student ID</TableHead>
                 <TableHead>Student Name</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {studentAttendance.map((student) => {
+              {selectedCourse.students.map((student) => {
                 const status = student.attendance[formattedDate] || 'absent';
                 
                 return (
                   <TableRow key={student.id}>
+                    <TableCell className="font-medium">{student.studentId}</TableCell>
                     <TableCell className="font-medium">{student.name}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -258,7 +371,7 @@ const ManageAttendance = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+                      <div className="flex gap-1 flex-wrap">
                         <Button 
                           size="sm" 
                           variant={status === 'present' ? 'default' : 'outline'} 
@@ -301,19 +414,20 @@ const ManageAttendance = () => {
         </CardContent>
       </Card>
 
+      {/* Attendance Summary */}
       <Card>
         <CardHeader>
           <CardTitle>Attendance Summary</CardTitle>
-          <CardDescription>Overview for {format(date, 'MMMM d, yyyy')}</CardDescription>
+          <CardDescription>Overview for {selectedCourse.name} on {format(date, 'MMMM d, yyyy')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(['present', 'absent', 'tardy', 'excused'] as AttendanceStatus[]).map((status) => {
-              const count = studentAttendance.filter(student => 
+              const count = selectedCourse.students.filter(student => 
                 student.attendance[formattedDate] === status
               ).length;
               
-              const percentage = ((count / studentAttendance.length) * 100).toFixed(1);
+              const percentage = selectedCourse.students.length > 0 ? ((count / selectedCourse.students.length) * 100).toFixed(1) : '0';
               
               return (
                 <div key={status} className={`p-4 rounded-lg border ${getStatusColor(status)}`}>
