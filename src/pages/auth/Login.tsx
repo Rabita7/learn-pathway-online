@@ -76,6 +76,10 @@ const Login = () => {
         setEmail('parent@example.com');
         setPassword('password');
         break;
+      case 'manager':
+        setEmail('manager@school.edu');
+        setPassword('password');
+        break;
       default:
         break;
     }
@@ -169,23 +173,24 @@ const Login = () => {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Demo accounts</span>
+                <span className="px-2 bg-white text-gray-500">Quick Demo Login</span>
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <Button variant="outline" onClick={() => fillDemoCredentials('admin')} className="bg-admin bg-opacity-10 hover:bg-opacity-20">
-                Admin
-              </Button>
-              <Button variant="outline" onClick={() => fillDemoCredentials('teacher')} className="bg-teacher bg-opacity-10 hover:bg-opacity-20">
-                Teacher
-              </Button>
-              <Button variant="outline" onClick={() => fillDemoCredentials('student')} className="bg-student bg-opacity-10 hover:bg-opacity-20">
-                Student
-              </Button>
-              <Button variant="outline" onClick={() => fillDemoCredentials('parent')} className="bg-parent bg-opacity-10 hover:bg-opacity-20">
-                Parent
-              </Button>
+            <div className="mt-6">
+              <Label htmlFor="demo-account">Select Demo Account</Label>
+              <Select onValueChange={fillDemoCredentials}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Choose a demo account to try" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Demo Admin Account</SelectItem>
+                  <SelectItem value="teacher">Demo Teacher Account</SelectItem>
+                  <SelectItem value="student">Demo Student Account</SelectItem>
+                  <SelectItem value="parent">Demo Parent Account</SelectItem>
+                  <SelectItem value="manager">Demo Manager Account</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
