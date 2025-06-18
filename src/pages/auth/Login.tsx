@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,6 @@ import {
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRole, setSelectedRole] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -26,10 +26,10 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || !selectedRole) {
+    if (!email || !password) {
       toast({
         title: 'Error',
-        description: 'Please fill in all fields and select your role',
+        description: 'Please fill in all fields',
         variant: 'destructive',
       });
       return;
@@ -39,13 +39,17 @@ const Login = () => {
     
     try {
       await login(email, password);
+      
+      // Get user from context after login to determine role-based redirect
+      const loggedInUser = JSON.parse(localStorage.getItem('highschool_portal_user') || '{}');
+      
       toast({
         title: 'Success',
         description: 'You have successfully logged in',
       });
       
-      // Redirect to role-specific dashboard
-      switch (selectedRole) {
+      // Redirect to role-specific dashboard based on user's actual role
+      switch (loggedInUser.role) {
         case 'admin':
           navigate('/admin');
           break;
@@ -77,7 +81,6 @@ const Login = () => {
 
   // For demo purposes, provide example login credentials
   const fillDemoCredentials = (role: string) => {
-    setSelectedRole(role);
     switch (role) {
       case 'admin':
         setEmail('admin@school.edu');
@@ -124,22 +127,6 @@ const Login = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <Label htmlFor="role">Select Your Role</Label>
-              <Select value={selectedRole} onValueChange={setSelectedRole}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Choose your account type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Administrator</SelectItem>
-                  <SelectItem value="teacher">Teacher</SelectItem>
-                  <SelectItem value="student">Student</SelectItem>
-                  <SelectItem value="parent">Parent</SelectItem>
-                  <SelectItem value="manager">Manager</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             <div>
               <Label htmlFor="email">Email address</Label>
               <Input
