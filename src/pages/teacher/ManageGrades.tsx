@@ -14,7 +14,7 @@ const ManageGrades = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedEducationLevel, setSelectedEducationLevel] = useState<string>('Secondary');
-  const [selectedGradeLevel, setSelectedGradeLevel] = useState<string>('');
+  const [selectedGradeLevel, setSelectedGradeLevel] = useState<string>('all-grades');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [selectedTerm, setSelectedTerm] = useState<string>('First Term');
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,7 +28,7 @@ const ManageGrades = () => {
   // Filter students by education level, grade level, and search term
   const filteredStudents = students.filter(student => {
     const matchesEducationLevel = selectedEducationLevel === '' || student.educationLevel === selectedEducationLevel;
-    const matchesGradeLevel = selectedGradeLevel === '' || student.gradeLevel === selectedGradeLevel;
+    const matchesGradeLevel = selectedGradeLevel === 'all-grades' || selectedGradeLevel === '' || student.gradeLevel === selectedGradeLevel;
     const matchesSearch = searchTerm === '' || student.name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesEducationLevel && matchesGradeLevel && matchesSearch;
   });

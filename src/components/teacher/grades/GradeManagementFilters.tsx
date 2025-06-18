@@ -90,7 +90,7 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
                 <SelectValue placeholder="All grades" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Grades</SelectItem>
+                <SelectItem value="all-grades">All Grades</SelectItem>
                 {availableGradeLevels.map(level => (
                   <SelectItem key={level} value={level}>{level}</SelectItem>
                 ))}
