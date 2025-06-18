@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -44,7 +43,27 @@ const Login = () => {
         title: 'Success',
         description: 'You have successfully logged in',
       });
-      navigate('/');
+      
+      // Redirect to role-specific dashboard
+      switch (selectedRole) {
+        case 'admin':
+          navigate('/admin');
+          break;
+        case 'teacher':
+          navigate('/teacher');
+          break;
+        case 'student':
+          navigate('/student');
+          break;
+        case 'parent':
+          navigate('/parent');
+          break;
+        case 'manager':
+          navigate('/manager');
+          break;
+        default:
+          navigate('/');
+      }
     } catch (error) {
       toast({
         title: 'Error',
