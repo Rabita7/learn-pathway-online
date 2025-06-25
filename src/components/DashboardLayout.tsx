@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -105,6 +106,35 @@ const DashboardLayout = () => {
             />
           </>
         );
+      case 'manager':
+        return (
+          <>
+            <SidebarLink 
+              to="/manager" 
+              icon={<Home className="w-5 h-5" />} 
+              label="Dashboard" 
+              active={location.pathname === '/manager'}
+            />
+            <SidebarLink 
+              to="/manager/manage-staff" 
+              icon={<Users className="w-5 h-5" />} 
+              label="Manage Staff" 
+              active={location.pathname === '/manager/manage-staff'}
+            />
+            <SidebarLink 
+              to="/manager/assign-teachers" 
+              icon={<GraduationCap className="w-5 h-5" />} 
+              label="Assign Teachers" 
+              active={location.pathname === '/manager/assign-teachers'}
+            />
+            <SidebarLink 
+              to="/manager/write-letters" 
+              icon={<Bell className="w-5 h-5" />} 
+              label="Write Letters" 
+              active={location.pathname === '/manager/write-letters'}
+            />
+          </>
+        );
       case 'teacher':
         return (
           <>
@@ -161,6 +191,7 @@ const DashboardLayout = () => {
             <SidebarLink to="/student/class-schedule" icon={<Calendar className="w-5 h-5" />} label="Class Schedule" active={location.pathname === '/student/class-schedule'} />
             <SidebarLink to="/student/assignments" icon={<Book className="w-5 h-5" />} label="Assignments" active={location.pathname === '/student/assignments'} />
             <SidebarLink to="/student/announcements" icon={<Bell className="w-5 h-5" />} label="Announcements" active={location.pathname === '/student/announcements'} />
+            <SidebarLink to="/student/profile" icon={<User className="w-5 h-5" />} label="Profile" active={location.pathname === '/student/profile'} />
           </>
         );
       case 'parent':

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,6 +34,8 @@ import PostAnnouncement from "@/pages/admin/PostAnnouncement";
 // Manager Pages
 import ManagerDashboard from "@/pages/manager/ManagerDashboard";
 import ManageStaff from "@/pages/manager/ManageStaff";
+import AssignTeachers from "@/pages/manager/AssignTeachers";
+import WriteLetters from "@/pages/manager/WriteLetters";
 
 // Teacher Pages
 import TeacherDashboard from "@/pages/teacher/TeacherDashboard";
@@ -43,14 +46,17 @@ import PostAssignment from "@/pages/teacher/PostAssignment";
 import ViewAssignments from "@/pages/teacher/ViewAssignments";
 import Announcements from "@/pages/teacher/Announcements";
 
-// Role-specific Dashboards
+// Student Pages
 import StudentDashboard from "@/pages/student/StudentDashboard";
 import ViewGrades from "@/pages/student/ViewGrades";
 import StudentAssignments from "@/pages/student/StudentAssignments";
-import ParentDashboard from "@/pages/parent/ParentDashboard";
-
+import StudentAnnouncements from "@/pages/student/StudentAnnouncements";
+import StudentProfile from "@/pages/student/StudentProfile";
 import ViewAttendance from "@/pages/student/ViewAttendance";
 import ClassSchedule from "@/pages/student/ClassSchedule";
+
+// Parent Pages
+import ParentDashboard from "@/pages/parent/ParentDashboard";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +95,8 @@ const App = () => (
               {/* Manager routes */}
               <Route path="/manager" element={<ManagerDashboard />} />
               <Route path="/manager/manage-staff" element={<ManageStaff />} />
+              <Route path="/manager/assign-teachers" element={<AssignTeachers />} />
+              <Route path="/manager/write-letters" element={<WriteLetters />} />
               <Route path="/manager/view-reports" element={<div>Manager Reports Page</div>} />
               <Route path="/manager/budget" element={<div>Budget Management Page</div>} />
               <Route path="/manager/announcements" element={<div>Manager Announcements Page</div>} />
@@ -108,7 +116,8 @@ const App = () => (
               <Route path="/student/view-attendance" element={<ViewAttendance />} />
               <Route path="/student/class-schedule" element={<ClassSchedule />} />
               <Route path="/student/assignments" element={<StudentAssignments />} />
-              <Route path="/student/announcements" element={<div>Student Announcements Page</div>} />
+              <Route path="/student/announcements" element={<StudentAnnouncements />} />
+              <Route path="/student/profile" element={<StudentProfile />} />
               
               {/* Parent routes */}
               <Route path="/parent" element={<ParentDashboard />} />
@@ -117,7 +126,7 @@ const App = () => (
               <Route path="/parent/announcements" element={<div>Parent Announcements Page</div>} />
               
               {/* Shared routes */}
-              <Route path="/profile" element={<div>Profile Page</div>} />
+              <Route path="/profile" element={<StudentProfile />} />
             </Route>
             
             {/* Catch-all route */}
