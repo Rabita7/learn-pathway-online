@@ -57,6 +57,9 @@ import ClassSchedule from "@/pages/student/ClassSchedule";
 
 // Parent Pages
 import ParentDashboard from "@/pages/parent/ParentDashboard";
+import ViewChildGrades from "@/pages/parent/ViewChildGrades";
+import ViewChildAttendance from "@/pages/parent/ViewChildAttendance";
+import ParentAnnouncements from "@/pages/parent/ParentAnnouncements";
 
 const queryClient = new QueryClient();
 
@@ -121,9 +124,9 @@ const App = () => (
               
               {/* Parent routes */}
               <Route path="/parent" element={<ParentDashboard />} />
-              <Route path="/parent/view-child-grades" element={<div>View Child's Grades Page</div>} />
-              <Route path="/parent/view-child-attendance" element={<div>View Child's Attendance Page</div>} />
-              <Route path="/parent/announcements" element={<div>Parent Announcements Page</div>} />
+              <Route path="/parent/view-child-grades" element={<ViewChildGrades />} />
+              <Route path="/parent/view-child-attendance" element={<ViewChildAttendance />} />
+              <Route path="/parent/announcements" element={<ParentAnnouncements />} />
               
               {/* Shared routes */}
               <Route path="/profile" element={<StudentProfile />} />
