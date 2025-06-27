@@ -19,8 +19,8 @@ import Services from "@/pages/Services";
 
 // Auth Pages
 import Login from "@/pages/auth/Login";
-import Register from "@/pages/auth/Register";
 import ManagerRegister from "@/pages/auth/ManagerRegister";
+import AccountSetup from "@/pages/auth/AccountSetup";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -80,8 +80,8 @@ const App = () => (
               
               {/* Authentication routes */}
               <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/register" element={<Register />} />
               <Route path="/auth/manager-register" element={<ManagerRegister />} />
+              <Route path="/auth/setup" element={<AccountSetup />} />
             </Route>
             
             {/* Dashboard routes */}

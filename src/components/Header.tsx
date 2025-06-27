@@ -116,9 +116,6 @@ const Header = () => {
               <Button variant="ghost" asChild className="hover:text-[#00a7b0]">
                 <Link to="/auth/login">Login</Link>
               </Button>
-              <Button asChild className="bg-[#00a7b0] hover:bg-[#008a92]">
-                <Link to="/auth/register">Register</Link>
-              </Button>
             </div>
           )}
         </div>

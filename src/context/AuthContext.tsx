@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
+  createUserAccount: (name: string, email: string, role: UserRole) => Promise<{ setupUrl: string }>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: () => {},
   register: async () => {},
+  createUserAccount: async () => ({ setupUrl: '' }),
 });
 
 // Mock user data for demonstration
@@ -115,6 +117,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(newUser);
     localStorage.setItem('highschool_portal_user', JSON.stringify(newUser));
   };
+
+  const createUserAccount = async (name: string, email: string, role: UserRole) => {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Check if email already exists
+    const existingUser = mockUsers.find(user => user.email === email);
+    if (existingUser) {
+      throw new Error('Email already in use');
+    }
+    
+    // Generate setup token (in real app, this would be a secure token)
+    const setupToken = Math.random().toString(36).substring(2, 15);
+    
+    // Create the setup URL
+    const setupUrl = `${window.location.origin}/auth/setup?email=${encodeURIComponent(email)}&token=${setupToken}`;
+    
+    // In a real app, this would:
+    // 1. Create the user account in pending state
+    // 2. Send an email with the setup link
+    // 3. Store the token securely
+    
+    console.log(`Account setup email would be sent to ${email} with link: ${setupUrl}`);
+    
+    return { setupUrl };
+  };
   
   return (
     <AuthContext.Provider value={{ 
@@ -123,7 +151,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isLoading, 
       login, 
       logout, 
-      register 
+      register,
+      createUserAccount
     }}>
       {children}
     </AuthContext.Provider>

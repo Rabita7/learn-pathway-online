@@ -117,10 +117,7 @@ const Login = () => {
           Sign in to your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Or{' '}
-          <Link to="/auth/register" className="font-medium text-primary hover:text-primary-focus">
-            create a new account
-          </Link>
+          Please enter your credentials to access the portal
         </p>
       </div>
 
@@ -198,6 +195,12 @@ const Login = () => {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="mt-6">
+            <p className="text-xs text-center text-gray-500">
+              Don't have an account? Contact your administrator to get access.
+            </p>
           </div>
         </div>
       </div>
