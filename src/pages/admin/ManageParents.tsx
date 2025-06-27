@@ -19,8 +19,10 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, Edit, Trash, User } from 'lucide-react';
+import { Search, Edit, Trash } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import AddParentDialog from '@/components/admin/AddParentDialog';
+import EditParentDialog from '@/components/admin/EditParentDialog';
 
 // Mock data for parents
 interface Parent {
@@ -44,6 +46,8 @@ const ManageParents = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [parents, setParents] = useState<Parent[]>(mockParents);
+  const [editingParent, setEditingParent] = useState<Parent | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   if (!user || user.role !== 'admin') {
     return <div>Access denied. Admin privileges required.</div>;
@@ -55,44 +59,55 @@ const ManageParents = () => {
     parent.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddParent = () => {
+  const handleAddParent = (parentData: Omit<Parent, 'id'>) => {
+    const newParent: Parent = {
+      id: `p${parents.length + 1}`,
+      ...parentData,
+    };
+    setParents([...parents, newParent]);
     toast({
-      title: "Not Implemented",
-      description: "Add parent functionality will be implemented in a future update.",
+      title: "Parent Added",
+      description: `${parentData.name} has been added successfully.`,
     });
   };
 
-  const handleEditParent = (id: string) => {
+  const handleEditParent = (updatedParent: Parent) => {
+    setParents(parents.map(parent => 
+      parent.id === updatedParent.id ? updatedParent : parent
+    ));
     toast({
-      title: "Not Implemented",
-      description: `Edit functionality for parent ID: ${id} will be implemented in a future update.`,
+      title: "Parent Updated",
+      description: `${updatedParent.name} has been updated successfully.`,
     });
   };
 
   const handleDeleteParent = (id: string) => {
-    // In a real app, you'd make an API call here
+    const parentToDelete = parents.find(parent => parent.id === id);
     setParents(parents.filter(parent => parent.id !== id));
     
     toast({
       title: "Parent Deleted",
-      description: `Parent ID: ${id} has been removed.`,
+      description: `${parentToDelete?.name} has been removed.`,
     });
   };
 
   const handleViewChildren = (parentId: string) => {
     toast({
-      title: "Not Implemented",
-      description: `View children for parent ID: ${parentId} will be implemented in a future update.`,
+      title: "View Children",
+      description: `Feature to view children for parent ID: ${parentId} will be implemented with backend integration.`,
     });
+  };
+
+  const openEditDialog = (parent: Parent) => {
+    setEditingParent(parent);
+    setEditDialogOpen(true);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Manage Parents</h1>
-        <Button onClick={handleAddParent} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add Parent
-        </Button>
+        <AddParentDialog onAddParent={handleAddParent} />
       </div>
 
       <Card>
@@ -147,7 +162,7 @@ const ManageParents = () => {
                           <Button 
                             variant="outline" 
                             size="icon"
-                            onClick={() => handleEditParent(parent.id)}
+                            onClick={() => openEditDialog(parent)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -174,6 +189,13 @@ const ManageParents = () => {
           </div>
         </CardContent>
       </Card>
+
+      <EditParentDialog
+        parent={editingParent}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onEditParent={handleEditParent}
+      />
     </div>
   );
 };

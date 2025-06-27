@@ -19,9 +19,11 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, Edit, Trash, User } from 'lucide-react';
+import { Search, Edit, Trash } from 'lucide-react';
 import { Student } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import AddStudentDialog from '@/components/admin/AddStudentDialog';
+import EditStudentDialog from '@/components/admin/EditStudentDialog';
 
 // Mock data for students
 const mockStudents: Student[] = [
@@ -37,6 +39,8 @@ const ManageStudents = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [students, setStudents] = useState<Student[]>(mockStudents);
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   if (!user || user.role !== 'admin') {
     return <div>Access denied. Admin privileges required.</div>;
@@ -49,37 +53,48 @@ const ManageStudents = () => {
     student.grade.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddStudent = () => {
+  const handleAddStudent = (studentData: Omit<Student, 'id'>) => {
+    const newStudent: Student = {
+      id: (students.length + 1).toString(),
+      ...studentData,
+    };
+    setStudents([...students, newStudent]);
     toast({
-      title: "Not Implemented",
-      description: "Add student functionality will be implemented in a future update.",
+      title: "Student Added",
+      description: `${studentData.name} has been added successfully.`,
     });
   };
 
-  const handleEditStudent = (id: string) => {
+  const handleEditStudent = (updatedStudent: Student) => {
+    setStudents(students.map(student => 
+      student.id === updatedStudent.id ? updatedStudent : student
+    ));
     toast({
-      title: "Not Implemented",
-      description: `Edit functionality for student ID: ${id} will be implemented in a future update.`,
+      title: "Student Updated",
+      description: `${updatedStudent.name} has been updated successfully.`,
     });
   };
 
   const handleDeleteStudent = (id: string) => {
-    // In a real app, you'd make an API call here
+    const studentToDelete = students.find(student => student.id === id);
     setStudents(students.filter(student => student.id !== id));
     
     toast({
       title: "Student Deleted",
-      description: `Student ID: ${id} has been removed.`,
+      description: `${studentToDelete?.name} has been removed.`,
     });
+  };
+
+  const openEditDialog = (student: Student) => {
+    setEditingStudent(student);
+    setEditDialogOpen(true);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Manage Students</h1>
-        <Button onClick={handleAddStudent} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add Student
-        </Button>
+        <AddStudentDialog onAddStudent={handleAddStudent} />
       </div>
 
       <Card>
@@ -125,7 +140,7 @@ const ManageStudents = () => {
                           <Button 
                             variant="outline" 
                             size="icon"
-                            onClick={() => handleEditStudent(student.id)}
+                            onClick={() => openEditDialog(student)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -152,6 +167,13 @@ const ManageStudents = () => {
           </div>
         </CardContent>
       </Card>
+
+      <EditStudentDialog
+        student={editingStudent}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onEditStudent={handleEditStudent}
+      />
     </div>
   );
 };

@@ -19,8 +19,10 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, Edit, Trash, GraduationCap } from 'lucide-react';
+import { Search, Edit, Trash } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import AddTeacherDialog from '@/components/admin/AddTeacherDialog';
+import EditTeacherDialog from '@/components/admin/EditTeacherDialog';
 
 // Mock data for teachers
 interface Teacher {
@@ -44,6 +46,8 @@ const ManageTeachers = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [teachers, setTeachers] = useState<Teacher[]>(mockTeachers);
+  const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   if (!user || user.role !== 'admin') {
     return <div>Access denied. Admin privileges required.</div>;
@@ -56,37 +60,48 @@ const ManageTeachers = () => {
     teacher.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddTeacher = () => {
+  const handleAddTeacher = (teacherData: Omit<Teacher, 'id'>) => {
+    const newTeacher: Teacher = {
+      id: (teachers.length + 1).toString(),
+      ...teacherData,
+    };
+    setTeachers([...teachers, newTeacher]);
     toast({
-      title: "Not Implemented",
-      description: "Add teacher functionality will be implemented in a future update.",
+      title: "Teacher Added",
+      description: `${teacherData.name} has been added successfully.`,
     });
   };
 
-  const handleEditTeacher = (id: string) => {
+  const handleEditTeacher = (updatedTeacher: Teacher) => {
+    setTeachers(teachers.map(teacher => 
+      teacher.id === updatedTeacher.id ? updatedTeacher : teacher
+    ));
     toast({
-      title: "Not Implemented",
-      description: `Edit functionality for teacher ID: ${id} will be implemented in a future update.`,
+      title: "Teacher Updated",
+      description: `${updatedTeacher.name} has been updated successfully.`,
     });
   };
 
   const handleDeleteTeacher = (id: string) => {
-    // In a real app, you'd make an API call here
+    const teacherToDelete = teachers.find(teacher => teacher.id === id);
     setTeachers(teachers.filter(teacher => teacher.id !== id));
     
     toast({
       title: "Teacher Deleted",
-      description: `Teacher ID: ${id} has been removed.`,
+      description: `${teacherToDelete?.name} has been removed.`,
     });
+  };
+
+  const openEditDialog = (teacher: Teacher) => {
+    setEditingTeacher(teacher);
+    setEditDialogOpen(true);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Manage Teachers</h1>
-        <Button onClick={handleAddTeacher} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add Teacher
-        </Button>
+        <AddTeacherDialog onAddTeacher={handleAddTeacher} />
       </div>
 
       <Card>
@@ -134,7 +149,7 @@ const ManageTeachers = () => {
                           <Button 
                             variant="outline" 
                             size="icon"
-                            onClick={() => handleEditTeacher(teacher.id)}
+                            onClick={() => openEditDialog(teacher)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -161,6 +176,13 @@ const ManageTeachers = () => {
           </div>
         </CardContent>
       </Card>
+
+      <EditTeacherDialog
+        teacher={editingTeacher}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onEditTeacher={handleEditTeacher}
+      />
     </div>
   );
 };

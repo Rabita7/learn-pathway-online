@@ -19,9 +19,11 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, Edit, Trash, School } from 'lucide-react';
+import { Search, Edit, Trash } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Class } from '@/types';
+import AddClassDialog from '@/components/admin/AddClassDialog';
+import EditClassDialog from '@/components/admin/EditClassDialog';
 
 // Mock data for classes
 const mockClasses: Class[] = [
@@ -51,6 +53,8 @@ const ManageClasses = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [classes, setClasses] = useState<Class[]>(mockClasses);
+  const [editingClass, setEditingClass] = useState<Class | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   if (!user || user.role !== 'admin') {
     return <div>Access denied. Admin privileges required.</div>;
@@ -69,37 +73,48 @@ const ManageClasses = () => {
     cls.room.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddClass = () => {
+  const handleAddClass = (classData: Omit<Class, 'id'>) => {
+    const newClass: Class = {
+      id: (classes.length + 1).toString(),
+      ...classData,
+    };
+    setClasses([...classes, newClass]);
     toast({
-      title: "Not Implemented",
-      description: "Add class functionality will be implemented in a future update.",
+      title: "Class Added",
+      description: `${classData.name} has been added successfully.`,
     });
   };
 
-  const handleEditClass = (id: string) => {
+  const handleEditClass = (updatedClass: Class) => {
+    setClasses(classes.map(cls => 
+      cls.id === updatedClass.id ? updatedClass : cls
+    ));
     toast({
-      title: "Not Implemented",
-      description: `Edit functionality for class ID: ${id} will be implemented in a future update.`,
+      title: "Class Updated",
+      description: `${updatedClass.name} has been updated successfully.`,
     });
   };
 
   const handleDeleteClass = (id: string) => {
-    // In a real app, you'd make an API call here
+    const classToDelete = classes.find(cls => cls.id === id);
     setClasses(classes.filter(cls => cls.id !== id));
     
     toast({
       title: "Class Deleted",
-      description: `Class ID: ${id} has been removed.`,
+      description: `${classToDelete?.name} has been removed.`,
     });
+  };
+
+  const openEditDialog = (cls: Class) => {
+    setEditingClass(cls);
+    setEditDialogOpen(true);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Manage Classes</h1>
-        <Button onClick={handleAddClass} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add Class
-        </Button>
+        <AddClassDialog onAddClass={handleAddClass} />
       </div>
 
       <Card>
@@ -147,7 +162,7 @@ const ManageClasses = () => {
                           <Button 
                             variant="outline" 
                             size="icon"
-                            onClick={() => handleEditClass(cls.id)}
+                            onClick={() => openEditDialog(cls)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -174,6 +189,13 @@ const ManageClasses = () => {
           </div>
         </CardContent>
       </Card>
+
+      <EditClassDialog
+        class={editingClass}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onEditClass={handleEditClass}
+      />
     </div>
   );
 };
