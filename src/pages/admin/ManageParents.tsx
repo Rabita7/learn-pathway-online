@@ -19,26 +19,77 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Edit, Trash } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Search, Edit, Trash, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import AddParentDialog from '@/components/admin/AddParentDialog';
 import EditParentDialog from '@/components/admin/EditParentDialog';
 
-// Mock data for parents
+// Updated interface for parents with children
+interface Child {
+  name: string;
+  grade: string;
+}
+
 interface Parent {
   id: string;
   name: string;
   email: string;
   phone: string;
-  childrenCount: number;
+  children: Child[];
 }
 
+// Updated mock data with children information
 const mockParents: Parent[] = [
-  { id: 'p1', name: 'Richard Doe', email: 'richard.doe@example.com', phone: '555-1001', childrenCount: 2 },
-  { id: 'p2', name: 'Mary Smith', email: 'mary.smith@example.com', phone: '555-1002', childrenCount: 1 },
-  { id: 'p3', name: 'James Johnson', email: 'james.johnson@example.com', phone: '555-1003', childrenCount: 3 },
-  { id: 'p4', name: 'Patricia Brown', email: 'patricia.brown@example.com', phone: '555-1004', childrenCount: 2 },
-  { id: 'p5', name: 'Robert Wilson', email: 'robert.wilson@example.com', phone: '555-1005', childrenCount: 1 },
+  { 
+    id: 'p1', 
+    name: 'Richard Doe', 
+    email: 'richard.doe@example.com', 
+    phone: '555-1001', 
+    children: [
+      { name: 'John Doe', grade: '11' },
+      { name: 'Jane Doe', grade: '9' }
+    ]
+  },
+  { 
+    id: 'p2', 
+    name: 'Mary Smith', 
+    email: 'mary.smith@example.com', 
+    phone: '555-1002', 
+    children: [
+      { name: 'Michael Smith', grade: '12' }
+    ]
+  },
+  { 
+    id: 'p3', 
+    name: 'James Johnson', 
+    email: 'james.johnson@example.com', 
+    phone: '555-1003', 
+    children: [
+      { name: 'Sarah Johnson', grade: '10' },
+      { name: 'David Johnson', grade: '11' },
+      { name: 'Lisa Johnson', grade: '9' }
+    ]
+  },
+  { 
+    id: 'p4', 
+    name: 'Patricia Brown', 
+    email: 'patricia.brown@example.com', 
+    phone: '555-1004', 
+    children: [
+      { name: 'Robert Brown', grade: '12' },
+      { name: 'Emily Brown', grade: '10' }
+    ]
+  },
+  { 
+    id: 'p5', 
+    name: 'Robert Wilson', 
+    email: 'robert.wilson@example.com', 
+    phone: '555-1005', 
+    children: [
+      { name: 'Amanda Wilson', grade: '9' }
+    ]
+  },
 ];
 
 const ManageParents = () => {
@@ -56,7 +107,10 @@ const ManageParents = () => {
   // Filter parents based on search term
   const filteredParents = parents.filter(parent => 
     parent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    parent.email.toLowerCase().includes(searchTerm.toLowerCase())
+    parent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    parent.children.some(child => 
+      child.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
   const handleAddParent = (parentData: Omit<Parent, 'id'>) => {
@@ -67,7 +121,7 @@ const ManageParents = () => {
     setParents([...parents, newParent]);
     toast({
       title: "Parent Added",
-      description: `${parentData.name} has been added successfully.`,
+      description: `${parentData.name} has been added with ${parentData.children.length} child(ren).`,
     });
   };
 
@@ -91,16 +145,19 @@ const ManageParents = () => {
     });
   };
 
-  const handleViewChildren = (parentId: string) => {
-    toast({
-      title: "View Children",
-      description: `Feature to view children for parent ID: ${parentId} will be implemented with backend integration.`,
-    });
-  };
-
   const openEditDialog = (parent: Parent) => {
     setEditingParent(parent);
     setEditDialogOpen(true);
+  };
+
+  const getGradeColor = (grade: string) => {
+    switch (grade) {
+      case '9': return 'bg-green-100 text-green-800';
+      case '10': return 'bg-blue-100 text-blue-800';
+      case '11': return 'bg-yellow-100 text-yellow-800';
+      case '12': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
   return (
@@ -113,14 +170,14 @@ const ManageParents = () => {
       <Card>
         <CardHeader>
           <CardTitle>Parents List</CardTitle>
-          <CardDescription>View and manage all parents with children in the school.</CardDescription>
+          <CardDescription>View and manage all parents with children in the high school.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search parents..."
+                placeholder="Search parents or children..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
@@ -130,14 +187,14 @@ const ManageParents = () => {
 
           <div className="border rounded-md">
             <Table>
-              <TableCaption>A list of all parents in the system.</TableCaption>
+              <TableCaption>A list of all parents and their high school children.</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead>ID</TableHead>
-                  <TableHead>Name</TableHead>
+                  <TableHead>Parent Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Phone</TableHead>
-                  <TableHead>Children</TableHead>
+                  <TableHead>Children (Grade)</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -150,12 +207,16 @@ const ManageParents = () => {
                       <TableCell>{parent.email}</TableCell>
                       <TableCell>{parent.phone}</TableCell>
                       <TableCell>
-                        <Button 
-                          variant="link" 
-                          onClick={() => handleViewChildren(parent.id)}
-                        >
-                          View ({parent.childrenCount})
-                        </Button>
+                        <div className="space-y-1">
+                          {parent.children.map((child, index) => (
+                            <div key={index} className="flex items-center gap-2">
+                              <span className="text-sm">{child.name}</span>
+                              <Badge className={`text-xs ${getGradeColor(child.grade)}`}>
+                                Grade {child.grade}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">

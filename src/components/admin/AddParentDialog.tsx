@@ -11,14 +11,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
+
+interface Child {
+  name: string;
+  grade: string;
+}
 
 interface Parent {
   id: string;
   name: string;
   email: string;
   phone: string;
-  childrenCount: number;
+  children: Child[];
 }
 
 interface AddParentDialogProps {
@@ -31,14 +36,57 @@ const AddParentDialog: React.FC<AddParentDialogProps> = ({ onAddParent }) => {
     name: '',
     email: '',
     phone: '',
-    childrenCount: 1,
+    children: [{ name: '', grade: '9' }] as Child[],
   });
+
+  const highSchoolGrades = ['9', '10', '11', '12'];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddParent(formData);
-    setFormData({ name: '', email: '', phone: '', childrenCount: 1 });
+    
+    // Filter out empty children
+    const validChildren = formData.children.filter(child => child.name.trim() !== '');
+    
+    if (validChildren.length === 0) {
+      alert('Please add at least one child');
+      return;
+    }
+    
+    onAddParent({
+      ...formData,
+      children: validChildren,
+    });
+    
+    setFormData({ 
+      name: '', 
+      email: '', 
+      phone: '', 
+      children: [{ name: '', grade: '9' }] 
+    });
     setOpen(false);
+  };
+
+  const addChild = () => {
+    setFormData({
+      ...formData,
+      children: [...formData.children, { name: '', grade: '9' }]
+    });
+  };
+
+  const removeChild = (index: number) => {
+    if (formData.children.length > 1) {
+      setFormData({
+        ...formData,
+        children: formData.children.filter((_, i) => i !== index)
+      });
+    }
+  };
+
+  const updateChild = (index: number, field: keyof Child, value: string) => {
+    const updatedChildren = formData.children.map((child, i) => 
+      i === index ? { ...child, [field]: value } : child
+    );
+    setFormData({ ...formData, children: updatedChildren });
   };
 
   return (
@@ -48,16 +96,16 @@ const AddParentDialog: React.FC<AddParentDialogProps> = ({ onAddParent }) => {
           <Plus className="h-4 w-4" /> Add Parent
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Parent</DialogTitle>
           <DialogDescription>
-            Enter the parent's information below.
+            Enter the parent's information and their children's details below.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name">Parent Name</Label>
             <Input
               id="name"
               value={formData.name}
@@ -84,17 +132,55 @@ const AddParentDialog: React.FC<AddParentDialogProps> = ({ onAddParent }) => {
               required
             />
           </div>
-          <div>
-            <Label htmlFor="childrenCount">Number of Children</Label>
-            <Input
-              id="childrenCount"
-              type="number"
-              value={formData.childrenCount}
-              onChange={(e) => setFormData({ ...formData, childrenCount: parseInt(e.target.value) || 1 })}
-              min="1"
-              required
-            />
+          
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Children (High School Students)</Label>
+              <Button type="button" onClick={addChild} size="sm" variant="outline">
+                <Plus className="h-3 w-3 mr-1" /> Add Child
+              </Button>
+            </div>
+            
+            {formData.children.map((child, index) => (
+              <div key={index} className="flex gap-2 items-end">
+                <div className="flex-1">
+                  <Label htmlFor={`child-name-${index}`} className="text-xs">Child Name</Label>
+                  <Input
+                    id={`child-name-${index}`}
+                    value={child.name}
+                    onChange={(e) => updateChild(index, 'name', e.target.value)}
+                    placeholder="Enter child's name"
+                    required
+                  />
+                </div>
+                <div className="w-20">
+                  <Label htmlFor={`child-grade-${index}`} className="text-xs">Grade</Label>
+                  <select
+                    id={`child-grade-${index}`}
+                    value={child.grade}
+                    onChange={(e) => updateChild(index, 'grade', e.target.value)}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    {highSchoolGrades.map(grade => (
+                      <option key={grade} value={grade}>Grade {grade}</option>
+                    ))}
+                  </select>
+                </div>
+                {formData.children.length > 1 && (
+                  <Button
+                    type="button"
+                    onClick={() => removeChild(index)}
+                    size="icon"
+                    variant="outline"
+                    className="h-10 w-10"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                )}
+              </div>
+            ))}
           </div>
+          
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
