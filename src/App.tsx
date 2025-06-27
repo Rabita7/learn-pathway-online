@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import ManagerRegister from './pages/auth/ManagerRegister';
+import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import PostAnnouncement from './pages/admin/PostAnnouncement';
 import ManageTeachers from './pages/admin/ManageTeachers';
@@ -35,15 +37,17 @@ const App: React.FC = () => {
           <Route path="/parent" element={<ProtectedRoute><ParentDashboard /></ProtectedRoute>} />
           <Route path="/manager" element={<ProtectedRoute><ManagerDashboard /></ProtectedRoute>} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/post-announcement" element={<ProtectedRoute><PostAnnouncement /></ProtectedRoute>} />
-          <Route path="/admin/manage-teachers" element={<ProtectedRoute><ManageTeachers /></ProtectedRoute>} />
-          <Route path="/admin/manage-students" element={<ProtectedRoute><ManageStudents /></ProtectedRoute>} />
-          <Route path="/admin/manage-parents" element={<ProtectedRoute><ManageParents /></ProtectedRoute>} />
-          <Route path="/admin/manage-classes" element={<ProtectedRoute><ManageClasses /></ProtectedRoute>} />
-          <Route path="/admin/manage-users" element={<ProtectedRoute><ManageUserAccounts /></ProtectedRoute>} />
-          <Route path="/admin/view-reports" element={<ProtectedRoute><ViewReports /></ProtectedRoute>} />
+          {/* Admin Routes with Sidebar Layout */}
+          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="post-announcement" element={<PostAnnouncement />} />
+            <Route path="manage-teachers" element={<ManageTeachers />} />
+            <Route path="manage-students" element={<ManageStudents />} />
+            <Route path="manage-parents" element={<ManageParents />} />
+            <Route path="manage-classes" element={<ManageClasses />} />
+            <Route path="manage-users" element={<ManageUserAccounts />} />
+            <Route path="view-reports" element={<ViewReports />} />
+          </Route>
 
           {/* Default Route */}
           <Route path="*" element={<Navigate to="/" />} />
