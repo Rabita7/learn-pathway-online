@@ -1,4 +1,3 @@
-
 import { EthiopianStudent, EthiopianClass, EthiopianGradeEntry } from '@/types/ethiopian-education';
 import { EthiopianGradeLevel } from '@/types/ethiopia';
 
@@ -12,7 +11,8 @@ export const mockEthiopianStudents: EthiopianStudent[] = [
     region: 'Addis Ababa',
     zone: 'Bole',
     woreda: 'Bole Sub-city',
-    motherTongue: 'Amharic'
+    motherTongue: 'Amharic',
+    section: 'A'
   },
   {
     id: '2',
@@ -23,7 +23,8 @@ export const mockEthiopianStudents: EthiopianStudent[] = [
     region: 'Oromia',
     zone: 'East Shewa',
     woreda: 'Adama',
-    motherTongue: 'Oromifa'
+    motherTongue: 'Oromifa',
+    section: 'B'
   },
   {
     id: '3',
@@ -35,7 +36,8 @@ export const mockEthiopianStudents: EthiopianStudent[] = [
     zone: 'North Shewa',
     woreda: 'Debre Berhan',
     stream: 'Natural Science',
-    motherTongue: 'Amharic'
+    motherTongue: 'Amharic',
+    section: 'A'
   },
   {
     id: '4',
@@ -47,7 +49,8 @@ export const mockEthiopianStudents: EthiopianStudent[] = [
     zone: 'Kirkos',
     woreda: 'Kirkos Sub-city',
     stream: 'Social Science',
-    motherTongue: 'Amharic'
+    motherTongue: 'Amharic',
+    section: 'A'
   },
   {
     id: '5',
@@ -58,7 +61,8 @@ export const mockEthiopianStudents: EthiopianStudent[] = [
     region: 'SNNP',
     zone: 'Wolaita',
     woreda: 'Sodo',
-    motherTongue: 'Wolaytta'
+    motherTongue: 'Wolaytta',
+    section: 'A'
   }
 ];
 
