@@ -25,13 +25,58 @@ import { Class } from '@/types';
 import AddClassDialog from '@/components/admin/AddClassDialog';
 import EditClassDialog from '@/components/admin/EditClassDialog';
 
-// Mock data for classes
+// Updated mock data for classes with all required fields
 const mockClasses: Class[] = [
-  { id: '1', name: 'Advanced Mathematics', teacherId: '1', schedule: 'Mon, Wed, Fri 9:00 AM', room: 'Room 101' },
-  { id: '2', name: 'Physics', teacherId: '2', schedule: 'Tue, Thu 10:30 AM', room: 'Room 102' },
-  { id: '3', name: 'English Literature', teacherId: '3', schedule: 'Mon, Wed 1:00 PM', room: 'Room 203' },
-  { id: '4', name: 'World History', teacherId: '4', schedule: 'Tue, Thu 2:30 PM', room: 'Room 205' },
-  { id: '5', name: 'Art & Design', teacherId: '5', schedule: 'Fri 11:00 AM', room: 'Room 302' },
+  { 
+    id: '1', 
+    name: 'Advanced Mathematics', 
+    grade: '12', 
+    section: 'A', 
+    teacherId: '1', 
+    schedule: 'Mon, Wed, Fri 9:00 AM', 
+    room: 'Room 101',
+    studentIds: ['1', '4'] 
+  },
+  { 
+    id: '2', 
+    name: 'Physics', 
+    grade: '11', 
+    section: 'A', 
+    teacherId: '2', 
+    schedule: 'Tue, Thu 10:30 AM', 
+    room: 'Room 102',
+    studentIds: ['3'] 
+  },
+  { 
+    id: '3', 
+    name: 'English Literature', 
+    grade: '10', 
+    section: 'A', 
+    teacherId: '3', 
+    schedule: 'Mon, Wed 1:00 PM', 
+    room: 'Room 203',
+    studentIds: ['1', '5'] 
+  },
+  { 
+    id: '4', 
+    name: 'World History', 
+    grade: '9', 
+    section: 'A', 
+    teacherId: '4', 
+    schedule: 'Tue, Thu 2:30 PM', 
+    room: 'Room 205',
+    studentIds: ['2'] 
+  },
+  { 
+    id: '5', 
+    name: 'Art & Design', 
+    grade: '10', 
+    section: 'B', 
+    teacherId: '5', 
+    schedule: 'Fri 11:00 AM', 
+    room: 'Room 302',
+    studentIds: [] 
+  },
 ];
 
 // Mock data for teachers
@@ -70,7 +115,9 @@ const ManageClasses = () => {
   const filteredClasses = classes.filter(cls => 
     cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     getTeacherName(cls.teacherId).toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cls.room.toLowerCase().includes(searchTerm.toLowerCase())
+    cls.room.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cls.grade.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cls.section.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleAddClass = (classData: Omit<Class, 'id'>) => {
@@ -142,9 +189,12 @@ const ManageClasses = () => {
                 <TableRow>
                   <TableHead>ID</TableHead>
                   <TableHead>Class Name</TableHead>
+                  <TableHead>Grade</TableHead>
+                  <TableHead>Section</TableHead>
                   <TableHead>Teacher</TableHead>
                   <TableHead>Schedule</TableHead>
                   <TableHead>Room</TableHead>
+                  <TableHead>Students</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -154,9 +204,16 @@ const ManageClasses = () => {
                     <TableRow key={cls.id}>
                       <TableCell>{cls.id}</TableCell>
                       <TableCell className="font-medium">{cls.name}</TableCell>
+                      <TableCell>Grade {cls.grade}</TableCell>
+                      <TableCell>
+                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">
+                          Section {cls.section}
+                        </span>
+                      </TableCell>
                       <TableCell>{getTeacherName(cls.teacherId)}</TableCell>
                       <TableCell>{cls.schedule}</TableCell>
                       <TableCell>{cls.room}</TableCell>
+                      <TableCell>{cls.studentIds.length}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           <Button 
@@ -179,7 +236,7 @@ const ManageClasses = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center">
+                    <TableCell colSpan={9} className="text-center">
                       No classes found
                     </TableCell>
                   </TableRow>

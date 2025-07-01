@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Class } from '@/types';
 
 interface EditClassDialogProps {
@@ -27,6 +28,8 @@ const EditClassDialog: React.FC<EditClassDialogProps> = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
+    grade: '',
+    section: '',
     teacherId: '',
     schedule: '',
     room: '',
@@ -36,6 +39,8 @@ const EditClassDialog: React.FC<EditClassDialogProps> = ({
     if (cls) {
       setFormData({
         name: cls.name,
+        grade: cls.grade,
+        section: cls.section,
         teacherId: cls.teacherId,
         schedule: cls.schedule,
         room: cls.room,
@@ -46,7 +51,10 @@ const EditClassDialog: React.FC<EditClassDialogProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (cls) {
-      onEditClass({ ...cls, ...formData });
+      onEditClass({ 
+        ...cls, 
+        ...formData 
+      });
       onOpenChange(false);
     }
   };
@@ -67,6 +75,29 @@ const EditClassDialog: React.FC<EditClassDialogProps> = ({
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="grade">Grade</Label>
+            <Select value={formData.grade} onValueChange={(value) => setFormData({ ...formData, grade: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select grade" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="9">Grade 9</SelectItem>
+                <SelectItem value="10">Grade 10</SelectItem>
+                <SelectItem value="11">Grade 11</SelectItem>
+                <SelectItem value="12">Grade 12</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="section">Section</Label>
+            <Input
+              id="section"
+              value={formData.section}
+              onChange={(e) => setFormData({ ...formData, section: e.target.value })}
               required
             />
           </div>

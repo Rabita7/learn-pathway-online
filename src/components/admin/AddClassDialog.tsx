@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 import { Class } from '@/types';
 
@@ -22,15 +23,26 @@ const AddClassDialog: React.FC<AddClassDialogProps> = ({ onAddClass }) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    grade: '',
+    section: '',
     teacherId: '',
     schedule: '',
     room: '',
+    studentIds: [] as string[],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onAddClass(formData);
-    setFormData({ name: '', teacherId: '', schedule: '', room: '' });
+    setFormData({ 
+      name: '', 
+      grade: '', 
+      section: '', 
+      teacherId: '', 
+      schedule: '', 
+      room: '', 
+      studentIds: [] 
+    });
     setOpen(false);
   };
 
@@ -55,6 +67,30 @@ const AddClassDialog: React.FC<AddClassDialogProps> = ({ onAddClass }) => {
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="grade">Grade</Label>
+            <Select value={formData.grade} onValueChange={(value) => setFormData({ ...formData, grade: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select grade" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="9">Grade 9</SelectItem>
+                <SelectItem value="10">Grade 10</SelectItem>
+                <SelectItem value="11">Grade 11</SelectItem>
+                <SelectItem value="12">Grade 12</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="section">Section</Label>
+            <Input
+              id="section"
+              value={formData.section}
+              onChange={(e) => setFormData({ ...formData, section: e.target.value })}
+              placeholder="e.g., A, B, C"
               required
             />
           </div>
