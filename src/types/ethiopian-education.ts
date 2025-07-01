@@ -1,4 +1,3 @@
-
 import { EthiopianGradeLevel, EthiopianRegion, EthiopianGrade } from './ethiopia';
 
 export interface EthiopianStudent extends Omit<Student, 'grade'> {
@@ -9,6 +8,7 @@ export interface EthiopianStudent extends Omit<Student, 'grade'> {
   woreda?: string;
   stream?: 'Natural Science' | 'Social Science'; // For preparatory students
   motherTongue?: string;
+  section: string; // Add section property
 }
 
 export interface EthiopianGradeEntry {
