@@ -1,5 +1,4 @@
-
-export type UserRole = 'admin' | 'teacher' | 'student' | 'parent' | 'guest' | 'manager';
+export type UserRole = 'admin' | 'teacher' | 'student' | 'parent' | 'guest' | 'director';
 
 export interface User {
   id: string;
@@ -74,4 +73,30 @@ export interface Class {
   schedule: string;
   room: string;
   studentIds: string[];
+  representativeTeacherId?: string;
+}
+
+export interface TeacherSubjectAssignment {
+  id: string;
+  teacherId: string;
+  teacherName: string;
+  subject: string;
+  classId: string;
+  className: string;
+  gradeLevel: string;
+  section: string;
+  isRepresentative: boolean;
+}
+
+export interface ClassAttendanceView {
+  classId: string;
+  className: string;
+  gradeLevel: string;
+  section: string;
+  date: string;
+  attendanceRecords: AttendanceEntry[];
+  totalStudents: number;
+  presentCount: number;
+  absentCount: number;
+  tardyCount: number;
 }

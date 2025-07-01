@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -106,32 +105,38 @@ const DashboardLayout = () => {
             />
           </>
         );
-      case 'manager':
+      case 'director':
         return (
           <>
             <SidebarLink 
-              to="/manager" 
+              to="/director" 
               icon={<Home className="w-5 h-5" />} 
               label="Dashboard" 
-              active={location.pathname === '/manager'}
+              active={location.pathname === '/director'}
             />
             <SidebarLink 
-              to="/manager/manage-staff" 
+              to="/director/manage-staff" 
               icon={<Users className="w-5 h-5" />} 
               label="Manage Staff" 
-              active={location.pathname === '/manager/manage-staff'}
+              active={location.pathname === '/director/manage-staff'}
             />
             <SidebarLink 
-              to="/manager/assign-teachers" 
+              to="/director/assign-teachers" 
               icon={<GraduationCap className="w-5 h-5" />} 
               label="Assign Teachers" 
-              active={location.pathname === '/manager/assign-teachers'}
+              active={location.pathname === '/director/assign-teachers'}
             />
             <SidebarLink 
-              to="/manager/write-letters" 
+              to="/director/class-attendance" 
+              icon={<Calendar className="w-5 h-5" />} 
+              label="Class Attendance" 
+              active={location.pathname === '/director/class-attendance'}
+            />
+            <SidebarLink 
+              to="/director/write-letters" 
               icon={<Bell className="w-5 h-5" />} 
               label="Write Letters" 
-              active={location.pathname === '/manager/write-letters'}
+              active={location.pathname === '/director/write-letters'}
             />
           </>
         );

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,7 +18,7 @@ import Services from "@/pages/Services";
 
 // Auth Pages
 import Login from "@/pages/auth/Login";
-import ManagerRegister from "@/pages/auth/ManagerRegister";
+import DirectorRegister from "@/pages/auth/DirectorRegister";
 import AccountSetup from "@/pages/auth/AccountSetup";
 
 // Admin Pages
@@ -31,11 +30,12 @@ import ManageClasses from "@/pages/admin/ManageClasses";
 import ViewReports from "@/pages/admin/ViewReports";
 import PostAnnouncement from "@/pages/admin/PostAnnouncement";
 
-// Manager Pages
-import ManagerDashboard from "@/pages/manager/ManagerDashboard";
-import ManageStaff from "@/pages/manager/ManageStaff";
-import AssignTeachers from "@/pages/manager/AssignTeachers";
-import WriteLetters from "@/pages/manager/WriteLetters";
+// Director Pages
+import DirectorDashboard from "@/pages/director/DirectorDashboard";
+import ManageStaff from "@/pages/director/ManageStaff";
+import AssignTeachers from "@/pages/director/AssignTeachers";
+import ClassAttendance from "@/pages/director/ClassAttendance";
+import WriteLetters from "@/pages/director/WriteLetters";
 
 // Teacher Pages
 import TeacherDashboard from "@/pages/teacher/TeacherDashboard";
@@ -80,7 +80,7 @@ const App = () => (
               
               {/* Authentication routes */}
               <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/manager-register" element={<ManagerRegister />} />
+              <Route path="/auth/director-register" element={<DirectorRegister />} />
               <Route path="/auth/setup" element={<AccountSetup />} />
             </Route>
             
@@ -95,14 +95,15 @@ const App = () => (
               <Route path="/admin/view-reports" element={<ViewReports />} />
               <Route path="/admin/post-announcement" element={<PostAnnouncement />} />
               
-              {/* Manager routes */}
-              <Route path="/manager" element={<ManagerDashboard />} />
-              <Route path="/manager/manage-staff" element={<ManageStaff />} />
-              <Route path="/manager/assign-teachers" element={<AssignTeachers />} />
-              <Route path="/manager/write-letters" element={<WriteLetters />} />
-              <Route path="/manager/view-reports" element={<div>Manager Reports Page</div>} />
-              <Route path="/manager/budget" element={<div>Budget Management Page</div>} />
-              <Route path="/manager/announcements" element={<div>Manager Announcements Page</div>} />
+              {/* Director routes */}
+              <Route path="/director" element={<DirectorDashboard />} />
+              <Route path="/director/manage-staff" element={<ManageStaff />} />
+              <Route path="/director/assign-teachers" element={<AssignTeachers />} />
+              <Route path="/director/class-attendance" element={<ClassAttendance />} />
+              <Route path="/director/write-letters" element={<WriteLetters />} />
+              <Route path="/director/view-reports" element={<div>Director Reports Page</div>} />
+              <Route path="/director/budget" element={<div>Budget Management Page</div>} />
+              <Route path="/director/announcements" element={<div>Director Announcements Page</div>} />
               
               {/* Teacher routes */}
               <Route path="/teacher" element={<TeacherDashboard />} />
