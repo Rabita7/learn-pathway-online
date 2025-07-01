@@ -18,7 +18,7 @@ import {
   Users, 
   Home,
   Bell,
-  Briefcase
+  Crown
 } from 'lucide-react';
 
 const getRoleColor = (role: UserRole): string => {
@@ -27,7 +27,7 @@ const getRoleColor = (role: UserRole): string => {
     case 'teacher': return 'bg-teacher';
     case 'student': return 'bg-student';
     case 'parent': return 'bg-parent';
-    case 'manager': return 'bg-purple-600';
+    case 'director': return 'bg-purple-600';
     default: return 'bg-gray-500';
   }
 };
@@ -79,8 +79,8 @@ const Header = () => {
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className={`p-1 rounded-full ${getRoleColor(user?.role || 'guest')}`}>
-                      {user?.role === 'manager' ? (
-                        <Briefcase className="h-4 w-4 text-white" />
+                      {user?.role === 'director' ? (
+                        <Crown className="h-4 w-4 text-white" />
                       ) : (
                         <User className="h-4 w-4 text-white" />
                       )}
