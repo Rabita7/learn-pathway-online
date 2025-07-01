@@ -1,14 +1,9 @@
 
 import React from 'react';
-import { ClipboardList } from 'lucide-react';
-import { ETHIOPIAN_SUBJECTS } from '@/types/ethiopia';
+import { Search, Save, BookOpen, Users } from 'lucide-react';
 import { EthiopianStudent } from '@/types/ethiopian-education';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -16,9 +11,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 interface GradeManagementFiltersProps {
   selectedEducationLevel: string;
@@ -27,11 +26,13 @@ interface GradeManagementFiltersProps {
   selectedTerm: string;
   searchTerm: string;
   students: EthiopianStudent[];
+  assignedSubjects: string[];
+  assignedGrades: string[];
   onEducationLevelChange: (level: string) => void;
-  onGradeLevelChange: (level: string) => void;
+  onGradeLevelChange: (grade: string) => void;
   onSubjectChange: (subject: string) => void;
   onTermChange: (term: string) => void;
-  onSearchChange: (search: string) => void;
+  onSearchChange: (term: string) => void;
   onSaveGrades: () => void;
 }
 
@@ -42,70 +43,77 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
   selectedTerm,
   searchTerm,
   students,
+  assignedSubjects,
+  assignedGrades,
   onEducationLevelChange,
   onGradeLevelChange,
   onSubjectChange,
   onTermChange,
   onSearchChange,
-  onSaveGrades
+  onSaveGrades,
 }) => {
-  // Get available subjects based on education level
-  const availableSubjects = selectedEducationLevel ? 
-    ETHIOPIAN_SUBJECTS[selectedEducationLevel as keyof typeof ETHIOPIAN_SUBJECTS] || [] : [];
-
-  // Get unique grade levels for selected education level
-  const availableGradeLevels = students
-    .filter(student => student.educationLevel === selectedEducationLevel)
-    .map(student => student.gradeLevel)
-    .filter((level, index, array) => array.indexOf(level) === index);
+  const terms = ['First Term', 'Second Term', 'Third Term'];
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ClipboardList className="h-5 w-5 text-teacher" />
+          <BookOpen className="h-5 w-5 text-teacher" />
           Grade Management Filters
         </CardTitle>
+        <CardDescription className="flex items-center gap-4">
+          <span className="flex items-center gap-1">
+            <Users className="h-4 w-4" />
+            {students.length} assigned students
+          </span>
+          <span>{assignedSubjects.length} assigned subjects</span>
+        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           <div>
-            <Label htmlFor="education-level">Education Level</Label>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Education Level
+            </label>
             <Select value={selectedEducationLevel} onValueChange={onEducationLevelChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select education level" />
+                <SelectValue placeholder="Select level" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Primary">Primary (1-8)</SelectItem>
-                <SelectItem value="Secondary">Secondary (9-10)</SelectItem>
-                <SelectItem value="Preparatory">Preparatory (11-12)</SelectItem>
+                <SelectItem value="Primary">Primary Education</SelectItem>
+                <SelectItem value="Secondary">Secondary Education</SelectItem>
+                <SelectItem value="Preparatory">Preparatory</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <Label htmlFor="grade-level">Grade Level</Label>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Grade Level
+            </label>
             <Select value={selectedGradeLevel} onValueChange={onGradeLevelChange}>
               <SelectTrigger>
-                <SelectValue placeholder="All grades" />
+                <SelectValue placeholder="Select grade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all-grades">All Grades</SelectItem>
-                {availableGradeLevels.map(level => (
-                  <SelectItem key={level} value={level}>{level}</SelectItem>
+                <SelectItem value="all-grades">All Assigned Grades</SelectItem>
+                {assignedGrades.map(grade => (
+                  <SelectItem key={grade} value={grade}>Grade {grade}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <Label htmlFor="subject">Subject</Label>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Subject
+            </label>
             <Select value={selectedSubject} onValueChange={onSubjectChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select subject" />
               </SelectTrigger>
               <SelectContent>
-                {availableSubjects.map(subject => (
+                {assignedSubjects.map(subject => (
                   <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                 ))}
               </SelectContent>
@@ -113,32 +121,40 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
           </div>
 
           <div>
-            <Label htmlFor="term">Term</Label>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Term
+            </label>
             <Select value={selectedTerm} onValueChange={onTermChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select term" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="First Term">First Term</SelectItem>
-                <SelectItem value="Second Term">Second Term</SelectItem>
-                <SelectItem value="Third Term">Third Term</SelectItem>
+                {terms.map(term => (
+                  <SelectItem key={term} value={term}>{term}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
         </div>
 
-        <div className="flex gap-4 items-end">
-          <div className="flex-1">
-            <Label htmlFor="search">Search Students</Label>
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              id="search"
-              placeholder="Search by student name..."
+              placeholder="Search students..."
+              className="pl-8"
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
             />
           </div>
-          <Button onClick={onSaveGrades} className="bg-teacher hover:bg-teacher/90">
-            Save All Grades
+
+          <Button 
+            onClick={onSaveGrades} 
+            className="bg-teacher text-white hover:bg-teacher/90"
+            disabled={!selectedSubject}
+          >
+            <Save className="h-4 w-4 mr-2" />
+            Save Grades
           </Button>
         </div>
       </CardContent>
