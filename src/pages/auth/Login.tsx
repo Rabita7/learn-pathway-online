@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -41,7 +40,7 @@ const Login = () => {
       await login(email, password);
       
       // Get user from context after login to determine role-based redirect
-      const loggedInUser = JSON.parse(localStorage.getItem('highschool_portal_user') || '{}');
+      const loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
       
       toast({
         title: 'Success',
@@ -62,8 +61,8 @@ const Login = () => {
         case 'parent':
           navigate('/parent');
           break;
-        case 'manager':
-          navigate('/manager');
+        case 'director':
+          navigate('/director');
           break;
         default:
           navigate('/');
@@ -95,11 +94,11 @@ const Login = () => {
         setPassword('password');
         break;
       case 'parent':
-        setEmail('parent@example.com');
+        setEmail('parent@school.edu');
         setPassword('password');
         break;
-      case 'manager':
-        setEmail('manager@school.edu');
+      case 'director':
+        setEmail('director@school.edu');
         setPassword('password');
         break;
       default:
@@ -191,7 +190,7 @@ const Login = () => {
                   <SelectItem value="teacher">Demo Teacher Account</SelectItem>
                   <SelectItem value="student">Demo Student Account</SelectItem>
                   <SelectItem value="parent">Demo Parent Account</SelectItem>
-                  <SelectItem value="manager">Demo Manager Account</SelectItem>
+                  <SelectItem value="director">Demo Director Account</SelectItem>
                 </SelectContent>
               </Select>
             </div>
