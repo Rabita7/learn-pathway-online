@@ -24,6 +24,20 @@ export interface Student {
   grade: string;
   email: string;
   parentId?: string;
+  phone?: string;
+  address?: string;
+  dateOfBirth?: string;
+  parentInfo?: {
+    name: string;
+    age: string;
+    email: string;
+    phone: string;
+    occupation: string;
+  };
+  emergencyContact?: string;
+  emergencyContactPhone?: string;
+  medicalConditions?: string;
+  previousSchool?: string;
 }
 
 export interface GradeEntry {
