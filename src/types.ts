@@ -27,6 +27,7 @@ export interface Student {
   phone?: string;
   address?: string;
   dateOfBirth?: string;
+  section?: string;
   parentInfo?: {
     name: string;
     age: string;
@@ -67,7 +68,10 @@ export interface Assignment {
 export interface Class {
   id: string;
   name: string;
+  grade: string;
+  section: string;
   teacherId: string;
   schedule: string;
   room: string;
+  studentIds: string[];
 }
