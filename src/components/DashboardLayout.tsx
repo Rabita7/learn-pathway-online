@@ -3,6 +3,7 @@ import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import DashboardHeader from '@/components/DashboardHeader';
 import { 
   Home, 
   Users, 
@@ -127,6 +128,7 @@ const DashboardLayout = () => {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
+        <DashboardHeader />
         <div className="p-6">
           <Outlet />
         </div>
