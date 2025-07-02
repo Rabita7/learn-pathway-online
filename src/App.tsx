@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -88,12 +89,12 @@ const App = () => (
             <Route element={<DashboardLayout />}>
               {/* Admin routes */}
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/manage-students" element={<ManageStudents />} />
-              <Route path="/admin/manage-teachers" element={<ManageTeachers />} />
-              <Route path="/admin/manage-parents" element={<ManageParents />} />
-              <Route path="/admin/manage-classes" element={<ManageClasses />} />
-              <Route path="/admin/view-reports" element={<ViewReports />} />
-              <Route path="/admin/post-announcement" element={<PostAnnouncement />} />
+              <Route path="/admin/students" element={<ManageStudents />} />
+              <Route path="/admin/teachers" element={<ManageTeachers />} />
+              <Route path="/admin/parents" element={<ManageParents />} />
+              <Route path="/admin/classes" element={<ManageClasses />} />
+              <Route path="/admin/reports" element={<ViewReports />} />
+              <Route path="/admin/announcements" element={<PostAnnouncement />} />
               
               {/* Director routes */}
               <Route path="/director" element={<DirectorDashboard />} />
@@ -101,32 +102,29 @@ const App = () => (
               <Route path="/director/assign-teachers" element={<AssignTeachers />} />
               <Route path="/director/class-attendance" element={<ClassAttendance />} />
               <Route path="/director/write-letters" element={<WriteLetters />} />
-              <Route path="/director/view-reports" element={<div>Director Reports Page</div>} />
-              <Route path="/director/budget" element={<div>Budget Management Page</div>} />
-              <Route path="/director/announcements" element={<div>Director Announcements Page</div>} />
               
               {/* Teacher routes */}
               <Route path="/teacher" element={<TeacherDashboard />} />
-              <Route path="/teacher/view-students" element={<ViewStudents />} />
-              <Route path="/teacher/manage-grades" element={<ManageGrades />} />
-              <Route path="/teacher/manage-attendance" element={<ManageAttendance />} />
+              <Route path="/teacher/students" element={<ViewStudents />} />
+              <Route path="/teacher/grades" element={<ManageGrades />} />
+              <Route path="/teacher/attendance" element={<ManageAttendance />} />
+              <Route path="/teacher/assignments" element={<ViewAssignments />} />
               <Route path="/teacher/post-assignment" element={<PostAssignment />} />
-              <Route path="/teacher/view-assignments" element={<ViewAssignments />} />
               <Route path="/teacher/announcements" element={<Announcements />} />
               
               {/* Student routes */}
               <Route path="/student" element={<StudentDashboard />} />
-              <Route path="/student/view-grades" element={<ViewGrades />} />
-              <Route path="/student/view-attendance" element={<ViewAttendance />} />
-              <Route path="/student/class-schedule" element={<ClassSchedule />} />
+              <Route path="/student/grades" element={<ViewGrades />} />
+              <Route path="/student/attendance" element={<ViewAttendance />} />
+              <Route path="/student/schedule" element={<ClassSchedule />} />
               <Route path="/student/assignments" element={<StudentAssignments />} />
               <Route path="/student/announcements" element={<StudentAnnouncements />} />
               <Route path="/student/profile" element={<StudentProfile />} />
               
               {/* Parent routes */}
               <Route path="/parent" element={<ParentDashboard />} />
-              <Route path="/parent/view-child-grades" element={<ViewChildGrades />} />
-              <Route path="/parent/view-child-attendance" element={<ViewChildAttendance />} />
+              <Route path="/parent/child-grades" element={<ViewChildGrades />} />
+              <Route path="/parent/child-attendance" element={<ViewChildAttendance />} />
               <Route path="/parent/announcements" element={<ParentAnnouncements />} />
               
               {/* Shared routes */}

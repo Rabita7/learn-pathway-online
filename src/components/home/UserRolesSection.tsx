@@ -5,50 +5,50 @@ import { Button } from '@/components/ui/button';
 import { 
   User,
   GraduationCap,
-  Briefcase,
+  Crown,
   ChevronRight
 } from 'lucide-react';
 
 const userRoles = [
   {
-    icon: <User className="w-8 h-8 text-admin" />,
+    icon: <User className="w-8 h-8 text-red-600" />,
     title: 'Administrators',
     description: 'Manage school operations, users, and get powerful insights.',
-    bgColor: 'bg-admin bg-opacity-10',
-    textColor: 'text-admin',
+    bgColor: 'bg-red-100',
+    textColor: 'text-red-600',
     link: '/auth/login'
   },
   {
-    icon: <GraduationCap className="w-8 h-8 text-teacher" />,
-    title: 'Teachers',
-    description: 'Manage classes, track student progress, and communicate easily.',
-    bgColor: 'bg-teacher bg-opacity-10',
-    textColor: 'text-teacher',
-    link: '/auth/login'
-  },
-  {
-    icon: <Briefcase className="w-8 h-8 text-student" />,
-    title: 'Students',
-    description: 'Access assignments, track grades, and stay organized.',
-    bgColor: 'bg-student bg-opacity-10',
-    textColor: 'text-student',
-    link: '/auth/login'
-  },
-  {
-    icon: <User className="w-8 h-8 text-parent" />,
-    title: 'Parents',
-    description: 'Monitor your child\'s progress and stay connected with teachers.',
-    bgColor: 'bg-parent bg-opacity-10',
-    textColor: 'text-parent',
-    link: '/auth/login'
-  },
-  {
-    icon: <Briefcase className="w-8 h-8 text-purple-600" />,
-    title: 'Managers',
-    description: 'Oversee staff, resources, and school operations efficiently.',
+    icon: <Crown className="w-8 h-8 text-purple-600" />,
+    title: 'Directors',
+    description: 'Oversee staff assignments, class management, and school operations.',
     bgColor: 'bg-purple-100',
     textColor: 'text-purple-600',
-    link: '/auth/manager-register'
+    link: '/auth/director-register'
+  },
+  {
+    icon: <GraduationCap className="w-8 h-8 text-blue-600" />,
+    title: 'Teachers',
+    description: 'Manage classes, track student progress, and communicate easily.',
+    bgColor: 'bg-blue-100',
+    textColor: 'text-blue-600',
+    link: '/auth/login'
+  },
+  {
+    icon: <User className="w-8 h-8 text-green-600" />,
+    title: 'Students',
+    description: 'Access assignments, track grades, and stay organized.',
+    bgColor: 'bg-green-100',
+    textColor: 'text-green-600',
+    link: '/auth/login'
+  },
+  {
+    icon: <User className="w-8 h-8 text-yellow-600" />,
+    title: 'Parents',
+    description: 'Monitor your child\'s progress and stay connected with teachers.',
+    bgColor: 'bg-yellow-100',
+    textColor: 'text-yellow-600',
+    link: '/auth/login'
   }
 ];
 

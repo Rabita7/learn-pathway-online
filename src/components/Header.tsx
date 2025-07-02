@@ -23,10 +23,10 @@ import {
 
 const getRoleColor = (role: UserRole): string => {
   switch (role) {
-    case 'admin': return 'bg-admin';
-    case 'teacher': return 'bg-teacher';
-    case 'student': return 'bg-student';
-    case 'parent': return 'bg-parent';
+    case 'admin': return 'bg-red-600';
+    case 'teacher': return 'bg-blue-600';
+    case 'student': return 'bg-green-600';
+    case 'parent': return 'bg-yellow-600';
     case 'director': return 'bg-purple-600';
     default: return 'bg-gray-500';
   }

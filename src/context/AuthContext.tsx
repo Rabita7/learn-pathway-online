@@ -13,7 +13,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users with director role
+// Clean mock users without duplications
 const mockUsers: User[] = [
   { id: '1', name: 'John Admin', email: 'admin@school.edu', role: 'admin' },
   { id: '2', name: 'Jane Director', email: 'director@school.edu', role: 'director' },
