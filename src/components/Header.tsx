@@ -18,8 +18,7 @@ import {
   Users, 
   Home,
   Bell,
-  Crown,
-  Settings
+  Crown
 } from 'lucide-react';
 
 const getRoleColor = (role?: UserRole): string => {
@@ -65,18 +64,6 @@ const Header = () => {
                 </Link>
               </Button>
               
-              {/* Profile Icon Button */}
-              <Button variant="ghost" size="icon" asChild>
-                <Link to="/profile">
-                  <User className="h-5 w-5" />
-                </Link>
-              </Button>
-              
-              {/* Logout Icon Button */}
-              <Button variant="ghost" size="icon" onClick={logout} className="text-red-600 hover:text-red-700">
-                <LogOut className="h-5 w-5" />
-              </Button>
-              
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative rounded-full">
@@ -114,7 +101,7 @@ const Header = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="cursor-pointer">
-                      <Settings className="w-4 h-4 mr-2" />
+                      <User className="w-4 h-4 mr-2" />
                       My Profile
                     </Link>
                   </DropdownMenuItem>
