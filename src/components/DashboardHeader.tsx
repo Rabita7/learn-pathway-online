@@ -32,7 +32,7 @@ const DashboardHeader = () => {
 
   return (
     <div className="bg-white border-b border-gray-200 px-6 py-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-end">
         <div className="flex items-center space-x-4">
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.avatarUrl} alt={user.name} />
@@ -51,16 +51,16 @@ const DashboardHeader = () => {
               {user.role}
             </p>
           </div>
+          
+          <Button 
+            variant="outline" 
+            onClick={handleLogout}
+            className="flex items-center space-x-2 hover:bg-red-50 hover:border-red-200 hover:text-red-600 ml-4"
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Logout</span>
+          </Button>
         </div>
-        
-        <Button 
-          variant="outline" 
-          onClick={handleLogout}
-          className="flex items-center space-x-2 hover:bg-red-50 hover:border-red-200 hover:text-red-600"
-        >
-          <LogOut className="h-4 w-4" />
-          <span>Logout</span>
-        </Button>
       </div>
     </div>
   );
