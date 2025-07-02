@@ -21,7 +21,9 @@ import {
   Crown
 } from 'lucide-react';
 
-const getRoleColor = (role: UserRole): string => {
+const getRoleColor = (role?: UserRole): string => {
+  if (!role) return 'bg-gray-500';
+  
   switch (role) {
     case 'admin': return 'bg-red-600';
     case 'teacher': return 'bg-blue-600';
@@ -67,7 +69,7 @@ const Header = () => {
                   <Button variant="ghost" className="relative rounded-full">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user?.avatarUrl} alt={user?.name} />
-                      <AvatarFallback className={getRoleColor(user?.role || 'guest')}>
+                      <AvatarFallback className={getRoleColor(user?.role)}>
                         {user?.name?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -78,7 +80,7 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="flex items-center justify-start gap-2 p-2">
-                    <div className={`p-1 rounded-full ${getRoleColor(user?.role || 'guest')}`}>
+                    <div className={`p-1 rounded-full ${getRoleColor(user?.role)}`}>
                       {user?.role === 'director' ? (
                         <Crown className="h-4 w-4 text-white" />
                       ) : (
