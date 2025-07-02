@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/context/AuthContext';
@@ -20,6 +21,12 @@ const getRoleColor = (role?: string): string => {
 
 const DashboardHeader = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   if (!user) return null;
 
@@ -48,7 +55,7 @@ const DashboardHeader = () => {
         
         <Button 
           variant="outline" 
-          onClick={logout}
+          onClick={handleLogout}
           className="flex items-center space-x-2 hover:bg-red-50 hover:border-red-200 hover:text-red-600"
         >
           <LogOut className="h-4 w-4" />
