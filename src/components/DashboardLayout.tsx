@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import DashboardHeader from '@/components/DashboardHeader';
@@ -16,12 +16,20 @@ import {
   FileText,
   Crown,
   ClipboardList,
-  School
+  School,
+  LogOut,
+  User
 } from 'lucide-react';
 
 const DashboardLayout = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const getNavigationItems = () => {
     const basePath = `/${user?.role}`;
@@ -99,7 +107,7 @@ const DashboardLayout = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
+      <div className="w-64 bg-white shadow-md flex flex-col">
         <div className="p-4 border-b">
           <div className="flex items-center space-x-2">
             {getRoleIcon()}
@@ -110,7 +118,7 @@ const DashboardLayout = () => {
           </div>
         </div>
         
-        <nav className="mt-4">
+        <nav className="mt-4 flex-1">
           {navigationItems.map((item) => (
             <Link
               key={item.path}
@@ -124,6 +132,26 @@ const DashboardLayout = () => {
             </Link>
           ))}
         </nav>
+
+        {/* Bottom section with Edit Profile and Logout */}
+        <div className="border-t border-gray-200 p-4 space-y-2">
+          <Link
+            to={`/${user?.role}/edit-profile`}
+            className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+          >
+            <User className="h-5 w-5 mr-3" />
+            Edit Profile
+          </Link>
+          
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className="flex items-center w-full justify-start px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          >
+            <LogOut className="h-5 w-5 mr-3" />
+            Logout
+          </Button>
+        </div>
       </div>
 
       {/* Main Content */}
