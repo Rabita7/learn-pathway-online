@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -107,100 +108,117 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <BookOpen className="h-12 w-12 text-primary" />
-        </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Please enter your credentials to access the portal
-        </p>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <Label htmlFor="email">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1"
-                placeholder="Enter your password"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link to="/auth/reset-password" className="font-medium text-primary hover:text-primary-focus">
-                  Forgot your password?
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
-            </div>
-          </form>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Quick Demo Login</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <Label htmlFor="demo-account">Select Demo Account</Label>
-              <Select onValueChange={fillDemoCredentials}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Choose a demo account to try" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Demo Admin Account</SelectItem>
-                  <SelectItem value="teacher">Demo Teacher Account</SelectItem>
-                  <SelectItem value="student">Demo Student Account</SelectItem>
-                  <SelectItem value="parent">Demo Parent Account</SelectItem>
-                  <SelectItem value="director">Demo Director Account</SelectItem>
-                </SelectContent>
-              </Select>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <div className="bg-primary rounded-full p-3">
+              <BookOpen className="h-8 w-8 text-white" />
             </div>
           </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-gray-600">
+            Sign in to access your school portal
+          </p>
+        </div>
 
-          <div className="mt-6">
-            <p className="text-xs text-center text-gray-500">
-              Don't have an account? Contact your administrator to get access.
+        {/* Login Form Card */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  Email Address
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1 h-11"
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 h-11"
+                  placeholder="Enter your password"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end">
+              <Link 
+                to="/auth/reset-password" 
+                className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full h-11 text-base font-medium" 
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+          </form>
+        </div>
+
+        {/* Demo Accounts Section */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Try Demo Accounts
+            </h3>
+            <p className="text-sm text-gray-600">
+              Select a role to auto-fill credentials
             </p>
           </div>
+
+          <div className="space-y-3">
+            <Label htmlFor="demo-select" className="text-sm font-medium text-gray-700">
+              Choose Demo Account
+            </Label>
+            <Select onValueChange={fillDemoCredentials}>
+              <SelectTrigger id="demo-select" className="h-11">
+                <SelectValue placeholder="Select a demo account" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="admin">👨‍💼 Admin Account</SelectItem>
+                <SelectItem value="director">👑 Director Account</SelectItem>
+                <SelectItem value="teacher">👩‍🏫 Teacher Account</SelectItem>
+                <SelectItem value="student">🎓 Student Account</SelectItem>
+                <SelectItem value="parent">👨‍👩‍👧‍👦 Parent Account</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Footer Note */}
+        <div className="text-center mt-6">
+          <p className="text-sm text-gray-500">
+            Need an account? Contact your school administrator
+          </p>
         </div>
       </div>
     </div>
