@@ -23,14 +23,17 @@ interface GradeManagementFiltersProps {
   selectedEducationLevel: string;
   selectedGradeLevel: string;
   selectedSubject: string;
+  selectedSection: string;
   selectedTerm: string;
   searchTerm: string;
   students: EthiopianStudent[];
   assignedSubjects: string[];
   assignedGrades: string[];
+  assignedSections: string[];
   onEducationLevelChange: (level: string) => void;
   onGradeLevelChange: (grade: string) => void;
   onSubjectChange: (subject: string) => void;
+  onSectionChange: (section: string) => void;
   onTermChange: (term: string) => void;
   onSearchChange: (term: string) => void;
   onSaveGrades: () => void;
@@ -40,14 +43,17 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
   selectedEducationLevel,
   selectedGradeLevel,
   selectedSubject,
+  selectedSection,
   selectedTerm,
   searchTerm,
   students,
   assignedSubjects,
   assignedGrades,
+  assignedSections,
   onEducationLevelChange,
   onGradeLevelChange,
   onSubjectChange,
+  onSectionChange,
   onTermChange,
   onSearchChange,
   onSaveGrades,
@@ -64,13 +70,13 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
         <CardDescription className="flex items-center gap-4">
           <span className="flex items-center gap-1">
             <Users className="h-4 w-4" />
-            {students.length} assigned students
+            {students.length} students found
           </span>
           <span>{assignedSubjects.length} assigned subjects</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 block">
               Education Level
@@ -96,7 +102,6 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
                 <SelectValue placeholder="Select grade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all-grades">All Assigned Grades</SelectItem>
                 {assignedGrades.map(grade => (
                   <SelectItem key={grade} value={grade}>Grade {grade}</SelectItem>
                 ))}
@@ -115,6 +120,23 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
               <SelectContent>
                 {assignedSubjects.map(subject => (
                   <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Section
+            </label>
+            <Select value={selectedSection} onValueChange={onSectionChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select section" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Sections</SelectItem>
+                {assignedSections.map(section => (
+                  <SelectItem key={section} value={section}>Section {section}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -151,7 +173,7 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
           <Button 
             onClick={onSaveGrades} 
             className="bg-teacher text-white hover:bg-teacher/90"
-            disabled={!selectedSubject}
+            disabled={!selectedSubject || !selectedGradeLevel}
           >
             <Save className="h-4 w-4 mr-2" />
             Save Grades

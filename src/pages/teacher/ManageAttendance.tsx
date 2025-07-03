@@ -47,30 +47,31 @@ type Course = {
 const mockCourses: Course[] = [
   {
     id: '1',
-    name: 'Biology 101',
-    code: 'BIO101',
+    name: 'Mathematics',
+    code: 'MATH101',
     schedule: 'MWF 9:00-10:00 AM',
-    room: 'Science Lab A',
-    sections: ['A', 'B', 'C'],
+    room: 'Room 101',
+    sections: ['A', 'B'],
     students: [
-      { id: '1', name: 'Alex Johnson', studentId: 'ST001', section: 'A' },
-      { id: '2', name: 'Emma Smith', studentId: 'ST002', section: 'A' },
-      { id: '3', name: 'Michael Brown', studentId: 'ST003', section: 'B' },
-      { id: '13', name: 'Sarah Wilson', studentId: 'ST013', section: 'B' },
-      { id: '14', name: 'David Lee', studentId: 'ST014', section: 'C' },
+      { id: '1', name: 'Almaz Tadesse', studentId: 'ST001', section: 'A' },
+      { id: '2', name: 'Bereket Haile', studentId: 'ST002', section: 'A' },
+      { id: '3', name: 'Chaltu Bekele', studentId: 'ST003', section: 'A' },
+      { id: '13', name: 'Dawit Mekonnen', studentId: 'ST013', section: 'B' },
+      { id: '14', name: 'Eden Girma', studentId: 'ST014', section: 'B' },
+      { id: '15', name: 'Fitsum Alemayehu', studentId: 'ST015', section: 'B' },
     ]
   },
   {
     id: '2',
-    name: 'Chemistry Lab',
-    code: 'CHEM201',
+    name: 'Physics',
+    code: 'PHY201',
     schedule: 'TTh 2:00-4:00 PM',
-    room: 'Chemistry Lab B',
-    sections: ['A', 'B'],
+    room: 'Physics Lab',
+    sections: ['A'],
     students: [
-      { id: '4', name: 'Sophia Davis', studentId: 'ST004', section: 'A' },
-      { id: '5', name: 'William Wilson', studentId: 'ST005', section: 'A' },
-      { id: '6', name: 'Olivia Taylor', studentId: 'ST006', section: 'B' },
+      { id: '4', name: 'Helen Teshome', studentId: 'ST004', section: 'A' },
+      { id: '5', name: 'Ibrahim Mohammed', studentId: 'ST005', section: 'A' },
+      { id: '6', name: 'Johar Abebe', studentId: 'ST006', section: 'A' },
     ]
   },
 ];
@@ -114,7 +115,7 @@ const ManageAttendance = () => {
       </div>
 
       {/* Course Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {mockCourses.map((course) => (
           <Card key={course.id} className={`cursor-pointer transition-all ${selectedCourseId === course.id ? 'ring-2 ring-teacher border-teacher' : 'hover:shadow-md'}`} onClick={() => setSelectedCourseId(course.id)}>
             <CardContent className="p-4">
@@ -175,7 +176,7 @@ const ManageAttendance = () => {
 
           <Select value={selectedSection} onValueChange={setSelectedSection}>
             <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="Select Section" />
+              <SelectValue placeholder="All Sections" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="">All Sections</SelectItem>
