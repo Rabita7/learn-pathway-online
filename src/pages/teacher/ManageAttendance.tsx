@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, CheckCircle, XCircle, Clock, Book, Users } from 'lucide-react';
+import { Calendar as CalendarIcon, Book, Users } from 'lucide-react';
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -23,24 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-
-type AttendanceStatus = 'present' | 'absent' | 'tardy' | 'excused';
+import SectionAttendance from '@/components/teacher/attendance/SectionAttendance';
 
 type Student = {
-  id: number;
+  id: string;
   name: string;
   studentId: string;
   section: string;
-  attendance: Record<string, AttendanceStatus>;
 };
 
 type Course = {
@@ -62,61 +53,11 @@ const mockCourses: Course[] = [
     room: 'Science Lab A',
     sections: ['A', 'B', 'C'],
     students: [
-      { 
-        id: 1, 
-        name: 'Alex Johnson',
-        studentId: 'ST001',
-        section: 'A',
-        attendance: { 
-          '2025-06-09': 'present',
-          '2025-06-08': 'present',
-          '2025-06-07': 'tardy',
-        } 
-      },
-      { 
-        id: 2, 
-        name: 'Emma Smith',
-        studentId: 'ST002',
-        section: 'A',
-        attendance: { 
-          '2025-06-09': 'present',
-          '2025-06-08': 'absent',
-          '2025-06-07': 'present',
-        } 
-      },
-      { 
-        id: 3, 
-        name: 'Michael Brown',
-        studentId: 'ST003',
-        section: 'B',
-        attendance: { 
-          '2025-06-09': 'tardy',
-          '2025-06-08': 'present',
-          '2025-06-07': 'excused',
-        } 
-      },
-      { 
-        id: 13, 
-        name: 'Sarah Wilson',
-        studentId: 'ST013',
-        section: 'B',
-        attendance: { 
-          '2025-06-09': 'present',
-          '2025-06-08': 'present',
-          '2025-06-07': 'present',
-        } 
-      },
-      { 
-        id: 14, 
-        name: 'David Lee',
-        studentId: 'ST014',
-        section: 'C',
-        attendance: { 
-          '2025-06-09': 'absent',
-          '2025-06-08': 'tardy',
-          '2025-06-07': 'present',
-        } 
-      },
+      { id: '1', name: 'Alex Johnson', studentId: 'ST001', section: 'A' },
+      { id: '2', name: 'Emma Smith', studentId: 'ST002', section: 'A' },
+      { id: '3', name: 'Michael Brown', studentId: 'ST003', section: 'B' },
+      { id: '13', name: 'Sarah Wilson', studentId: 'ST013', section: 'B' },
+      { id: '14', name: 'David Lee', studentId: 'ST014', section: 'C' },
     ]
   },
   {
@@ -127,71 +68,9 @@ const mockCourses: Course[] = [
     room: 'Chemistry Lab B',
     sections: ['A', 'B'],
     students: [
-      { 
-        id: 4, 
-        name: 'Sophia Davis',
-        studentId: 'ST004',
-        section: 'A',
-        attendance: { 
-          '2025-06-09': 'present',
-          '2025-06-08': 'present',
-          '2025-06-07': 'present',
-        } 
-      },
-      { 
-        id: 5, 
-        name: 'William Wilson',
-        studentId: 'ST005',
-        section: 'A',
-        attendance: { 
-          '2025-06-09': 'absent',
-          '2025-06-08': 'tardy',
-          '2025-06-07': 'present',
-        } 
-      },
-      { 
-        id: 6, 
-        name: 'Olivia Taylor',
-        studentId: 'ST006',
-        section: 'B',
-        attendance: { 
-          '2025-06-09': 'present',
-          '2025-06-08': 'excused',
-          '2025-06-07': 'present',
-        } 
-      },
-    ]
-  },
-  {
-    id: '3',
-    name: 'Advanced Biology',
-    code: 'BIO301',
-    schedule: 'MWF 1:00-2:00 PM',
-    room: 'Science Lab C',
-    sections: ['A'],
-    students: [
-      { 
-        id: 7, 
-        name: 'James Anderson',
-        studentId: 'ST007',
-        section: 'A',
-        attendance: { 
-          '2025-06-09': 'present',
-          '2025-06-08': 'present',
-          '2025-06-07': 'present',
-        } 
-      },
-      { 
-        id: 8, 
-        name: 'Isabella Martinez',
-        studentId: 'ST008',
-        section: 'A',
-        attendance: { 
-          '2025-06-09': 'tardy',
-          '2025-06-08': 'present',
-          '2025-06-07': 'absent',
-        } 
-      },
+      { id: '4', name: 'Sophia Davis', studentId: 'ST004', section: 'A' },
+      { id: '5', name: 'William Wilson', studentId: 'ST005', section: 'A' },
+      { id: '6', name: 'Olivia Taylor', studentId: 'ST006', section: 'B' },
     ]
   },
 ];
@@ -200,81 +79,27 @@ const ManageAttendance = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedCourseId, setSelectedCourseId] = useState(mockCourses[0].id);
-  const [selectedSection, setSelectedSection] = useState('All Sections');
+  const [selectedSection, setSelectedSection] = useState('');
   const [date, setDate] = useState<Date>(new Date());
-  const [courses, setCourses] = useState<Course[]>(mockCourses);
 
   if (!user || user.role !== 'teacher') {
     return <div>Access denied. Teacher privileges required.</div>;
   }
 
-  const selectedCourse = courses.find(course => course.id === selectedCourseId);
+  const selectedCourse = mockCourses.find(course => course.id === selectedCourseId);
   const formattedDate = format(date, 'yyyy-MM-dd');
 
-  // Filter students by selected section
-  const filteredStudents = selectedCourse?.students.filter(student => 
-    selectedSection === 'All Sections' || student.section === selectedSection
+  // Get students for selected section
+  const sectionStudents = selectedCourse?.students.filter(student => 
+    selectedSection === '' || student.section === selectedSection
   ) || [];
 
-  const handleAttendanceChange = (studentId: number, status: AttendanceStatus) => {
-    setCourses(prev => 
-      prev.map(course => 
-        course.id === selectedCourseId 
-          ? {
-              ...course,
-              students: course.students.map(student => 
-                student.id === studentId 
-                  ? { 
-                      ...student, 
-                      attendance: { 
-                        ...student.attendance, 
-                        [formattedDate]: status 
-                      } 
-                    } 
-                  : student
-              )
-            }
-          : course
-      )
-    );
-  };
-
-  const handleSaveAttendance = () => {
-    const sectionText = selectedSection === 'All Sections' ? 'all sections' : `section ${selectedSection}`;
+  const handleSaveAttendance = (attendanceRecords: any[]) => {
+    const sectionText = selectedSection ? `section ${selectedSection}` : 'all sections';
     toast({
       title: "Attendance saved successfully",
       description: `Updated attendance for ${selectedCourse?.name} (${sectionText}) on ${format(date, 'MMMM d, yyyy')}`,
     });
-  };
-
-  const getStatusIcon = (status: AttendanceStatus) => {
-    switch (status) {
-      case 'present':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'absent':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      case 'tardy':
-        return <Clock className="h-5 w-5 text-amber-500" />;
-      case 'excused':
-        return <CheckCircle className="h-5 w-5 text-blue-500" />;
-      default:
-        return null;
-    }
-  };
-
-  const getStatusColor = (status: AttendanceStatus) => {
-    switch (status) {
-      case 'present':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'absent':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'tardy':
-        return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'excused':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
   };
 
   if (!selectedCourse) {
@@ -290,7 +115,7 @@ const ManageAttendance = () => {
 
       {/* Course Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {courses.map((course) => (
+        {mockCourses.map((course) => (
           <Card key={course.id} className={`cursor-pointer transition-all ${selectedCourseId === course.id ? 'ring-2 ring-teacher border-teacher' : 'hover:shadow-md'}`} onClick={() => setSelectedCourseId(course.id)}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -340,7 +165,7 @@ const ManageAttendance = () => {
               <SelectValue placeholder="Select Course" />
             </SelectTrigger>
             <SelectContent>
-              {courses.map(course => (
+              {mockCourses.map(course => (
                 <SelectItem key={course.id} value={course.id}>
                   {course.name} ({course.code})
                 </SelectItem>
@@ -353,7 +178,7 @@ const ManageAttendance = () => {
               <SelectValue placeholder="Select Section" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="All Sections">All Sections</SelectItem>
+              <SelectItem value="">All Sections</SelectItem>
               {selectedCourse?.sections.map(section => (
                 <SelectItem key={section} value={section}>
                   Section {section}
@@ -362,160 +187,35 @@ const ManageAttendance = () => {
             </SelectContent>
           </Select>
         </div>
-
-        <Button onClick={handleSaveAttendance} className="bg-teacher hover:bg-teacher/90">
-          Save Attendance
-        </Button>
       </div>
 
-      {/* Selected Course Info */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Book className="h-5 w-5 text-teacher" />
-            {selectedCourse.name} - {selectedSection} - {format(date, 'MMMM d, yyyy')}
-          </CardTitle>
-          <CardDescription className="flex items-center gap-4">
-            <span>{selectedCourse.code} | {selectedCourse.schedule} | Room: {selectedCourse.room}</span>
-            <span className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              {filteredStudents.length} students
-            </span>
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-6">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span className="text-sm">Present</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-red-500" />
-              <span className="text-sm">Absent</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-amber-500" />
-              <span className="text-sm">Tardy</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-blue-500" />
-              <span className="text-sm">Excused</span>
-            </div>
-          </div>
-
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Student ID</TableHead>
-                <TableHead>Student Name</TableHead>
-                <TableHead>Section</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredStudents.map((student) => {
-                const status = student.attendance[formattedDate] || 'absent';
-                
-                return (
-                  <TableRow key={student.id}>
-                    <TableCell className="font-medium">{student.studentId}</TableCell>
-                    <TableCell className="font-medium">{student.name}</TableCell>
-                    <TableCell>
-                      <span className="px-2 py-1 bg-teacher/10 text-teacher rounded-full text-sm font-medium">
-                        Section {student.section}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {getStatusIcon(status)}
-                        <span className={`text-sm px-2 py-1 rounded-full border ${getStatusColor(status)} capitalize`}>
-                          {status}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1 flex-wrap">
-                        <Button 
-                          size="sm" 
-                          variant={status === 'present' ? 'default' : 'outline'} 
-                          className={status === 'present' ? 'bg-green-500 hover:bg-green-600' : ''}
-                          onClick={() => handleAttendanceChange(student.id, 'present')}
-                        >
-                          Present
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant={status === 'absent' ? 'default' : 'outline'} 
-                          className={status === 'absent' ? 'bg-red-500 hover:bg-red-600' : ''}
-                          onClick={() => handleAttendanceChange(student.id, 'absent')}
-                        >
-                          Absent
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant={status === 'tardy' ? 'default' : 'outline'} 
-                          className={status === 'tardy' ? 'bg-amber-500 hover:bg-amber-600' : ''}
-                          onClick={() => handleAttendanceChange(student.id, 'tardy')}
-                        >
-                          Tardy
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant={status === 'excused' ? 'default' : 'outline'} 
-                          className={status === 'excused' ? 'bg-blue-500 hover:bg-blue-600' : ''}
-                          onClick={() => handleAttendanceChange(student.id, 'excused')}
-                        >
-                          Excused
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {filteredStudents.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    No students found in the selected section
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Attendance Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Attendance Summary</CardTitle>
-          <CardDescription>
-            Overview for {selectedCourse.name} - {selectedSection} on {format(date, 'MMMM d, yyyy')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {(['present', 'absent', 'tardy', 'excused'] as AttendanceStatus[]).map((status) => {
-              const count = filteredStudents.filter(student => 
-                student.attendance[formattedDate] === status
-              ).length;
-              
-              const percentage = filteredStudents.length > 0 ? ((count / filteredStudents.length) * 100).toFixed(1) : '0';
-              
-              return (
-                <div key={status} className={`p-4 rounded-lg border ${getStatusColor(status)}`}>
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm capitalize font-medium">{status}</div>
-                    {getStatusIcon(status)}
-                  </div>
-                  <div className="mt-2 text-2xl font-bold">{count}</div>
-                  <div className="text-sm">{percentage}% of section</div>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+      {/* Section-based Attendance */}
+      {selectedSection ? (
+        <SectionAttendance
+          students={sectionStudents}
+          section={selectedSection}
+          course={selectedCourse.name}
+          date={formattedDate}
+          onSave={handleSaveAttendance}
+        />
+      ) : (
+        // Show all sections
+        <div className="space-y-6">
+          {selectedCourse.sections.map(section => {
+            const studentsInSection = selectedCourse.students.filter(s => s.section === section);
+            return (
+              <SectionAttendance
+                key={section}
+                students={studentsInSection}
+                section={section}
+                course={selectedCourse.name}
+                date={formattedDate}
+                onSave={handleSaveAttendance}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

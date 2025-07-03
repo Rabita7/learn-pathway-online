@@ -2,13 +2,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { mockEthiopianStudents, mockEthiopianGrades } from '@/data/ethiopianMockData';
-import { EthiopianGrade } from '@/types/ethiopia';
-import { EthiopianStudent, EthiopianGradeEntry } from '@/types/ethiopian-education';
-import { ETHIOPIAN_GRADING_SCALE } from '@/types/ethiopia';
+import { mockEthiopianStudents } from '@/data/ethiopianMockData';
+import { EthiopianStudent } from '@/types/ethiopian-education';
 import GradeManagementFilters from '@/components/teacher/grades/GradeManagementFilters';
 import EthiopianGradingScale from '@/components/teacher/grades/EthiopianGradingScale';
-import GradeEntryTable from '@/components/teacher/grades/GradeEntryTable';
+import AssessmentGradeEntry from '@/components/teacher/grades/AssessmentGradeEntry';
 
 // Mock teacher assignments - this would come from a backend
 const mockTeacherAssignments = [
@@ -29,7 +27,6 @@ const ManageGrades = () => {
   const [selectedTerm, setSelectedTerm] = useState<string>('First Term');
   const [searchTerm, setSearchTerm] = useState('');
   const [students, setStudents] = useState<EthiopianStudent[]>(mockEthiopianStudents);
-  const [grades, setGrades] = useState<EthiopianGradeEntry[]>(mockEthiopianGrades);
 
   if (!user || user.role !== 'teacher') {
     return <div>Access denied. Teacher privileges required.</div>;
@@ -68,48 +65,7 @@ const ManageGrades = () => {
     return matchesEducationLevel && matchesGradeLevel && matchesSearch && canTeachSubject;
   });
 
-  const handleGradeChange = (studentId: string, grade: EthiopianGrade, percentage: number) => {
-    // Verify teacher can grade this student for this subject
-    const student = students.find(s => s.id === studentId);
-    if (!student) return;
-
-    const canGrade = teacherAssignments.some(assignment => 
-      assignment.subject === selectedSubject && 
-      assignment.grade === student.gradeLevel && 
-      assignment.section === student.section
-    );
-
-    if (!canGrade) {
-      toast({
-        title: "Access Denied",
-        description: "You are not assigned to teach this subject to this student's class.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const gradeInfo = ETHIOPIAN_GRADING_SCALE[grade];
-    const newGradeEntry: EthiopianGradeEntry = {
-      id: Date.now().toString(),
-      studentId,
-      subject: selectedSubject,
-      grade,
-      points: gradeInfo.points,
-      percentage,
-      term: selectedTerm as any,
-      academicYear: '2024/25',
-      date: new Date().toISOString().split('T')[0]
-    };
-
-    setGrades(prev => {
-      const filtered = prev.filter(g => 
-        !(g.studentId === studentId && g.subject === selectedSubject && g.term === selectedTerm)
-      );
-      return [...filtered, newGradeEntry];
-    });
-  };
-
-  const handleSaveGrades = () => {
+  const handleSaveGrades = (assessments: any[]) => {
     if (!selectedSubject) {
       toast({
         title: "No Subject Selected",
@@ -158,18 +114,22 @@ const ManageGrades = () => {
         onSubjectChange={setSelectedSubject}
         onTermChange={setSelectedTerm}
         onSearchChange={setSearchTerm}
-        onSaveGrades={handleSaveGrades}
+        onSaveGrades={() => handleSaveGrades([])}
       />
 
       <EthiopianGradingScale />
 
-      <GradeEntryTable
-        selectedSubject={selectedSubject}
-        selectedTerm={selectedTerm}
-        filteredStudents={filteredStudents}
-        grades={grades}
-        onGradeChange={handleGradeChange}
-      />
+      {selectedSubject && (
+        <AssessmentGradeEntry
+          students={filteredStudents.map(s => ({
+            id: s.id,
+            name: s.name,
+            section: s.section
+          }))}
+          subject={selectedSubject}
+          onSave={handleSaveGrades}
+        />
+      )}
     </div>
   );
 };

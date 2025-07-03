@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import DashboardHeader from '@/components/DashboardHeader';
 import { 
@@ -17,19 +16,12 @@ import {
   Crown,
   ClipboardList,
   School,
-  LogOut,
   User
 } from 'lucide-react';
 
 const DashboardLayout = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
 
   const getNavigationItems = () => {
     const basePath = `/${user?.role}`;
@@ -133,8 +125,8 @@ const DashboardLayout = () => {
           ))}
         </nav>
 
-        {/* Bottom section with Edit Profile and Logout */}
-        <div className="border-t border-gray-200 p-4 space-y-2">
+        {/* Bottom section with Edit Profile only */}
+        <div className="border-t border-gray-200 p-4">
           <Link
             to={`/${user?.role}/edit-profile`}
             className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
@@ -142,15 +134,6 @@ const DashboardLayout = () => {
             <User className="h-5 w-5 mr-3" />
             Edit Profile
           </Link>
-          
-          <Button
-            variant="ghost"
-            onClick={handleLogout}
-            className="flex items-center w-full justify-start px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          >
-            <LogOut className="h-5 w-5 mr-3" />
-            Logout
-          </Button>
         </div>
       </div>
 
