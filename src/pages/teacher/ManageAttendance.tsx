@@ -2,30 +2,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Book, Users } from 'lucide-react';
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import SectionAttendance from '@/components/teacher/attendance/SectionAttendance';
+import CourseOverviewCards from '@/components/teacher/attendance/CourseOverviewCards';
+import AttendanceControls from '@/components/teacher/attendance/AttendanceControls';
+import AttendanceSectionList from '@/components/teacher/attendance/AttendanceSectionList';
 
 type Student = {
   id: string;
@@ -90,11 +70,6 @@ const ManageAttendance = () => {
   const selectedCourse = mockCourses.find(course => course.id === selectedCourseId);
   const formattedDate = format(date, 'yyyy-MM-dd');
 
-  // Get students for selected section
-  const sectionStudents = selectedCourse?.students.filter(student => 
-    selectedSection === '' || student.section === selectedSection
-  ) || [];
-
   const handleSaveAttendance = (attendanceRecords: any[]) => {
     const sectionText = selectedSection ? `section ${selectedSection}` : 'all sections';
     toast({
@@ -114,109 +89,28 @@ const ManageAttendance = () => {
         <p className="text-muted-foreground">Track and update student attendance records by section</p>
       </div>
 
-      {/* Course Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {mockCourses.map((course) => (
-          <Card key={course.id} className={`cursor-pointer transition-all ${selectedCourseId === course.id ? 'ring-2 ring-teacher border-teacher' : 'hover:shadow-md'}`} onClick={() => setSelectedCourseId(course.id)}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Book className="h-5 w-5 text-teacher" />
-                  <div>
-                    <div className="font-semibold">{course.name}</div>
-                    <div className="text-sm text-muted-foreground">{course.code}</div>
-                  </div>
-                </div>
-                <div className="text-right text-sm">
-                  <div className="font-medium">{course.students.length} students</div>
-                  <div className="text-muted-foreground">{course.sections.length} sections</div>
-                </div>
-              </div>
-              <div className="mt-2 text-xs text-muted-foreground">{course.schedule} | {course.room}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <CourseOverviewCards
+        courses={mockCourses}
+        selectedCourseId={selectedCourseId}
+        onCourseSelect={setSelectedCourseId}
+      />
 
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 justify-between">
-        <div className="flex flex-col md:flex-row gap-4">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full md:w-auto justify-start text-left font-normal flex items-center"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {format(date, 'MMMM d, yyyy')}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={(newDate) => newDate && setDate(newDate)}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+      <AttendanceControls
+        date={date}
+        selectedCourseId={selectedCourseId}
+        selectedSection={selectedSection}
+        courses={mockCourses}
+        onDateChange={setDate}
+        onCourseChange={setSelectedCourseId}
+        onSectionChange={setSelectedSection}
+      />
 
-          <Select value={selectedCourseId} onValueChange={setSelectedCourseId}>
-            <SelectTrigger className="w-full md:w-64">
-              <SelectValue placeholder="Select Course" />
-            </SelectTrigger>
-            <SelectContent>
-              {mockCourses.map(course => (
-                <SelectItem key={course.id} value={course.id}>
-                  {course.name} ({course.code})
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={selectedSection} onValueChange={setSelectedSection}>
-            <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="All Sections" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">All Sections</SelectItem>
-              {selectedCourse?.sections.map(section => (
-                <SelectItem key={section} value={section}>
-                  Section {section}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Section-based Attendance */}
-      {selectedSection ? (
-        <SectionAttendance
-          students={sectionStudents}
-          section={selectedSection}
-          course={selectedCourse.name}
-          date={formattedDate}
-          onSave={handleSaveAttendance}
-        />
-      ) : (
-        // Show all sections
-        <div className="space-y-6">
-          {selectedCourse.sections.map(section => {
-            const studentsInSection = selectedCourse.students.filter(s => s.section === section);
-            return (
-              <SectionAttendance
-                key={section}
-                students={studentsInSection}
-                section={section}
-                course={selectedCourse.name}
-                date={formattedDate}
-                onSave={handleSaveAttendance}
-              />
-            );
-          })}
-        </div>
-      )}
+      <AttendanceSectionList
+        selectedCourse={selectedCourse}
+        selectedSection={selectedSection}
+        date={formattedDate}
+        onSave={handleSaveAttendance}
+      />
     </div>
   );
 };
