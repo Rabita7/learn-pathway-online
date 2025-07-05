@@ -29,7 +29,7 @@ const AttendanceSectionList: React.FC<AttendanceSectionListProps> = ({
   date,
   onSave,
 }) => {
-  if (selectedSection) {
+  if (selectedSection && selectedSection !== 'all') {
     const sectionStudents = selectedCourse.students.filter(student => 
       student.section === selectedSection
     );

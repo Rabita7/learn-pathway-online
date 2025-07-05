@@ -58,12 +58,13 @@ const AttendanceControls: React.FC<AttendanceControlsProps> = ({
               {format(date, 'MMMM d, yyyy')}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
+          <PopoverContent className="w-auto p-0 bg-white z-50">
             <Calendar
               mode="single"
               selected={date}
               onSelect={(newDate) => newDate && onDateChange(newDate)}
               initialFocus
+              className="p-3 pointer-events-auto"
             />
           </PopoverContent>
         </Popover>
@@ -72,7 +73,7 @@ const AttendanceControls: React.FC<AttendanceControlsProps> = ({
           <SelectTrigger className="w-full md:w-64">
             <SelectValue placeholder="Select Course" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white z-50">
             {courses.map(course => (
               <SelectItem key={course.id} value={course.id}>
                 {course.name} ({course.code})
@@ -85,8 +86,8 @@ const AttendanceControls: React.FC<AttendanceControlsProps> = ({
           <SelectTrigger className="w-full md:w-48">
             <SelectValue placeholder="All Sections" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All Sections</SelectItem>
+          <SelectContent className="bg-white z-50">
+            <SelectItem value="all">All Sections</SelectItem>
             {selectedCourse?.sections.map(section => (
               <SelectItem key={section} value={section}>
                 Section {section}

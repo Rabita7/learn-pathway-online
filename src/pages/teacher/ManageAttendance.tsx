@@ -60,7 +60,7 @@ const ManageAttendance = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedCourseId, setSelectedCourseId] = useState(mockCourses[0].id);
-  const [selectedSection, setSelectedSection] = useState('');
+  const [selectedSection, setSelectedSection] = useState('all');
   const [date, setDate] = useState<Date>(new Date());
 
   if (!user || user.role !== 'teacher') {
@@ -71,7 +71,7 @@ const ManageAttendance = () => {
   const formattedDate = format(date, 'yyyy-MM-dd');
 
   const handleSaveAttendance = (attendanceRecords: any[]) => {
-    const sectionText = selectedSection ? `section ${selectedSection}` : 'all sections';
+    const sectionText = selectedSection && selectedSection !== 'all' ? `section ${selectedSection}` : 'all sections';
     toast({
       title: "Attendance saved successfully",
       description: `Updated attendance for ${selectedCourse?.name} (${sectionText}) on ${format(date, 'MMMM d, yyyy')}`,
