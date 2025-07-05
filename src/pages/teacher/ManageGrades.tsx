@@ -6,7 +6,7 @@ import { mockEthiopianStudents } from '@/data/ethiopianMockData';
 import { EthiopianStudent } from '@/types/ethiopian-education';
 import GradeManagementFilters from '@/components/teacher/grades/GradeManagementFilters';
 import EthiopianGradingScale from '@/components/teacher/grades/EthiopianGradingScale';
-import AssessmentGradeEntry from '@/components/teacher/grades/AssessmentGradeEntry';
+import StudentGradeTable from '@/components/teacher/grades/StudentGradeTable';
 
 // Mock teacher assignments - this would come from a backend
 const mockTeacherAssignments = [
@@ -19,6 +19,15 @@ const mockTeacherAssignments = [
   { teacherId: '5', subject: 'Art', grade: '10', section: 'B' },
 ];
 
+interface StudentGrade {
+  studentId: string;
+  test: number;
+  assignment: number;
+  midexam: number;
+  finalexam: number;
+  result: number;
+}
+
 const ManageGrades = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -29,6 +38,7 @@ const ManageGrades = () => {
   const [selectedTerm, setSelectedTerm] = useState<string>('First Term');
   const [searchTerm, setSearchTerm] = useState('');
   const [students, setStudents] = useState<EthiopianStudent[]>(mockEthiopianStudents);
+  const [grades, setGrades] = useState<StudentGrade[]>([]);
 
   if (!user || user.role !== 'teacher') {
     return <div>Access denied. Teacher privileges required.</div>;
@@ -56,7 +66,6 @@ const ManageGrades = () => {
   // Filter students based on teacher's assignments and selections
   const getFilteredStudents = () => {
     let filteredStudents = students.filter(student => {
-      // Check if teacher is assigned to this student's grade and section for the selected subject
       const hasAssignment = teacherAssignments.some(assignment => 
         assignment.grade === student.gradeLevel && 
         assignment.section === student.section &&
@@ -76,7 +85,33 @@ const ManageGrades = () => {
 
   const filteredStudents = getFilteredStudents();
 
-  const handleSaveGrades = (assessments: any[]) => {
+  const handleGradeChange = (studentId: string, field: keyof Omit<StudentGrade, 'studentId' | 'result'>, value: number) => {
+    setGrades(prev => {
+      const existing = prev.find(g => g.studentId === studentId);
+      const updated = existing ? { ...existing } : {
+        studentId,
+        test: 0,
+        assignment: 0,
+        midexam: 0,
+        finalexam: 0,
+        result: 0
+      };
+      
+      updated[field] = Math.max(0, Math.min(100, value));
+      
+      // Calculate result: Test(20%) + Assignment(20%) + Midexam(30%) + Final(30%)
+      updated.result = Math.round(
+        (updated.test * 0.2) + 
+        (updated.assignment * 0.2) + 
+        (updated.midexam * 0.3) + 
+        (updated.finalexam * 0.3)
+      );
+
+      return prev.filter(g => g.studentId !== studentId).concat(updated);
+    });
+  };
+
+  const handleSaveGrades = () => {
     if (!selectedSubject || selectedSubject === 'all') {
       toast({
         title: "No Subject Selected",
@@ -128,22 +163,20 @@ const ManageGrades = () => {
         onSectionChange={setSelectedSection}
         onTermChange={setSelectedTerm}
         onSearchChange={setSearchTerm}
-        onSaveGrades={() => handleSaveGrades([])}
+        onSaveGrades={handleSaveGrades}
       />
 
       <EthiopianGradingScale />
 
-      {selectedSubject && selectedSubject !== 'all' && selectedGradeLevel && selectedGradeLevel !== 'all' && (
-        <AssessmentGradeEntry
-          students={filteredStudents.map(s => ({
-            id: s.id,
-            name: s.name,
-            section: s.section
-          }))}
+      {selectedSubject && selectedSubject !== 'all' && (
+        <StudentGradeTable
+          students={filteredStudents}
+          grades={grades}
           subject={selectedSubject}
-          grade={selectedGradeLevel}
-          section={selectedSection === 'all' ? 'All' : selectedSection}
-          onSave={handleSaveGrades}
+          gradeLevel={selectedGradeLevel}
+          section={selectedSection}
+          term={selectedTerm}
+          onGradeChange={handleGradeChange}
         />
       )}
     </div>
