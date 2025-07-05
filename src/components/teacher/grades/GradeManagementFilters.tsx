@@ -1,9 +1,10 @@
 
 import React from 'react';
-import { Search, Save, BookOpen, Users } from 'lucide-react';
-import { EthiopianStudent } from '@/types/ethiopian-education';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -11,13 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Search, Save, Users, BookOpen, GraduationCap } from 'lucide-react';
+
+interface Student {
+  id: string;
+  name: string;
+  section: string;
+}
 
 interface GradeManagementFiltersProps {
   selectedEducationLevel: string;
@@ -26,7 +27,7 @@ interface GradeManagementFiltersProps {
   selectedSection: string;
   selectedTerm: string;
   searchTerm: string;
-  students: EthiopianStudent[];
+  students: Student[];
   assignedSubjects: string[];
   assignedGrades: string[];
   assignedSections: string[];
@@ -35,7 +36,7 @@ interface GradeManagementFiltersProps {
   onSubjectChange: (subject: string) => void;
   onSectionChange: (section: string) => void;
   onTermChange: (term: string) => void;
-  onSearchChange: (term: string) => void;
+  onSearchChange: (search: string) => void;
   onSaveGrades: () => void;
 }
 
@@ -58,125 +59,131 @@ const GradeManagementFilters: React.FC<GradeManagementFiltersProps> = ({
   onSearchChange,
   onSaveGrades,
 }) => {
-  const terms = ['First Term', 'Second Term', 'Third Term'];
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BookOpen className="h-5 w-5 text-teacher" />
-          Grade Management Filters
-        </CardTitle>
-        <CardDescription className="flex items-center gap-4">
-          <span className="flex items-center gap-1">
-            <Users className="h-4 w-4" />
-            {students.length} students found
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2">
+            <GraduationCap className="h-5 w-5 text-teacher" />
+            Grade Management Filters
           </span>
-          <span>{assignedSubjects.length} assigned subjects</span>
-        </CardDescription>
+          <Badge variant="secondary" className="flex items-center gap-1">
+            <Users className="h-3 w-3" />
+            {students.length} Students
+          </Badge>
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+      <CardContent className="space-y-6">
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search students by name..."
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        {/* Filter Controls */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Education Level
-            </label>
+            <Label>Education Level</Label>
             <Select value={selectedEducationLevel} onValueChange={onEducationLevelChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select level" />
+                <SelectValue placeholder="Select Level" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Primary">Primary Education</SelectItem>
-                <SelectItem value="Secondary">Secondary Education</SelectItem>
+              <SelectContent className="bg-white z-50">
+                <SelectItem value="Primary">Primary</SelectItem>
+                <SelectItem value="Secondary">Secondary</SelectItem>
                 <SelectItem value="Preparatory">Preparatory</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Grade Level
-            </label>
+            <Label>Grade Level</Label>
             <Select value={selectedGradeLevel} onValueChange={onGradeLevelChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select grade" />
+                <SelectValue placeholder="Select Grade" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
+                <SelectItem value="all">All Grades</SelectItem>
                 {assignedGrades.map(grade => (
-                  <SelectItem key={grade} value={grade}>Grade {grade}</SelectItem>
+                  <SelectItem key={grade} value={grade}>
+                    Grade {grade}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Subject
-            </label>
+            <Label>Subject</Label>
             <Select value={selectedSubject} onValueChange={onSubjectChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select subject" />
+                <SelectValue placeholder="Select Subject" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
+                <SelectItem value="all">All Subjects</SelectItem>
                 {assignedSubjects.map(subject => (
-                  <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                  <SelectItem key={subject} value={subject}>
+                    {subject}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Section
-            </label>
+            <Label>Section</Label>
             <Select value={selectedSection} onValueChange={onSectionChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select section" />
+                <SelectValue placeholder="Select Section" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All Sections</SelectItem>
+              <SelectContent className="bg-white z-50">
+                <SelectItem value="all">All Sections</SelectItem>
                 {assignedSections.map(section => (
-                  <SelectItem key={section} value={section}>Section {section}</SelectItem>
+                  <SelectItem key={section} value={section}>
+                    Section {section}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Term
-            </label>
+            <Label>Term</Label>
             <Select value={selectedTerm} onValueChange={onTermChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select term" />
+                <SelectValue placeholder="Select Term" />
               </SelectTrigger>
-              <SelectContent>
-                {terms.map(term => (
-                  <SelectItem key={term} value={term}>{term}</SelectItem>
-                ))}
+              <SelectContent className="bg-white z-50">
+                <SelectItem value="First Term">First Term</SelectItem>
+                <SelectItem value="Second Term">Second Term</SelectItem>
+                <SelectItem value="Third Term">Third Term</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
-          <div className="relative w-full md:w-72">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search students..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-            />
+        {/* Action Button */}
+        <div className="flex justify-between items-center pt-4 border-t">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <BookOpen className="h-4 w-4" />
+            <span>
+              {selectedSubject && selectedSubject !== 'all' ? `${selectedSubject} - ` : ''}
+              {selectedGradeLevel && selectedGradeLevel !== 'all' ? `Grade ${selectedGradeLevel} - ` : ''}
+              {selectedSection && selectedSection !== 'all' ? `Section ${selectedSection}` : 'All Sections'}
+            </span>
           </div>
-
           <Button 
-            onClick={onSaveGrades} 
-            className="bg-teacher text-white hover:bg-teacher/90"
-            disabled={!selectedSubject || !selectedGradeLevel}
+            onClick={onSaveGrades}
+            className="bg-teacher hover:bg-teacher/90"
+            disabled={!selectedSubject || selectedSubject === 'all'}
           >
             <Save className="h-4 w-4 mr-2" />
-            Save Grades
+            Save All Grades
           </Button>
         </div>
       </CardContent>

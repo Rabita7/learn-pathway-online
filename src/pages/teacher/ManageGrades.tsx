@@ -23,9 +23,9 @@ const ManageGrades = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedEducationLevel, setSelectedEducationLevel] = useState<string>('Secondary');
-  const [selectedGradeLevel, setSelectedGradeLevel] = useState<string>('');
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
-  const [selectedSection, setSelectedSection] = useState<string>('');
+  const [selectedGradeLevel, setSelectedGradeLevel] = useState<string>('all');
+  const [selectedSubject, setSelectedSubject] = useState<string>('all');
+  const [selectedSection, setSelectedSection] = useState<string>('all');
   const [selectedTerm, setSelectedTerm] = useState<string>('First Term');
   const [searchTerm, setSearchTerm] = useState('');
   const [students, setStudents] = useState<EthiopianStudent[]>(mockEthiopianStudents);
@@ -42,7 +42,7 @@ const ManageGrades = () => {
 
   // Get sections for selected subject and grade
   const getAvailableSections = () => {
-    if (!selectedSubject || !selectedGradeLevel) return [];
+    if (!selectedSubject || selectedSubject === 'all' || !selectedGradeLevel || selectedGradeLevel === 'all') return assignedSections;
     return teacherAssignments
       .filter(assignment => 
         assignment.subject === selectedSubject && 
@@ -60,12 +60,12 @@ const ManageGrades = () => {
       const hasAssignment = teacherAssignments.some(assignment => 
         assignment.grade === student.gradeLevel && 
         assignment.section === student.section &&
-        (selectedSubject === '' || assignment.subject === selectedSubject)
+        (selectedSubject === 'all' || assignment.subject === selectedSubject)
       );
       
-      const matchesEducationLevel = selectedEducationLevel === '' || student.educationLevel === selectedEducationLevel;
-      const matchesGradeLevel = selectedGradeLevel === '' || student.gradeLevel === selectedGradeLevel;
-      const matchesSection = selectedSection === '' || student.section === selectedSection;
+      const matchesEducationLevel = selectedEducationLevel === 'all' || student.educationLevel === selectedEducationLevel;
+      const matchesGradeLevel = selectedGradeLevel === 'all' || student.gradeLevel === selectedGradeLevel;
+      const matchesSection = selectedSection === 'all' || student.section === selectedSection;
       const matchesSearch = searchTerm === '' || student.name.toLowerCase().includes(searchTerm.toLowerCase());
       
       return hasAssignment && matchesEducationLevel && matchesGradeLevel && matchesSection && matchesSearch;
@@ -77,7 +77,7 @@ const ManageGrades = () => {
   const filteredStudents = getFilteredStudents();
 
   const handleSaveGrades = (assessments: any[]) => {
-    if (!selectedSubject) {
+    if (!selectedSubject || selectedSubject === 'all') {
       toast({
         title: "No Subject Selected",
         description: "Please select a subject before saving grades.",
@@ -133,7 +133,7 @@ const ManageGrades = () => {
 
       <EthiopianGradingScale />
 
-      {selectedSubject && selectedGradeLevel && (
+      {selectedSubject && selectedSubject !== 'all' && selectedGradeLevel && selectedGradeLevel !== 'all' && (
         <AssessmentGradeEntry
           students={filteredStudents.map(s => ({
             id: s.id,
@@ -142,7 +142,7 @@ const ManageGrades = () => {
           }))}
           subject={selectedSubject}
           grade={selectedGradeLevel}
-          section={selectedSection || 'All'}
+          section={selectedSection === 'all' ? 'All' : selectedSection}
           onSave={handleSaveGrades}
         />
       )}
