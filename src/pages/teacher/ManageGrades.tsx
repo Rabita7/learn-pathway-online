@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -8,6 +7,7 @@ import { useGradeCalculation } from '@/hooks/useGradeCalculation';
 import GradeManagementFilters from '@/components/teacher/grades/GradeManagementFilters';
 import EthiopianGradingScale from '@/components/teacher/grades/EthiopianGradingScale';
 import StudentGradeTable from '@/components/teacher/grades/StudentGradeTable';
+import { BookOpen } from 'lucide-react';
 
 // Mock teacher assignments - this would come from a backend
 const mockTeacherAssignments = [
