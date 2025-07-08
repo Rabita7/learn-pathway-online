@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -9,15 +10,17 @@ import EthiopianGradingScale from '@/components/teacher/grades/EthiopianGradingS
 import StudentGradeTable from '@/components/teacher/grades/StudentGradeTable';
 import { BookOpen } from 'lucide-react';
 
-// Mock teacher assignments - this would come from a backend
+// Mock teacher assignments - each teacher teaches 1-2 subjects
 const mockTeacherAssignments = [
   { teacherId: '1', subject: 'Mathematics', grade: '9', section: 'A' },
   { teacherId: '1', subject: 'Mathematics', grade: '10', section: 'B' },
-  { teacherId: '1', subject: 'Physics', grade: '9', section: 'A' },
+  { teacherId: '2', subject: 'Physics', grade: '9', section: 'A' },
   { teacherId: '2', subject: 'Physics', grade: '11', section: 'A' },
   { teacherId: '3', subject: 'English', grade: '10', section: 'A' },
+  { teacherId: '3', subject: 'English', grade: '10', section: 'B' },
   { teacherId: '4', subject: 'History', grade: '9', section: 'A' },
   { teacherId: '5', subject: 'Art', grade: '10', section: 'B' },
+  { teacherId: '5', subject: 'Music', grade: '11', section: 'A' },
 ];
 
 const ManageGrades = () => {
