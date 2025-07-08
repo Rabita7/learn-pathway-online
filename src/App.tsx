@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,31 +24,31 @@ import ManageStudents from "./pages/admin/ManageStudents";
 import ManageTeachers from "./pages/admin/ManageTeachers";
 import ManageParents from "./pages/admin/ManageParents";
 import ManageClasses from "./pages/admin/ManageClasses";
-import AdminReports from "./pages/admin/AdminReports";
+import ViewReports from "./pages/admin/ViewReports";
 import PostAnnouncement from "./pages/admin/PostAnnouncement";
 
 // Teacher pages
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
-import TeacherStudents from "./pages/teacher/TeacherStudents";
+import ViewStudents from "./pages/teacher/ViewStudents";
 import ManageGrades from "./pages/teacher/ManageGrades";
-import TeacherAttendance from "./pages/teacher/TeacherAttendance";
-import TeacherAssignments from "./pages/teacher/TeacherAssignments";
+import ManageAttendance from "./pages/teacher/ManageAttendance";
+import ViewAssignments from "./pages/teacher/ViewAssignments";
 import PostAssignment from "./pages/teacher/PostAssignment";
-import TeacherAnnouncements from "./pages/teacher/TeacherAnnouncements";
+import Announcements from "./pages/teacher/Announcements";
 
 // Student pages
 import StudentDashboard from "./pages/student/StudentDashboard";
-import StudentGrades from "./pages/student/StudentGrades";
-import StudentAttendance from "./pages/student/StudentAttendance";
+import ViewGrades from "./pages/student/ViewGrades";
+import ViewAttendance from "./pages/student/ViewAttendance";
 import StudentAssignments from "./pages/student/StudentAssignments";
-import StudentSchedule from "./pages/student/StudentSchedule";
+import ClassSchedule from "./pages/student/ClassSchedule";
 import StudentAnnouncements from "./pages/student/StudentAnnouncements";
 import StudentProfile from "./pages/student/StudentProfile";
 
 // Parent pages
 import ParentDashboard from "./pages/parent/ParentDashboard";
-import ChildGrades from "./pages/parent/ChildGrades";
-import ChildAttendance from "./pages/parent/ChildAttendance";
+import ViewChildGrades from "./pages/parent/ViewChildGrades";
+import ViewChildAttendance from "./pages/parent/ViewChildAttendance";
 import ParentAnnouncements from "./pages/parent/ParentAnnouncements";
 
 // Director pages
@@ -87,28 +88,28 @@ const App = () => (
                 <Route path="teachers" element={<ManageTeachers />} />
                 <Route path="parents" element={<ManageParents />} />
                 <Route path="classes" element={<ManageClasses />} />
-                <Route path="reports" element={<AdminReports />} />
+                <Route path="reports" element={<ViewReports />} />
                 <Route path="announcements" element={<PostAnnouncement />} />
               </Route>
 
               {/* Teacher routes */}
               <Route path="/teacher" element={<DashboardLayout />}>
                 <Route index element={<TeacherDashboard />} />
-                <Route path="students" element={<TeacherStudents />} />
+                <Route path="students" element={<ViewStudents />} />
                 <Route path="grades" element={<ManageGrades />} />
-                <Route path="attendance" element={<TeacherAttendance />} />
-                <Route path="assignments" element={<TeacherAssignments />} />
+                <Route path="attendance" element={<ManageAttendance />} />
+                <Route path="assignments" element={<ViewAssignments />} />
                 <Route path="post-assignment" element={<PostAssignment />} />
-                <Route path="announcements" element={<TeacherAnnouncements />} />
+                <Route path="announcements" element={<Announcements />} />
               </Route>
 
               {/* Student routes */}
               <Route path="/student" element={<DashboardLayout />}>
                 <Route index element={<StudentDashboard />} />
-                <Route path="grades" element={<StudentGrades />} />
-                <Route path="attendance" element={<StudentAttendance />} />
+                <Route path="grades" element={<ViewGrades />} />
+                <Route path="attendance" element={<ViewAttendance />} />
                 <Route path="assignments" element={<StudentAssignments />} />
-                <Route path="schedule" element={<StudentSchedule />} />
+                <Route path="schedule" element={<ClassSchedule />} />
                 <Route path="announcements" element={<StudentAnnouncements />} />
                 <Route path="profile" element={<StudentProfile />} />
               </Route>
@@ -116,8 +117,8 @@ const App = () => (
               {/* Parent routes */}
               <Route path="/parent" element={<DashboardLayout />}>
                 <Route index element={<ParentDashboard />} />
-                <Route path="child-grades" element={<ChildGrades />} />
-                <Route path="child-attendance" element={<ChildAttendance />} />
+                <Route path="child-grades" element={<ViewChildGrades />} />
+                <Route path="child-attendance" element={<ViewChildAttendance />} />
                 <Route path="announcements" element={<ParentAnnouncements />} />
               </Route>
 
