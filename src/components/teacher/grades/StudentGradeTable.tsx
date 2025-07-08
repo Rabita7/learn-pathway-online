@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -12,7 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { EthiopianStudent } from '@/types/ethiopian-education';
-import { Users, BookOpen } from 'lucide-react';
+import { Users, BookOpen, Loader } from 'lucide-react';
 
 interface StudentGrade {
   studentId: string;
@@ -30,7 +31,11 @@ interface StudentGradeTableProps {
   gradeLevel: string;
   section: string;
   term: string;
+  isLoading?: boolean;
   onGradeChange: (studentId: string, field: keyof Omit<StudentGrade, 'studentId' | 'result'>, value: number) => void;
+  getStudentGrade: (studentId: string) => StudentGrade;
+  getLetterGrade: (percentage: number) => string;
+  getGradeColor: (percentage: number) => string;
 }
 
 const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
@@ -40,34 +45,31 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
   gradeLevel,
   section,
   term,
+  isLoading = false,
   onGradeChange,
+  getStudentGrade,
+  getLetterGrade,
+  getGradeColor,
 }) => {
-  const getStudentGrade = (studentId: string): StudentGrade => {
-    return grades.find(g => g.studentId === studentId) || {
-      studentId,
-      test: 0,
-      assignment: 0,
-      midexam: 0,
-      finalexam: 0,
-      result: 0
-    };
-  };
-
-  const getGradeColor = (percentage: number): string => {
-    if (percentage >= 90) return 'bg-green-100 text-green-800';
-    if (percentage >= 80) return 'bg-blue-100 text-blue-800';
-    if (percentage >= 70) return 'bg-yellow-100 text-yellow-800';
-    if (percentage >= 60) return 'bg-orange-100 text-orange-800';
-    return 'bg-red-100 text-red-800';
-  };
-
-  const getLetterGrade = (percentage: number): string => {
-    if (percentage >= 90) return 'A';
-    if (percentage >= 80) return 'B';
-    if (percentage >= 70) return 'C';
-    if (percentage >= 60) return 'D';
-    return 'F';
-  };
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Loader className="h-5 w-5 animate-spin text-teacher" />
+            Loading Grades...
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -96,29 +98,29 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-[150px]">Student Name</TableHead>
-                  <TableHead className="w-[80px]">Section</TableHead>
-                  <TableHead className="w-[100px] text-center">
+                  <TableHead className="min-w-[150px] font-semibold">Student Name</TableHead>
+                  <TableHead className="w-[80px] text-center font-semibold">Section</TableHead>
+                  <TableHead className="w-[100px] text-center font-semibold">
                     Test
-                    <div className="text-xs text-muted-foreground">(20%)</div>
+                    <div className="text-xs text-muted-foreground font-normal">(20%)</div>
                   </TableHead>
-                  <TableHead className="w-[100px] text-center">
+                  <TableHead className="w-[100px] text-center font-semibold">
                     Assignment
-                    <div className="text-xs text-muted-foreground">(20%)</div>
+                    <div className="text-xs text-muted-foreground font-normal">(20%)</div>
                   </TableHead>
-                  <TableHead className="w-[100px] text-center">
+                  <TableHead className="w-[100px] text-center font-semibold">
                     Mid Exam
-                    <div className="text-xs text-muted-foreground">(30%)</div>
+                    <div className="text-xs text-muted-foreground font-normal">(30%)</div>
                   </TableHead>
-                  <TableHead className="w-[100px] text-center">
+                  <TableHead className="w-[100px] text-center font-semibold">
                     Final Exam
-                    <div className="text-xs text-muted-foreground">(30%)</div>
+                    <div className="text-xs text-muted-foreground font-normal">(30%)</div>
                   </TableHead>
-                  <TableHead className="w-[100px] text-center">
+                  <TableHead className="w-[100px] text-center font-semibold">
                     Result
-                    <div className="text-xs text-muted-foreground">(100%)</div>
+                    <div className="text-xs text-muted-foreground font-normal">(100%)</div>
                   </TableHead>
-                  <TableHead className="w-[80px] text-center">Grade</TableHead>
+                  <TableHead className="w-[80px] text-center font-semibold">Grade</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -127,9 +129,11 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
                   const letterGrade = getLetterGrade(studentGrade.result);
                   
                   return (
-                    <TableRow key={student.id}>
+                    <TableRow key={student.id} className="hover:bg-gray-50">
                       <TableCell className="font-medium">{student.name}</TableCell>
-                      <TableCell>{student.section}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant="outline">{student.section}</Badge>
+                      </TableCell>
                       <TableCell>
                         <Input
                           type="number"
@@ -137,7 +141,7 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
                           max="100"
                           value={studentGrade.test || ''}
                           onChange={(e) => onGradeChange(student.id, 'test', Number(e.target.value))}
-                          className="w-full text-center"
+                          className="w-full text-center border-gray-300 focus:border-teacher focus:ring-teacher/20"
                           placeholder="0"
                         />
                       </TableCell>
@@ -148,7 +152,7 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
                           max="100"
                           value={studentGrade.assignment || ''}
                           onChange={(e) => onGradeChange(student.id, 'assignment', Number(e.target.value))}
-                          className="w-full text-center"
+                          className="w-full text-center border-gray-300 focus:border-teacher focus:ring-teacher/20"
                           placeholder="0"
                         />
                       </TableCell>
@@ -159,7 +163,7 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
                           max="100"
                           value={studentGrade.midexam || ''}
                           onChange={(e) => onGradeChange(student.id, 'midexam', Number(e.target.value))}
-                          className="w-full text-center"
+                          className="w-full text-center border-gray-300 focus:border-teacher focus:ring-teacher/20"
                           placeholder="0"
                         />
                       </TableCell>
@@ -170,17 +174,20 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
                           max="100"
                           value={studentGrade.finalexam || ''}
                           onChange={(e) => onGradeChange(student.id, 'finalexam', Number(e.target.value))}
-                          className="w-full text-center"
+                          className="w-full text-center border-gray-300 focus:border-teacher focus:ring-teacher/20"
                           placeholder="0"
                         />
                       </TableCell>
                       <TableCell className="text-center">
-                        <Badge className={getGradeColor(studentGrade.result)}>
+                        <Badge className={`${getGradeColor(studentGrade.result)} font-medium`}>
                           {studentGrade.result}%
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        <Badge variant={letterGrade === 'F' ? "destructive" : "default"}>
+                        <Badge 
+                          variant={letterGrade === 'F' ? "destructive" : "default"}
+                          className="font-bold"
+                        >
                           {letterGrade}
                         </Badge>
                       </TableCell>
@@ -191,11 +198,13 @@ const StudentGradeTable: React.FC<StudentGradeTableProps> = ({
             </Table>
           </div>
         ) : (
-          <div className="text-center py-8">
+          <div className="text-center py-12">
+            <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Students Found</h3>
             <p className="text-gray-500">
               {!subject || subject === 'all' 
                 ? 'Please select a subject to view students and enter grades.'
-                : 'No students found for the selected criteria.'
+                : 'No students found for the selected criteria. Try adjusting your filters.'
               }
             </p>
           </div>

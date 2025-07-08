@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import DashboardHeader from '@/components/DashboardHeader';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Home, 
   Users, 
@@ -16,12 +17,24 @@ import {
   Crown,
   ClipboardList,
   School,
-  User
+  User,
+  LogOut
 } from 'lucide-react';
 
 const DashboardLayout = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: 'Success',
+      description: 'You have been logged out successfully',
+    });
+    navigate('/auth/login');
+  };
 
   const getNavigationItems = () => {
     const basePath = `/${user?.role}`;
@@ -96,27 +109,66 @@ const DashboardLayout = () => {
     }
   };
 
+  const getRoleColor = () => {
+    switch (user?.role) {
+      case 'director':
+        return 'text-purple-600';
+      case 'admin':
+        return 'text-red-600';
+      case 'teacher':
+        return 'text-blue-600';
+      case 'student':
+        return 'text-green-600';
+      case 'parent':
+        return 'text-yellow-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600 mb-4">Please log in to access the dashboard.</p>
+          <Link 
+            to="/auth/login" 
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90"
+          >
+            Go to Login
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md flex flex-col">
-        <div className="p-4 border-b">
-          <div className="flex items-center space-x-2">
-            {getRoleIcon()}
+      <div className="w-64 bg-white shadow-lg flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center space-x-3">
+            <div className={`p-2 rounded-lg bg-gray-100 ${getRoleColor()}`}>
+              {getRoleIcon()}
+            </div>
             <div>
-              <h2 className="font-semibold text-lg capitalize">{user?.role} Panel</h2>
-              <p className="text-sm text-gray-600">{user?.name}</p>
+              <h2 className="font-semibold text-lg capitalize text-gray-900">
+                {user.role} Panel
+              </h2>
+              <p className="text-sm text-gray-600 truncate">{user.name}</p>
             </div>
           </div>
         </div>
         
-        <nav className="mt-4 flex-1">
+        <nav className="mt-4 flex-1 px-2">
           {navigationItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 ${
-                location.pathname === item.path ? 'bg-blue-50 border-r-2 border-blue-500 text-blue-700' : ''
+              className={`flex items-center px-3 py-2 mb-1 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === item.path 
+                  ? 'bg-primary text-white shadow-sm' 
+                  : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
               }`}
             >
               <item.icon className="h-5 w-5 mr-3" />
@@ -125,19 +177,25 @@ const DashboardLayout = () => {
           ))}
         </nav>
 
-        {/* Bottom section with Edit Profile only */}
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-gray-200 p-4 space-y-2">
           <Link
-            to={`/${user?.role}/edit-profile`}
-            className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+            to={`/${user.role}/edit-profile`}
+            className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <User className="h-5 w-5 mr-3" />
             Edit Profile
           </Link>
+          
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <LogOut className="h-5 w-5 mr-3" />
+            Logout
+          </button>
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <DashboardHeader />
         <div className="p-6">

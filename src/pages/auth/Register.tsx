@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { BookOpen, Loader } from 'lucide-react';
 import { UserRole } from '@/types';
@@ -48,6 +48,15 @@ const Register = () => {
       });
       return;
     }
+
+    if (password.length < 6) {
+      toast({
+        title: 'Error',
+        description: 'Password must be at least 6 characters long',
+        variant: 'destructive',
+      });
+      return;
+    }
     
     setIsLoading(true);
     
@@ -55,9 +64,29 @@ const Register = () => {
       await register(name, email, password, role);
       toast({
         title: 'Success',
-        description: 'Your account has been created',
+        description: 'Your account has been created successfully',
       });
-      navigate('/');
+      
+      // Redirect based on role
+      switch (role) {
+        case 'admin':
+          navigate('/admin');
+          break;
+        case 'teacher':
+          navigate('/teacher');
+          break;
+        case 'student':
+          navigate('/student');
+          break;
+        case 'parent':
+          navigate('/parent');
+          break;
+        case 'director':
+          navigate('/director');
+          break;
+        default:
+          navigate('/');
+      }
     } catch (error) {
       toast({
         title: 'Error',
@@ -70,90 +99,109 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <BookOpen className="h-12 w-12 text-primary" />
+        <div className="flex justify-center mb-4">
+          <div className="bg-primary rounded-full p-3">
+            <BookOpen className="h-8 w-8 text-white" />
+          </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-2">
           Create your account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-gray-600">
           Or{' '}
-          <Link to="/auth/login" className="font-medium text-primary hover:text-primary-focus">
+          <Link to="/auth/login" className="font-medium text-primary hover:text-primary/80">
             sign in to your account
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white py-8 px-4 shadow-lg rounded-xl sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                Full Name
+              </Label>
               <Input
                 id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1"
-                placeholder="Enter your name"
+                className="mt-1 h-11"
+                placeholder="Enter your full name"
+                required
               />
             </div>
 
             <div>
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                Email address
+              </Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1"
+                className="mt-1 h-11"
                 placeholder="Enter your email"
+                required
               />
             </div>
 
             <div>
-              <Label htmlFor="role">Your Role</Label>
+              <Label htmlFor="role" className="text-sm font-medium text-gray-700">
+                Your Role
+              </Label>
               <Select value={role} onValueChange={(value) => setRole(value as UserRole)}>
-                <SelectTrigger className="mt-1">
+                <SelectTrigger className="mt-1 h-11">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="student">Student</SelectItem>
-                  <SelectItem value="teacher">Teacher</SelectItem>
-                  <SelectItem value="parent">Parent</SelectItem>
-                  <SelectItem value="admin">Administrator</SelectItem>
+                <SelectContent className="bg-white z-50">
+                  <SelectItem value="student">🎓 Student</SelectItem>
+                  <SelectItem value="teacher">👩‍🏫 Teacher</SelectItem>
+                  <SelectItem value="parent">👨‍👩‍👧‍👦 Parent</SelectItem>
+                  <SelectItem value="admin">👨‍💼 Administrator</SelectItem>
+                  <SelectItem value="director">👑 Director</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                Password
+              </Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1"
+                className="mt-1 h-11"
                 placeholder="Enter your password"
+                minLength={6}
+                required
               />
             </div>
 
             <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+                Confirm Password
+              </Label>
               <Input
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1"
+                className="mt-1 h-11"
                 placeholder="Confirm your password"
+                minLength={6}
+                required
               />
             </div>
 
             <div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full h-11 text-base font-medium" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader className="mr-2 h-4 w-4 animate-spin" />
@@ -169,11 +217,11 @@ const Register = () => {
           <div className="mt-6">
             <p className="text-xs text-center text-gray-500">
               By creating an account, you agree to our{' '}
-              <a href="#" className="font-medium text-primary">
+              <a href="#" className="font-medium text-primary hover:text-primary/80">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="#" className="font-medium text-primary">
+              <a href="#" className="font-medium text-primary hover:text-primary/80">
                 Privacy Policy
               </a>
             </p>

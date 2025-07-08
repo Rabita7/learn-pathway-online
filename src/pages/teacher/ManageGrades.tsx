@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { mockEthiopianStudents } from '@/data/ethiopianMockData';
 import { EthiopianStudent } from '@/types/ethiopian-education';
+import { useGradeCalculation } from '@/hooks/useGradeCalculation';
 import GradeManagementFilters from '@/components/teacher/grades/GradeManagementFilters';
 import EthiopianGradingScale from '@/components/teacher/grades/EthiopianGradingScale';
 import StudentGradeTable from '@/components/teacher/grades/StudentGradeTable';
@@ -19,15 +20,6 @@ const mockTeacherAssignments = [
   { teacherId: '5', subject: 'Art', grade: '10', section: 'B' },
 ];
 
-interface StudentGrade {
-  studentId: string;
-  test: number;
-  assignment: number;
-  midexam: number;
-  finalexam: number;
-  result: number;
-}
-
 const ManageGrades = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -38,10 +30,26 @@ const ManageGrades = () => {
   const [selectedTerm, setSelectedTerm] = useState<string>('First Term');
   const [searchTerm, setSearchTerm] = useState('');
   const [students, setStudents] = useState<EthiopianStudent[]>(mockEthiopianStudents);
-  const [grades, setGrades] = useState<StudentGrade[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { 
+    grades, 
+    updateGrade, 
+    getStudentGrade,
+    getLetterGrade,
+    getGradeColor,
+    classStatistics 
+  } = useGradeCalculation();
 
   if (!user || user.role !== 'teacher') {
-    return <div>Access denied. Teacher privileges required.</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600">Teacher privileges required to access this page.</p>
+        </div>
+      </div>
+    );
   }
 
   // Get teacher's assigned subjects, grades, and sections
@@ -85,33 +93,7 @@ const ManageGrades = () => {
 
   const filteredStudents = getFilteredStudents();
 
-  const handleGradeChange = (studentId: string, field: keyof Omit<StudentGrade, 'studentId' | 'result'>, value: number) => {
-    setGrades(prev => {
-      const existing = prev.find(g => g.studentId === studentId);
-      const updated = existing ? { ...existing } : {
-        studentId,
-        test: 0,
-        assignment: 0,
-        midexam: 0,
-        finalexam: 0,
-        result: 0
-      };
-      
-      updated[field] = Math.max(0, Math.min(100, value));
-      
-      // Calculate result: Test(20%) + Assignment(20%) + Midexam(30%) + Final(30%)
-      updated.result = Math.round(
-        (updated.test * 0.2) + 
-        (updated.assignment * 0.2) + 
-        (updated.midexam * 0.3) + 
-        (updated.finalexam * 0.3)
-      );
-
-      return prev.filter(g => g.studentId !== studentId).concat(updated);
-    });
-  };
-
-  const handleSaveGrades = () => {
+  const handleSaveGrades = async () => {
     if (!selectedSubject || selectedSubject === 'all') {
       toast({
         title: "No Subject Selected",
@@ -121,21 +103,36 @@ const ManageGrades = () => {
       return;
     }
 
-    toast({
-      title: "ውጤቶች በተሳካ ሁኔታ ተቀምጠዋል",
-      description: `Updated grades for ${selectedSubject} - ${selectedTerm}`,
-    });
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "ውጤቶች በተሳካ ሁኔታ ተቀምጠዋል (Grades Saved Successfully)",
+        description: `Updated grades for ${selectedSubject} - ${selectedTerm}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error Saving Grades",
+        description: "Failed to save grades. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold">የወሰን ውጤት አያያዝ (Manage Grades)</h1>
-          <p className="text-muted-foreground">Update and review grades for your assigned classes</p>
-          <div className="mt-2 text-sm text-blue-600">
+          <h1 className="text-3xl font-bold text-gray-900">የወሰን ውጤት አያያዝ (Manage Grades)</h1>
+          <p className="text-muted-foreground mt-1">Update and review grades for your assigned classes</p>
+          <div className="mt-3 text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
             <strong>Your Assignments:</strong>
-            <ul className="list-disc list-inside mt-1">
+            <ul className="list-disc list-inside mt-2 space-y-1">
               {teacherAssignments.map((assignment, index) => (
                 <li key={index}>
                   {assignment.subject} - Grade {assignment.grade}{assignment.section}
@@ -144,6 +141,18 @@ const ManageGrades = () => {
             </ul>
           </div>
         </div>
+        
+        {classStatistics && (
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <h3 className="font-semibold text-gray-900 mb-2">Class Statistics</h3>
+            <div className="space-y-1 text-sm">
+              <p>Average: <span className="font-medium">{classStatistics.average}%</span></p>
+              <p>Highest: <span className="font-medium text-green-600">{classStatistics.highest}%</span></p>
+              <p>Lowest: <span className="font-medium text-red-600">{classStatistics.lowest}%</span></p>
+              <p>Total Students: <span className="font-medium">{classStatistics.total}</span></p>
+            </div>
+          </div>
+        )}
       </div>
 
       <GradeManagementFilters
@@ -176,8 +185,20 @@ const ManageGrades = () => {
           gradeLevel={selectedGradeLevel}
           section={selectedSection}
           term={selectedTerm}
-          onGradeChange={handleGradeChange}
+          onGradeChange={updateGrade}
+          getStudentGrade={getStudentGrade}
+          getLetterGrade={getLetterGrade}
+          getGradeColor={getGradeColor}
+          isLoading={isLoading}
         />
+      )}
+
+      {(!selectedSubject || selectedSubject === 'all') && (
+        <div className="text-center py-12 bg-white rounded-lg border">
+          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Select a Subject</h3>
+          <p className="text-gray-600">Choose a subject from the filters above to start managing grades.</p>
+        </div>
       )}
     </div>
   );
