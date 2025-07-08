@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useLocalization } from '@/context/LocalizationContext';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -27,6 +27,7 @@ const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLocalization();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,12 +108,12 @@ const Register = () => {
           </div>
         </div>
         <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-2">
-          Create your account
+          {t('create_account')}
         </h2>
         <p className="text-center text-sm text-gray-600">
-          Or{' '}
+          {t('already_have_account')}{' '}
           <Link to="/auth/login" className="font-medium text-primary hover:text-primary/80">
-            sign in to your account
+            {t('sign_in')}
           </Link>
         </p>
       </div>
@@ -122,7 +123,7 @@ const Register = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                Full Name
+                {t('full_name')}
               </Label>
               <Input
                 id="name"
@@ -137,7 +138,7 @@ const Register = () => {
 
             <div>
               <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Email address
+                {t('email')}
               </Label>
               <Input
                 id="email"
@@ -152,25 +153,25 @@ const Register = () => {
 
             <div>
               <Label htmlFor="role" className="text-sm font-medium text-gray-700">
-                Your Role
+                {t('your_role')}
               </Label>
               <Select value={role} onValueChange={(value) => setRole(value as UserRole)}>
                 <SelectTrigger className="mt-1 h-11">
-                  <SelectValue placeholder="Select your role" />
+                  <SelectValue placeholder={t('your_role')} />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
-                  <SelectItem value="student">🎓 Student</SelectItem>
-                  <SelectItem value="teacher">👩‍🏫 Teacher</SelectItem>
-                  <SelectItem value="parent">👨‍👩‍👧‍👦 Parent</SelectItem>
-                  <SelectItem value="admin">👨‍💼 Administrator</SelectItem>
-                  <SelectItem value="director">👑 Director</SelectItem>
+                  <SelectItem value="student">🎓 {t('student')}</SelectItem>
+                  <SelectItem value="teacher">👩‍🏫 {t('teacher')}</SelectItem>
+                  <SelectItem value="parent">👨‍👩‍👧‍👦 {t('parent')}</SelectItem>
+                  <SelectItem value="admin">👨‍💼 {t('admin')}</SelectItem>
+                  <SelectItem value="director">👑 {t('director')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
               <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                Password
+                {t('password')}
               </Label>
               <Input
                 id="password"
@@ -186,7 +187,7 @@ const Register = () => {
 
             <div>
               <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                Confirm Password
+                {t('confirm_password')}
               </Label>
               <Input
                 id="confirmPassword"
@@ -205,10 +206,10 @@ const Register = () => {
                 {isLoading ? (
                   <>
                     <Loader className="mr-2 h-4 w-4 animate-spin" />
-                    Creating account...
+                    {t('loading')}
                   </>
                 ) : (
-                  'Create account'
+                  t('create_account')
                 )}
               </Button>
             </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -20,6 +19,8 @@ import {
   Bell,
   Crown
 } from 'lucide-react';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useLocalization } from '@/context/LocalizationContext';
 
 const getRoleColor = (role?: UserRole): string => {
   if (!role) return 'bg-gray-500';
@@ -36,6 +37,7 @@ const getRoleColor = (role?: UserRole): string => {
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useLocalization();
 
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-30">
@@ -49,13 +51,15 @@ const Header = () => {
         </Link>
         
         <nav className="hidden md:flex items-center space-x-4">
-          <Link to="/" className="text-gray-600 hover:text-[#00a7b0] transition-colors">Home</Link>
-          <Link to="/services" className="text-gray-600 hover:text-[#00a7b0] transition-colors">Services</Link>
-          <Link to="/about" className="text-gray-600 hover:text-[#00a7b0] transition-colors">About</Link>
-          <Link to="/contact" className="text-gray-600 hover:text-[#00a7b0] transition-colors">Contact</Link>
+          <Link to="/" className="text-gray-600 hover:text-[#00a7b0] transition-colors">{t('home')}</Link>
+          <Link to="/services" className="text-gray-600 hover:text-[#00a7b0] transition-colors">{t('services')}</Link>
+          <Link to="/about" className="text-gray-600 hover:text-[#00a7b0] transition-colors">{t('about')}</Link>
+          <Link to="/contact" className="text-gray-600 hover:text-[#00a7b0] transition-colors">{t('contact')}</Link>
         </nav>
         
         <div className="flex items-center space-x-4">
+          <LanguageSwitcher />
+          
           {isAuthenticated ? (
             <>
               <Button variant="ghost" size="icon" asChild>
@@ -96,19 +100,19 @@ const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to={`/${user?.role}`} className="cursor-pointer">
                       <Home className="w-4 h-4 mr-2" />
-                      Dashboard
+                      {t('dashboard')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="cursor-pointer">
                       <User className="w-4 h-4 mr-2" />
-                      My Profile
+                      {t('my_profile')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout} className="cursor-pointer text-destructive">
                     <LogOut className="w-4 h-4 mr-2" />
-                    Logout
+                    {t('logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -116,7 +120,7 @@ const Header = () => {
           ) : (
             <div className="flex space-x-2">
               <Button variant="ghost" asChild className="hover:text-[#00a7b0]">
-                <Link to="/auth/login">Login</Link>
+                <Link to="/auth/login">{t('login')}</Link>
               </Button>
             </div>
           )}

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -9,6 +8,7 @@ import GradeManagementFilters from '@/components/teacher/grades/GradeManagementF
 import EthiopianGradingScale from '@/components/teacher/grades/EthiopianGradingScale';
 import StudentGradeTable from '@/components/teacher/grades/StudentGradeTable';
 import { BookOpen } from 'lucide-react';
+import { useLocalization } from '@/context/LocalizationContext';
 
 // Mock teacher assignments - each teacher teaches 1-2 subjects
 const mockTeacherAssignments = [
@@ -43,6 +43,7 @@ const ManageGrades = () => {
     getGradeColor,
     classStatistics 
   } = useGradeCalculation();
+  const { t } = useLocalization();
 
   if (!user || user.role !== 'teacher') {
     return (
@@ -99,8 +100,8 @@ const ManageGrades = () => {
   const handleSaveGrades = async () => {
     if (!selectedSubject || selectedSubject === 'all') {
       toast({
-        title: "No Subject Selected",
-        description: "Please select a subject before saving grades.",
+        title: t('no_subject_selected'),
+        description: t('select_subject_before_saving'),
         variant: "destructive",
       });
       return;
@@ -113,12 +114,12 @@ const ManageGrades = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
-        title: "ውጤቶች በተሳካ ሁኔታ ተቀምጠዋል (Grades Saved Successfully)",
+        title: t('grades_saved_successfully'),
         description: `Updated grades for ${selectedSubject} - ${selectedTerm}`,
       });
     } catch (error) {
       toast({
-        title: "Error Saving Grades",
+        title: t('error'),
         description: "Failed to save grades. Please try again.",
         variant: "destructive",
       });
@@ -131,10 +132,10 @@ const ManageGrades = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">የወሰን ውጤት አያያዝ (Manage Grades)</h1>
-          <p className="text-muted-foreground mt-1">Update and review grades for your assigned classes</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('manage_grades')}</h1>
+          <p className="text-muted-foreground mt-1">{t('update_review_grades')}</p>
           <div className="mt-3 text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
-            <strong>Your Assignments:</strong>
+            <strong>{t('your_assignments')}:</strong>
             <ul className="list-disc list-inside mt-2 space-y-1">
               {teacherAssignments.map((assignment, index) => (
                 <li key={index}>
@@ -147,12 +148,12 @@ const ManageGrades = () => {
         
         {classStatistics && (
           <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <h3 className="font-semibold text-gray-900 mb-2">Class Statistics</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">{t('class_statistics')}</h3>
             <div className="space-y-1 text-sm">
-              <p>Average: <span className="font-medium">{classStatistics.average}%</span></p>
-              <p>Highest: <span className="font-medium text-green-600">{classStatistics.highest}%</span></p>
-              <p>Lowest: <span className="font-medium text-red-600">{classStatistics.lowest}%</span></p>
-              <p>Total Students: <span className="font-medium">{classStatistics.total}</span></p>
+              <p>{t('average')}: <span className="font-medium">{classStatistics.average}%</span></p>
+              <p>{t('highest')}: <span className="font-medium text-green-600">{classStatistics.highest}%</span></p>
+              <p>{t('lowest')}: <span className="font-medium text-red-600">{classStatistics.lowest}%</span></p>
+              <p>{t('total_students')}: <span className="font-medium">{classStatistics.total}</span></p>
             </div>
           </div>
         )}
@@ -199,8 +200,8 @@ const ManageGrades = () => {
       {(!selectedSubject || selectedSubject === 'all') && (
         <div className="text-center py-12 bg-white rounded-lg border">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Select a Subject</h3>
-          <p className="text-gray-600">Choose a subject from the filters above to start managing grades.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('select_subject')}</h3>
+          <p className="text-gray-600">{t('choose_subject_to_start')}</p>
         </div>
       )}
     </div>
