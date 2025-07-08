@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import CourseOverviewCards from '@/components/teacher/attendance/CourseOverviewCards';
@@ -58,35 +59,36 @@ const mockCourses: Course[] = [
 
 const ManageAttendance = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const { toast } = useToast();
   const [selectedCourseId, setSelectedCourseId] = useState(mockCourses[0].id);
   const [selectedSection, setSelectedSection] = useState('all');
   const [date, setDate] = useState<Date>(new Date());
 
   if (!user || user.role !== 'teacher') {
-    return <div>Access denied. Teacher privileges required.</div>;
+    return <div>{t('access_denied')}. {t('teacher')} {t('privileges_required')}.</div>;
   }
 
   const selectedCourse = mockCourses.find(course => course.id === selectedCourseId);
   const formattedDate = format(date, 'yyyy-MM-dd');
 
   const handleSaveAttendance = (attendanceRecords: any[]) => {
-    const sectionText = selectedSection && selectedSection !== 'all' ? `section ${selectedSection}` : 'all sections';
+    const sectionText = selectedSection && selectedSection !== 'all' ? `${t('section')} ${selectedSection}` : t('all') + ' ' + t('sections');
     toast({
-      title: "Attendance saved successfully",
-      description: `Updated attendance for ${selectedCourse?.name} (${sectionText}) on ${format(date, 'MMMM d, yyyy')}`,
+      title: t('attendance') + ' ' + t('success'),
+      description: `${t('update')} ${t('attendance')} ${t('for')} ${selectedCourse?.name} (${sectionText}) ${t('on')} ${format(date, 'MMMM d, yyyy')}`,
     });
   };
 
   if (!selectedCourse) {
-    return <div>Course not found</div>;
+    return <div>{t('course')} {t('not_found')}</div>;
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Manage Course Attendance</h1>
-        <p className="text-muted-foreground">Track and update student attendance records by section</p>
+        <h1 className="text-3xl font-bold">{t('manage_attendance')}</h1>
+        <p className="text-muted-foreground">{t('track_and_update_student_attendance_records_by_section')}</p>
       </div>
 
       <CourseOverviewCards

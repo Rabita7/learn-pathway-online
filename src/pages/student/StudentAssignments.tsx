@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { StudentAssignment } from '@/types/grades';
 import { mockStudentAssignments } from '@/data/mockStudentGrades';
 import { useToast } from '@/hooks/use-toast';
@@ -10,6 +11,7 @@ import AssignmentSubmissionDialog from '@/components/student/assignments/Assignm
 
 const StudentAssignments = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const { toast } = useToast();
   const [selectedAssignment, setSelectedAssignment] = useState<StudentAssignment | null>(null);
   const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
@@ -27,7 +29,7 @@ const StudentAssignments = () => {
   }, [user]);
 
   if (!user || user.role !== 'student') {
-    return <div>Access denied. Student privileges required.</div>;
+    return <div>{t('access_denied')}. {t('student')} {t('privileges_required')}.</div>;
   }
 
   const handleViewAssignment = (assignment: StudentAssignment) => {
@@ -63,8 +65,8 @@ const StudentAssignments = () => {
         setSubmissionDialogOpen(false);
         
         toast({
-          title: "Assignment submitted",
-          description: "Your assignment has been submitted successfully",
+          title: t('assignment') + ' ' + t('submitted'),
+          description: t('assignment_submitted_successfully'),
         });
       }
     }, 1500);
@@ -74,8 +76,8 @@ const StudentAssignments = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">My Assignments</h1>
-          <p className="text-muted-foreground">View and submit your assignments</p>
+          <h1 className="text-3xl font-bold">{t('my_assignments')}</h1>
+          <p className="text-muted-foreground">{t('view_and_submit_your_assignments')}</p>
         </div>
       </div>
 

@@ -1,198 +1,114 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import {
-  BookOpen,
-  GraduationCap,
-  Users,
-  School,
-  Calendar,
-  Bus,
-  Shield,
-  Settings,
-  MessageCircle,
-  ChevronRight
-} from 'lucide-react';
-
-const services = [
-  {
-    icon: <School className="h-10 w-10 text-primary mb-4" />,
-    title: "Academic Programs",
-    description: "Comprehensive curriculum designed to engage and challenge students at all levels, from standard courses to advanced placement and special education services."
-  },
-  {
-    icon: <Calendar className="h-10 w-10 text-primary mb-4" />,
-    title: "Scheduling & Attendance",
-    description: "Powerful tools for managing class schedules, tracking attendance, and organizing school-wide events and activities."
-  },
-  {
-    icon: <GraduationCap className="h-10 w-10 text-primary mb-4" />,
-    title: "Performance Tracking",
-    description: "Advanced assessment and grading systems to monitor student progress, identify areas for improvement, and celebrate achievements."
-  },
-  {
-    icon: <Bus className="h-10 w-10 text-primary mb-4" />,
-    title: "Transportation Services",
-    description: "Safe and reliable transportation with real-time tracking, route optimization, and parent notifications for peace of mind."
-  },
-  {
-    icon: <Shield className="h-10 w-10 text-primary mb-4" />,
-    title: "Campus Security",
-    description: "Comprehensive security measures including visitor management, emergency protocols, and secure digital access controls."
-  },
-  {
-    icon: <MessageCircle className="h-10 w-10 text-primary mb-4" />,
-    title: "Communication Platform",
-    description: "Streamlined channels for announcements, direct messaging, and parent-teacher conferences to keep everyone connected."
-  },
-];
+import { useLocalization } from '@/context/LocalizationContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BookOpen, Users, BarChart, Calendar, GraduationCap, MessageSquare, FileText, Settings } from 'lucide-react';
 
 const Services = () => {
+  const { t } = useLocalization();
+
+  const services = [
+    {
+      icon: BookOpen,
+      title: t('academic_management'),
+      description: t('academic_management_description'),
+      color: 'text-blue-500'
+    },
+    {
+      icon: Users,
+      title: t('student_tracking'),
+      description: t('student_tracking_description'),
+      color: 'text-green-500'
+    },
+    {
+      icon: BarChart,
+      title: t('data_driven_insights'),
+      description: t('data_driven_insights_description'),
+      color: 'text-purple-500'
+    },
+    {
+      icon: Calendar,
+      title: t('attendance_management'),
+      description: t('attendance_management_description'),
+      color: 'text-orange-500'
+    },
+    {
+      icon: GraduationCap,
+      title: t('grade_management'),
+      description: t('grade_management_description'),
+      color: 'text-red-500'
+    },
+    {
+      icon: MessageSquare,
+      title: t('communication_tools'),
+      description: t('communication_tools_description'),
+      color: 'text-cyan-500'
+    },
+    {
+      icon: FileText,
+      title: t('report_generation'),
+      description: t('report_generation_description'),
+      color: 'text-indigo-500'
+    },
+    {
+      icon: Settings,
+      title: t('administrative_tools'),
+      description: t('administrative_tools_description'),
+      color: 'text-gray-500'
+    }
+  ];
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-blue-50 to-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Our School Services
-            </h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Comprehensive educational solutions designed to support students, teachers, and parents throughout the academic journey.
-            </p>
-            <Button size="lg" asChild>
-              <Link to="/contact">
-                Contact Us
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+    <div className="container mx-auto px-4 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold mb-4">{t('our_services')}</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          {t('comprehensive_school_management_solutions')}
+        </p>
+      </div>
 
-      {/* Services Grid */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            What We Offer
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="dashboard-card hover:shadow-lg transition-all">
-                {service.icon}
-                <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {services.map((service, index) => (
+          <Card key={index} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <service.icon className={`h-8 w-8 ${service.color}`} />
+                <CardTitle className="text-lg">{service.title}</CardTitle>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>{service.description}</CardDescription>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-      {/* Feature Image Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Classroom Excellence</h2>
-              <p className="text-gray-600 mb-4">
-                Our dedicated teachers engage with students through interactive learning methods that foster critical thinking and creativity. Small class sizes ensure every student receives the attention they deserve.
-              </p>
-              <p className="text-gray-600 mb-6">
-                With state-of-the-art facilities and resources, we create an optimal environment for academic growth and development.
-              </p>
-              <Button variant="outline" asChild>
-                <Link to="/about">
-                  Learn More About Our Teaching Approach
-                </Link>
-              </Button>
+      <div className="mt-16 text-center">
+        <h2 className="text-3xl font-bold mb-6">{t('why_choose_our_platform')}</h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="space-y-3">
+            <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+              <Users className="h-8 w-8 text-primary" />
             </div>
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src="/lovable-uploads/ad18b617-65cf-4042-bacd-ea5985be7dcd.png" 
-                alt="Teacher engaging with classroom of students" 
-                className="w-full h-auto"
-              />
+            <h3 className="text-xl font-semibold">{t('role_based_access')}</h3>
+            <p className="text-muted-foreground">{t('role_based_access_description')}</p>
+          </div>
+          <div className="space-y-3">
+            <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+              <Settings className="h-8 w-8 text-primary" />
             </div>
+            <h3 className="text-xl font-semibold">{t('easy_to_use')}</h3>
+            <p className="text-muted-foreground">{t('easy_to_use_description')}</p>
+          </div>
+          <div className="space-y-3">
+            <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+              <BarChart className="h-8 w-8 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold">{t('comprehensive_reporting')}</h3>
+            <p className="text-muted-foreground">{t('comprehensive_reporting_description')}</p>
           </div>
         </div>
-      </section>
-
-      {/* Transportation Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1 rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src="/lovable-uploads/1257f99c-c1a0-45e8-a47b-fa818e4dfe33.png" 
-                alt="School buses in parking lot" 
-                className="w-full h-auto"
-              />
-            </div>
-            <div className="order-1 lg:order-2">
-              <h2 className="text-3xl font-bold mb-6">Safe Transportation</h2>
-              <p className="text-gray-600 mb-4">
-                Our fleet of well-maintained buses ensures students arrive safely and on time. Experienced drivers follow optimized routes with real-time GPS tracking available to parents.
-              </p>
-              <p className="text-gray-600 mb-6">
-                We maintain strict safety protocols and regular vehicle inspections to provide peace of mind to families who rely on our transportation services.
-              </p>
-              <Button variant="outline" asChild>
-                <Link to="/contact">
-                  Inquire About Transportation
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Student Success Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Celebrating Student Success</h2>
-              <p className="text-gray-600 mb-4">
-                We take pride in our graduates who consistently achieve academic excellence and go on to prestigious colleges and universities. Our comprehensive approach to education prepares students for future success.
-              </p>
-              <p className="text-gray-600 mb-6">
-                Through mentorship programs, career counseling, and college preparation services, we help students transition confidently to the next chapter of their academic journey.
-              </p>
-              <Button variant="outline" asChild>
-                <Link to="/about">
-                  View Our Success Stories
-                </Link>
-              </Button>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src="/lovable-uploads/4171ebc7-9c1f-41c4-98e4-2c8285af94b7.png" 
-                alt="Graduates throwing caps in celebration" 
-                className="w-full h-auto"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-primary bg-opacity-5">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Experience Our Services?</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join our educational community and discover the difference our comprehensive services can make for your child's academic journey.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" asChild>
-              <Link to="/auth/register">Register Now</Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link to="/contact">Contact Our Team</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };
