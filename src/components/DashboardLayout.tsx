@@ -2,6 +2,7 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import DashboardHeader from '@/components/DashboardHeader';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -23,6 +24,7 @@ import {
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
+  const { t } = useLocalization();
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -30,8 +32,8 @@ const DashboardLayout = () => {
   const handleLogout = () => {
     logout();
     toast({
-      title: 'Success',
-      description: 'You have been logged out successfully',
+      title: t('success'),
+      description: t('your_profile_has_been_successfully_updated'),
     });
     navigate('/auth/login');
   };
@@ -42,48 +44,48 @@ const DashboardLayout = () => {
     switch (user?.role) {
       case 'admin':
         return [
-          { path: basePath, label: 'Dashboard', icon: Home },
-          { path: `${basePath}/announcements`, label: 'Announcements', icon: MessageSquare },
-          { path: `${basePath}/students`, label: 'Students', icon: Users },
-          { path: `${basePath}/teachers`, label: 'Teachers', icon: UserCheck },
-          { path: `${basePath}/parents`, label: 'Parents', icon: Users },
-          { path: `${basePath}/classes`, label: 'Classes', icon: School },
-          { path: `${basePath}/reports`, label: 'Reports', icon: BarChart3 },
+          { path: basePath, label: t('dashboard'), icon: Home },
+          { path: `${basePath}/announcements`, label: t('announcements'), icon: MessageSquare },
+          { path: `${basePath}/students`, label: t('students'), icon: Users },
+          { path: `${basePath}/teachers`, label: t('teachers'), icon: UserCheck },
+          { path: `${basePath}/parents`, label: t('parents'), icon: Users },
+          { path: `${basePath}/classes`, label: t('classes'), icon: School },
+          { path: `${basePath}/reports`, label: t('reports'), icon: BarChart3 },
         ];
       case 'director':
         return [
-          { path: basePath, label: 'Dashboard', icon: Home },
-          { path: `${basePath}/assign-teachers`, label: 'Assign Teachers', icon: UserCheck },
-          { path: `${basePath}/class-attendance`, label: 'Class Attendance', icon: Calendar },
-          { path: `${basePath}/manage-staff`, label: 'Manage Staff', icon: Users },
-          { path: `${basePath}/write-letters`, label: 'Write Letters', icon: FileText },
+          { path: basePath, label: t('dashboard'), icon: Home },
+          { path: `${basePath}/assign-teachers`, label: t('assign_teachers'), icon: UserCheck },
+          { path: `${basePath}/class-attendance`, label: t('attendance'), icon: Calendar },
+          { path: `${basePath}/manage-staff`, label: t('manage_staff'), icon: Users },
+          { path: `${basePath}/write-letters`, label: t('write_letters'), icon: FileText },
         ];
       case 'teacher':
         return [
-          { path: basePath, label: 'Dashboard', icon: Home },
-          { path: `${basePath}/students`, label: 'Students', icon: Users },
-          { path: `${basePath}/grades`, label: 'Grades', icon: BarChart3 },
-          { path: `${basePath}/attendance`, label: 'Attendance', icon: Calendar },
-          { path: `${basePath}/assignments`, label: 'Assignments', icon: BookOpen },
-          { path: `${basePath}/post-assignment`, label: 'Post Assignment', icon: FileText },
-          { path: `${basePath}/announcements`, label: 'Announcements', icon: MessageSquare },
+          { path: basePath, label: t('dashboard'), icon: Home },
+          { path: `${basePath}/students`, label: t('students'), icon: Users },
+          { path: `${basePath}/grades`, label: t('grades'), icon: BarChart3 },
+          { path: `${basePath}/attendance`, label: t('attendance'), icon: Calendar },
+          { path: `${basePath}/assignments`, label: t('assignments'), icon: BookOpen },
+          { path: `${basePath}/post-assignment`, label: t('post_assignment'), icon: FileText },
+          { path: `${basePath}/announcements`, label: t('announcements'), icon: MessageSquare },
         ];
       case 'student':
         return [
-          { path: basePath, label: 'Dashboard', icon: Home },
-          { path: `${basePath}/grades`, label: 'My Grades', icon: BarChart3 },
-          { path: `${basePath}/attendance`, label: 'My Attendance', icon: Calendar },
-          { path: `${basePath}/assignments`, label: 'Assignments', icon: BookOpen },
-          { path: `${basePath}/schedule`, label: 'Class Schedule', icon: ClipboardList },
-          { path: `${basePath}/announcements`, label: 'Announcements', icon: MessageSquare },
-          { path: `${basePath}/profile`, label: 'My Profile', icon: Settings },
+          { path: basePath, label: t('dashboard'), icon: Home },
+          { path: `${basePath}/grades`, label: t('my_grades'), icon: BarChart3 },
+          { path: `${basePath}/attendance`, label: t('my_attendance'), icon: Calendar },
+          { path: `${basePath}/assignments`, label: t('assignments'), icon: BookOpen },
+          { path: `${basePath}/schedule`, label: t('class_schedule'), icon: ClipboardList },
+          { path: `${basePath}/announcements`, label: t('announcements'), icon: MessageSquare },
+          { path: `${basePath}/profile`, label: t('my_profile'), icon: Settings },
         ];
       case 'parent':
         return [
-          { path: basePath, label: 'Dashboard', icon: Home },
-          { path: `${basePath}/child-grades`, label: 'Child Grades', icon: BarChart3 },
-          { path: `${basePath}/child-attendance`, label: 'Child Attendance', icon: Calendar },
-          { path: `${basePath}/announcements`, label: 'Announcements', icon: MessageSquare },
+          { path: basePath, label: t('dashboard'), icon: Home },
+          { path: `${basePath}/child-grades`, label: t('child_grades'), icon: BarChart3 },
+          { path: `${basePath}/child-attendance`, label: t('child_attendance'), icon: Calendar },
+          { path: `${basePath}/announcements`, label: t('announcements'), icon: MessageSquare },
         ];
       default:
         return [];
@@ -130,13 +132,13 @@ const DashboardLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-600 mb-4">Please log in to access the dashboard.</p>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">{t('access_denied')}</h2>
+          <p className="text-gray-600 mb-4">{t('access_denied_login_required')}</p>
           <Link 
             to="/auth/login" 
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90"
           >
-            Go to Login
+            {t('go_to_login')}
           </Link>
         </div>
       </div>
@@ -153,7 +155,7 @@ const DashboardLayout = () => {
             </div>
             <div>
               <h2 className="font-semibold text-lg capitalize text-gray-900">
-                {user.role} Panel
+                {t(user.role)} {t('panel')}
               </h2>
               <p className="text-sm text-gray-600 truncate">{user.name}</p>
             </div>
@@ -183,7 +185,7 @@ const DashboardLayout = () => {
             className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <User className="h-5 w-5 mr-3" />
-            Edit Profile
+            {t('edit_profile')}
           </Link>
           
           <button
@@ -191,7 +193,7 @@ const DashboardLayout = () => {
             className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           >
             <LogOut className="h-5 w-5 mr-3" />
-            Logout
+            {t('logout')}
           </button>
         </div>
       </div>

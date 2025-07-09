@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import {
   Card,
   CardContent,
@@ -62,6 +63,7 @@ const mockAnnouncements: Announcement[] = [
 
 const Announcements = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const { toast } = useToast();
   const [announcements, setAnnouncements] = useState<Announcement[]>(mockAnnouncements);
   const [isCreating, setIsCreating] = useState(false);
@@ -73,7 +75,7 @@ const Announcements = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   if (!user || user.role !== 'teacher') {
-    return <div>Access denied. Teacher privileges required.</div>;
+    return <div>{t('access_denied')}. {t('privileges_required')}.</div>;
   }
 
   const handleCreateToggle = () => {
@@ -90,8 +92,8 @@ const Announcements = () => {
     
     if (!newAnnouncement.title || !newAnnouncement.content) {
       toast({
-        title: "Missing information",
-        description: "Please fill in all required fields",
+        title: t('missing_information'),
+        description: t('please_fill_in_all_required_fields'),
         variant: "destructive"
       });
       return;
@@ -110,8 +112,8 @@ const Announcements = () => {
     setIsCreating(false);
     
     toast({
-      title: "Announcement created",
-      description: "Your announcement has been published",
+      title: t('announcement_created'),
+      description: t('your_announcement_has_been_published'),
     });
   };
 
@@ -124,16 +126,16 @@ const Announcements = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Announcements</h1>
-          <p className="text-muted-foreground">Manage and view announcements for your students</p>
+          <h1 className="text-3xl font-bold">{t('announcements')}</h1>
+          <p className="text-muted-foreground">{t('manage_and_post_announcements')}</p>
         </div>
         <Button onClick={handleCreateToggle} className="bg-teacher hover:bg-teacher/90">
           {isCreating ? (
-            "Cancel"
+            t('cancel')
           ) : (
             <>
               <Plus className="mr-2 h-4 w-4" />
-              New Announcement
+              {t('post_new_announcement')}
             </>
           )}
         </Button>
@@ -142,34 +144,34 @@ const Announcements = () => {
       {isCreating && (
         <Card>
           <CardHeader>
-            <CardTitle>Create Announcement</CardTitle>
+            <CardTitle>{t('create_new_announcement')}</CardTitle>
             <CardDescription>
-              Post a new announcement to your students
+              {t('post_announcement')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="title" className="text-sm font-medium">
-                  Announcement Title
+                  {t('announcement_title')}
                 </label>
                 <Input
                   id="title"
                   value={newAnnouncement.title}
                   onChange={(e) => setNewAnnouncement({...newAnnouncement, title: e.target.value})}
-                  placeholder="Enter announcement title"
+                  placeholder={t('enter_announcement_title')}
                 />
               </div>
               
               <div className="space-y-2">
                 <label htmlFor="content" className="text-sm font-medium">
-                  Announcement Content
+                  {t('announcement_content')}
                 </label>
                 <Textarea
                   id="content"
                   value={newAnnouncement.content}
                   onChange={(e) => setNewAnnouncement({...newAnnouncement, content: e.target.value})}
-                  placeholder="Enter announcement content"
+                  placeholder={t('enter_announcement_content')}
                   className="min-h-32"
                 />
               </div>
@@ -183,13 +185,13 @@ const Announcements = () => {
                   className="h-4 w-4 rounded border-gray-300 text-teacher focus:ring-teacher"
                 />
                 <label htmlFor="important" className="text-sm font-medium">
-                  Mark as important
+                  {t('mark_as_important')}
                 </label>
               </div>
               
               <div className="flex justify-end">
                 <Button type="submit" className="bg-teacher hover:bg-teacher/90">
-                  Publish Announcement
+                  {t('publish_announcement')}
                 </Button>
               </div>
             </form>
@@ -200,7 +202,7 @@ const Announcements = () => {
       <div className="relative">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search announcements..."
+          placeholder={t('search_announcements')}
           className="pl-8"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -211,9 +213,9 @@ const Announcements = () => {
         <Card>
           <CardContent className="flex flex-col items-center justify-center p-6">
             <Bell className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No announcements found</h3>
+            <h3 className="text-lg font-medium">{t('no_announcements_found')}</h3>
             <p className="text-sm text-muted-foreground">
-              {searchTerm ? "Try a different search term" : "Create your first announcement using the button above"}
+              {searchTerm ? t('try_different_search_term') : t('create_first_announcement')}
             </p>
           </CardContent>
         </Card>
@@ -228,7 +230,7 @@ const Announcements = () => {
                       {announcement.title}
                       {announcement.important && (
                         <span className="bg-teacher text-white text-xs px-2 py-0.5 rounded-full">
-                          Important
+                          {t('important')}
                         </span>
                       )}
                     </CardTitle>

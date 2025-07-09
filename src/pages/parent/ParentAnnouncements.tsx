@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import {
   Card,
   CardContent,
@@ -32,12 +33,13 @@ import {
 
 const ParentAnnouncements = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterPriority, setFilterPriority] = useState('all');
 
   if (!user || user.role !== 'parent') {
-    return <div>Access denied. Parent privileges required.</div>;
+    return <div>{t('access_denied')}. {t('privileges_required')}.</div>;
   }
 
   const announcements = [
@@ -173,12 +175,12 @@ const ParentAnnouncements = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">School Announcements</h1>
-          <p className="text-gray-500">Stay updated with school news and your child's activities</p>
+          <h1 className="text-3xl font-bold">{t('school_announcements')}</h1>
+          <p className="text-gray-500">{t('stay_updated_school_news_child_activities')}</p>
         </div>
         <div className="flex items-center gap-2">
           <Bell className="h-5 w-5 text-parent" />
-          <span className="font-medium">{unreadCount} unread</span>
+          <span className="font-medium">{unreadCount} {t('unread')}</span>
         </div>
       </div>
 
@@ -190,7 +192,7 @@ const ParentAnnouncements = () => {
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search announcements..."
+                  placeholder={t('search_announcements')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-8"
@@ -199,27 +201,27 @@ const ParentAnnouncements = () => {
             </div>
             <Select value={filterType} onValueChange={setFilterType}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Types" />
+                <SelectValue placeholder={t('all_types')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="school">School</SelectItem>
-                <SelectItem value="academic">Academic</SelectItem>
-                <SelectItem value="urgent">Urgent</SelectItem>
-                <SelectItem value="achievement">Achievement</SelectItem>
-                <SelectItem value="reminder">Reminder</SelectItem>
-                <SelectItem value="extracurricular">Extracurricular</SelectItem>
+                <SelectItem value="all">{t('all_types')}</SelectItem>
+                <SelectItem value="school">{t('school')}</SelectItem>
+                <SelectItem value="academic">{t('academic')}</SelectItem>
+                <SelectItem value="urgent">{t('urgent')}</SelectItem>
+                <SelectItem value="achievement">{t('achievement')}</SelectItem>
+                <SelectItem value="reminder">{t('reminder')}</SelectItem>
+                <SelectItem value="extracurricular">{t('extracurricular')}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={filterPriority} onValueChange={setFilterPriority}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="All Priorities" />
+                <SelectValue placeholder={t('all_priorities')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Priorities</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="all">{t('all_priorities')}</SelectItem>
+                <SelectItem value="high">{t('high')}</SelectItem>
+                <SelectItem value="medium">{t('medium')}</SelectItem>
+                <SelectItem value="low">{t('low')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -250,12 +252,12 @@ const ParentAnnouncements = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className={getPriorityColor(announcement.priority)}>
-                    {announcement.priority}
+                    {t(announcement.priority)}
                   </Badge>
                   <Badge variant="outline" className={getTypeColor(announcement.type)}>
                     <div className="flex items-center gap-1">
                       {getTypeIcon(announcement.type)}
-                      {announcement.type}
+                      {t(announcement.type)}
                     </div>
                   </Badge>
                 </div>
@@ -265,11 +267,11 @@ const ParentAnnouncements = () => {
               <p className="text-gray-700 mb-3">{announcement.content}</p>
               <div className="flex justify-between items-center">
                 <Badge variant="secondary" className="text-xs">
-                  Target: {announcement.targetGrade}
+                  {t('target')}: {announcement.targetGrade}
                 </Badge>
                 {!announcement.isRead && (
                   <Button variant="outline" size="sm">
-                    Mark as Read
+                    {t('mark_as_read')}
                   </Button>
                 )}
               </div>
@@ -282,11 +284,11 @@ const ParentAnnouncements = () => {
         <Card>
           <CardContent className="p-8 text-center">
             <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No Announcements Found</h3>
+            <h3 className="text-lg font-medium mb-2">{t('no_announcements_found')}</h3>
             <p className="text-muted-foreground">
               {searchTerm || filterType !== 'all' || filterPriority !== 'all'
-                ? 'Try adjusting your search criteria or filters.'
-                : 'No announcements available at the moment.'}
+                ? t('try_adjusting_search_criteria')
+                : t('no_announcements_available')}
             </p>
           </CardContent>
         </Card>

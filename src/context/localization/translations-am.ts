@@ -1,4 +1,3 @@
-
 export const translationsAm = {
   // Common
   'welcome': 'እንኳን ደህና መጡ',

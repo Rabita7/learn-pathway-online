@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { format, isToday, isYesterday } from 'date-fns';
 import { Bell, Calendar, User, AlertCircle, Info, CheckCircle, X } from 'lucide-react';
 import {
@@ -99,11 +100,12 @@ const mockAnnouncements: Announcement[] = [
 
 const StudentAnnouncements = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const [announcements, setAnnouncements] = useState<Announcement[]>(mockAnnouncements);
   const [filter, setFilter] = useState<string>('all');
 
   if (!user || user.role !== 'student') {
-    return <div>Access denied. Student privileges required.</div>;
+    return <div>{t('access_denied')}. {t('privileges_required')}.</div>;
   }
 
   const getPriorityIcon = (priority: AnnouncementPriority) => {
@@ -138,8 +140,8 @@ const StudentAnnouncements = () => {
 
   const getDateLabel = (dateString: string) => {
     const date = new Date(dateString);
-    if (isToday(date)) return 'Today';
-    if (isYesterday(date)) return 'Yesterday';
+    if (isToday(date)) return t('today');
+    if (isYesterday(date)) return t('yesterday');
     return format(date, 'MMM d, yyyy');
   };
 
@@ -165,24 +167,24 @@ const StudentAnnouncements = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Announcements</h1>
-          <p className="text-muted-foreground">Stay updated with the latest school news and information</p>
+          <h1 className="text-3xl font-bold">{t('announcements')}</h1>
+          <p className="text-muted-foreground">{t('stay_updated_with_latest_school_news')}</p>
         </div>
         <div className="flex items-center gap-2">
           <Bell className="h-5 w-5 text-student" />
-          <span className="text-sm font-medium">{unreadCount} unread</span>
+          <span className="text-sm font-medium">{unreadCount} {t('unread')}</span>
         </div>
       </div>
 
       {/* Filter Buttons */}
       <div className="flex gap-2 flex-wrap">
         {[
-          { key: 'all', label: 'All' },
-          { key: 'unread', label: 'Unread' },
-          { key: 'academic', label: 'Academic' },
-          { key: 'events', label: 'Events' },
-          { key: 'general', label: 'General' },
-          { key: 'safety', label: 'Safety' }
+          { key: 'all', label: t('all') },
+          { key: 'unread', label: t('unread') },
+          { key: 'academic', label: t('academic') },
+          { key: 'events', label: t('events') },
+          { key: 'general', label: t('general') },
+          { key: 'safety', label: t('safety') }
         ].map(({ key, label }) => (
           <Button
             key={key}
@@ -208,7 +210,7 @@ const StudentAnnouncements = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <CardTitle className="text-lg">{announcement.title}</CardTitle>
                         {!announcement.isRead && (
-                          <Badge variant="secondary" className="text-xs">New</Badge>
+                          <Badge variant="secondary" className="text-xs">{t('new')}</Badge>
                         )}
                       </div>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -221,10 +223,10 @@ const StudentAnnouncements = () => {
                           {getDateLabel(announcement.date)}
                         </div>
                         <Badge className={getPriorityColor(announcement.priority)}>
-                          {announcement.priority}
+                          {t(announcement.priority)}
                         </Badge>
                         <Badge variant="outline">
-                          {announcement.category}
+                          {t(announcement.category.toLowerCase())}
                         </Badge>
                       </div>
                     </div>
@@ -250,8 +252,8 @@ const StudentAnnouncements = () => {
             <CardContent className="flex items-center justify-center py-12">
               <div className="text-center">
                 <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium">No announcements found</h3>
-                <p className="text-muted-foreground">Try adjusting your filters to see more announcements.</p>
+                <h3 className="text-lg font-medium">{t('no_announcements_found')}</h3>
+                <p className="text-muted-foreground">{t('try_adjusting_filters')}</p>
               </div>
             </CardContent>
           </Card>
