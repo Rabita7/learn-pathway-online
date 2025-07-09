@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { BookOpen, Loader } from 'lucide-react';
 
 const AccountSetup = () => {
@@ -16,6 +17,7 @@ const AccountSetup = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login } = useAuth();
+  const { t } = useLocalization();
 
   const email = searchParams.get('email');
   const token = searchParams.get('token');
@@ -25,9 +27,9 @@ const AccountSetup = () => {
       <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <h2 className="text-2xl font-bold text-center text-red-600 mb-4">Invalid Setup Link</h2>
+            <h2 className="text-2xl font-bold text-center text-red-600 mb-4">{t('invalid_setup_link')}</h2>
             <p className="text-center text-gray-600">
-              This account setup link is invalid or has expired. Please contact your administrator for a new setup link.
+              {t('invalid_setup_link_description')}
             </p>
           </div>
         </div>
@@ -40,8 +42,8 @@ const AccountSetup = () => {
     
     if (!password || !confirmPassword) {
       toast({
-        title: 'Error',
-        description: 'Please fill in all fields',
+        title: t('error'),
+        description: t('please_fill_in_all_fields'),
         variant: 'destructive',
       });
       return;
@@ -49,8 +51,8 @@ const AccountSetup = () => {
     
     if (password !== confirmPassword) {
       toast({
-        title: 'Error',
-        description: 'Passwords do not match',
+        title: t('error'),
+        description: t('passwords_do_not_match'),
         variant: 'destructive',
       });
       return;
@@ -58,8 +60,8 @@ const AccountSetup = () => {
 
     if (password.length < 6) {
       toast({
-        title: 'Error',
-        description: 'Password must be at least 6 characters long',
+        title: t('error'),
+        description: t('password_must_be_at_least_6_characters'),
         variant: 'destructive',
       });
       return;
@@ -75,16 +77,16 @@ const AccountSetup = () => {
       await login(email, password);
       
       toast({
-        title: 'Success',
-        description: 'Your account has been set up successfully',
+        title: t('success'),
+        description: t('account_setup_successful'),
       });
       
       // Redirect based on role (this would come from the token verification)
       navigate('/student'); // Default redirect, would be dynamic based on user role
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to set up account. Please try again.',
+        title: t('error'),
+        description: t('failed_to_setup_account'),
         variant: 'destructive',
       });
     } finally {
@@ -99,10 +101,10 @@ const AccountSetup = () => {
           <BookOpen className="h-12 w-12 text-primary" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Set up your account
+          {t('set_up_your_account')}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Create a password for: <span className="font-medium">{email}</span>
+          {t('create_password_for')}: <span className="font-medium">{email}</span>
         </p>
       </div>
 
@@ -110,27 +112,27 @@ const AccountSetup = () => {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('password')}</Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1"
-                placeholder="Enter your password"
+                placeholder={t('enter_your_password')}
                 minLength={6}
               />
             </div>
 
             <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">{t('confirm_password')}</Label>
               <Input
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="mt-1"
-                placeholder="Confirm your password"
+                placeholder={t('confirm_your_password')}
                 minLength={6}
               />
             </div>
@@ -140,10 +142,10 @@ const AccountSetup = () => {
                 {isLoading ? (
                   <>
                     <Loader className="mr-2 h-4 w-4 animate-spin" />
-                    Setting up account...
+                    {t('setting_up_account')}...
                   </>
                 ) : (
-                  'Set up account'
+                  t('set_up_account')
                 )}
               </Button>
             </div>
@@ -151,7 +153,7 @@ const AccountSetup = () => {
 
           <div className="mt-6">
             <p className="text-xs text-center text-gray-500">
-              Your password must be at least 6 characters long and secure.
+              {t('password_requirements')}
             </p>
           </div>
         </div>

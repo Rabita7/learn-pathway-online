@@ -1,4 +1,3 @@
-
 export const translationsEn = {
   // Common
   'welcome': 'Welcome',
@@ -61,6 +60,7 @@ export const translationsEn = {
   'course': 'course',
   'not_found': 'not found',
   'bio': 'Bio',
+  'clear': 'Clear',
   
   // Auth
   'sign_in': 'Sign In',
@@ -214,6 +214,12 @@ export const translationsEn = {
   'send_message': 'Send Message',
   'your_message': 'Your Message',
   'subject': 'Subject',
+  'contact_info_description': 'We would love to hear from you',
+  'office_hours': 'Office Hours',
+  'monday_to_friday': 'Monday to Friday',
+  'fill_out_form_below': 'Fill out the form below and we will get back to you',
+  'message_sent_successfully': 'Message sent successfully',
+  'get_in_touch_with_us': 'Get in touch with us for any questions or support',
   
   // Services
   'our_services': 'Our Services',
@@ -309,7 +315,6 @@ export const translationsEn = {
   'enter_letter_subject': 'Enter letter subject',
   'letter_content': 'Letter Content',
   'write_your_letter_content_here': 'Write your letter content here...',
-  'clear': 'Clear',
   'send_letter': 'Send Letter',
   'official_notice': 'Official Notice',
   'parent_communication': 'Parent Communication',
@@ -436,4 +441,52 @@ export const translationsEn = {
   'thursday': 'Thursday',
   'friday': 'Friday',
   'no_classes_scheduled_for_this_day': 'No classes scheduled for this day',
+
+  // Director Dashboard
+  'heres_overview_of_your_school_management': "Here's an overview of your school management",
+  'across_all_grades': 'Across all grades',
+  'all_assigned': 'All assigned',
+  'from_last_week': 'From last week',
+  'assigned_mrs_taylor_to_grade_10a_biology': 'Assigned Mrs. Taylor to Grade 10A Biology',
+  'hours_ago': 'hours ago',
+  'set_dr_adams_as_grade_9b_representative': 'Set Dr. Adams as Grade 9B representative',
+  'day_ago': 'day ago',
+  'reviewed_attendance_for_grade_11a': 'Reviewed attendance for Grade 11A',
+  'days_ago': 'days ago',
+  'updated_teacher_qualifications': 'Updated teacher qualifications',
+  'class_representatives': 'Class Representatives',
+  'your_latest_management_actions': 'Your latest management actions',
+  'quick_actions': 'Quick Actions',
+  'common_director_tasks': 'Common director tasks',
+  'assign_teacher_to_class': 'Assign Teacher to Class',
+  'view_class_attendance': 'View Class Attendance',
+
+  // NotFound Page
+  'oops_page_not_found': 'Oops! Page not found',
+  'return_to_home': 'Return to Home',
+
+  // Additional translations for newly localized pages
+  'parent_teacher_conference': 'Parent-Teacher Conference',
+  'annual_parent_teacher_conference_scheduled': 'Annual parent-teacher conference scheduled for next month.',
+  'system_maintenance': 'System Maintenance',
+  'system_will_be_down_for_maintenance': 'System will be down for maintenance this weekend.',
+  'new_curriculum_update': 'New Curriculum Update',
+  'new_curriculum_updates_have_been_released': 'New curriculum updates have been released.',
+  'heres_whats_happening_in_your_school': "Here's what's happening in your school",
+  'recent_announcements': 'Recent Announcements',
+  'latest_announcements_posted_in_system': 'Latest announcements posted in the system',
+  'common_tasks_you_may_want_to_perform': 'Common tasks you may want to perform',
+  'invalid_setup_link': 'Invalid Setup Link',
+  'invalid_setup_link_description': 'This account setup link is invalid or has expired. Please contact your administrator for a new setup link.',
+  'passwords_do_not_match': 'Passwords do not match',
+  'password_must_be_at_least_6_characters': 'Password must be at least 6 characters long',
+  'account_setup_successful': 'Your account has been set up successfully',
+  'failed_to_setup_account': 'Failed to set up account. Please try again.',
+  'set_up_your_account': 'Set up your account',
+  'create_password_for': 'Create a password for',
+  'enter_your_password': 'Enter your password',
+  'confirm_your_password': 'Confirm your password',
+  'setting_up_account': 'Setting up account',
+  'set_up_account': 'Set up account',
+  'password_requirements': 'Your password must be at least 6 characters long and secure.',
 };
