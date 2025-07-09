@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
+import { useLocalization } from '@/context/LocalizationContext';
 import { Edit, Trash2, Plus, Search } from 'lucide-react';
 
 // Mock data for staff members
@@ -35,6 +36,7 @@ const ManageStaff = () => {
   const [staffData, setStaffData] = useState(initialStaffData);
   const [searchTerm, setSearchTerm] = useState('');
   const { toast } = useToast();
+  const { t } = useLocalization();
 
   // Filter staff based on search term
   const filteredStaff = staffData.filter(staff => 
@@ -47,34 +49,34 @@ const ManageStaff = () => {
   const handleDelete = (id: string) => {
     setStaffData(staffData.filter(staff => staff.id !== id));
     toast({
-      title: "Staff member removed",
-      description: "The staff member has been removed from the system.",
+      title: t('staff_member_removed'),
+      description: t('staff_member_has_been_removed'),
     });
   };
 
   // Handle edit staff member (mock functionality)
   const handleEdit = (id: string) => {
     toast({
-      title: "Edit staff member",
-      description: "This would open a form to edit the staff member.",
+      title: t('edit_staff_member'),
+      description: t('this_would_open_form_to_edit'),
     });
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Manage Staff</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('manage_staff')}</h1>
       
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Staff Management</CardTitle>
-          <CardDescription>View, add, edit, or remove staff members</CardDescription>
+          <CardTitle>{t('staff_management')}</CardTitle>
+          <CardDescription>{t('view_add_edit_or_remove_staff_members')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
             <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input 
-                placeholder="Search staff..." 
+                placeholder={t('search_staff')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 w-full sm:w-80"
@@ -82,21 +84,21 @@ const ManageStaff = () => {
             </div>
             <Button className="w-full sm:w-auto">
               <Plus className="mr-2 h-4 w-4" />
-              Add New Staff
+              {t('add_new_staff')}
             </Button>
           </div>
           
           <div className="overflow-x-auto">
             <Table>
-              <TableCaption>A list of all staff members in the school system.</TableCaption>
+              <TableCaption>{t('list_of_all_staff_members')}</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('position')}</TableHead>
+                  <TableHead>{t('department')}</TableHead>
+                  <TableHead>{t('email')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
+                  <TableHead className="text-right">{t('actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -111,7 +113,7 @@ const ManageStaff = () => {
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           staff.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                         }`}>
-                          {staff.status}
+                          {t(staff.status)}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
@@ -129,7 +131,7 @@ const ManageStaff = () => {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8">
-                      No staff members found matching your search.
+                      {t('no_staff_members_found')}
                     </TableCell>
                   </TableRow>
                 )}

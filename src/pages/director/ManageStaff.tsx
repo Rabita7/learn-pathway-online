@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import {
   Card,
   CardContent,
@@ -36,6 +37,7 @@ interface Teacher {
 
 const ManageStaff = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const { toast } = useToast();
   const [teachers, setTeachers] = useState<Teacher[]>([
     {
@@ -71,7 +73,7 @@ const ManageStaff = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   if (!user || user.role !== 'director') {
-    return <div>Access denied. Director privileges required.</div>;
+    return <div>{t('access_denied')}. {t('director')} {t('privileges_required')}.</div>;
   }
 
   const filteredTeachers = teachers.filter(teacher =>
@@ -89,24 +91,24 @@ const ManageStaff = () => {
     };
     setTeachers([...teachers, newTeacher]);
     toast({
-      title: 'Success',
-      description: 'Teacher added successfully',
+      title: t('success'),
+      description: t('teacher_added_successfully'),
     });
   };
 
   const handleEditTeacher = (updatedTeacher: Teacher) => {
     setTeachers(teachers.map(t => t.id === updatedTeacher.id ? updatedTeacher : t));
     toast({
-      title: 'Success',
-      description: 'Teacher updated successfully',
+      title: t('success'),
+      description: t('teacher_updated_successfully'),
     });
   };
 
   const handleDeleteTeacher = (teacherId: string) => {
     setTeachers(teachers.filter(t => t.id !== teacherId));
     toast({
-      title: 'Success',
-      description: 'Teacher removed successfully',
+      title: t('success'),
+      description: t('teacher_removed_successfully'),
     });
   };
 
@@ -117,8 +119,8 @@ const ManageStaff = () => {
         : t
     ));
     toast({
-      title: 'Success',
-      description: 'Teacher status updated',
+      title: t('success'),
+      description: t('teacher_status_updated'),
     });
   };
 
@@ -131,8 +133,8 @@ const ManageStaff = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Manage Staff</h1>
-          <p className="text-muted-foreground">Manage teacher information and assignments</p>
+          <h1 className="text-3xl font-bold">{t('manage_staff')}</h1>
+          <p className="text-muted-foreground">{t('manage_teacher_information_and_assignments')}</p>
         </div>
         <AddTeacherDialog onAddTeacher={handleAddTeacher} />
       </div>
@@ -141,15 +143,15 @@ const ManageStaff = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Teaching Staff
+            {t('teaching_staff')}
           </CardTitle>
-          <CardDescription>View and manage all teaching staff members</CardDescription>
+          <CardDescription>{t('view_and_manage_all_teaching_staff_members')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
             <Search className="h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search teachers..."
+              placeholder={t('search_teachers')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="max-w-sm"
@@ -159,13 +161,13 @@ const ManageStaff = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Subjects</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Classes</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>{t('name')}</TableHead>
+                <TableHead>{t('subjects')}</TableHead>
+                <TableHead>{t('email')}</TableHead>
+                <TableHead>{t('phone')}</TableHead>
+                <TableHead>{t('classes')}</TableHead>
+                <TableHead>{t('status')}</TableHead>
+                <TableHead>{t('actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -177,7 +179,7 @@ const ManageStaff = () => {
                   <TableCell>{teacher.phone}</TableCell>
                   <TableCell>
                     <Badge variant="outline">
-                      {teacher.assignedClasses} classes
+                      {teacher.assignedClasses} {t('classes')}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -186,7 +188,7 @@ const ManageStaff = () => {
                       className="cursor-pointer"
                       onClick={() => handleToggleStatus(teacher.id)}
                     >
-                      {teacher.status}
+                      {t(teacher.status)}
                     </Badge>
                   </TableCell>
                   <TableCell>

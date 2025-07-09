@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { format, subDays } from 'date-fns';
 import { Calendar, CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 import {
@@ -44,9 +45,10 @@ const mockAttendanceData: AttendanceRecord[] = [
 
 const ViewAttendance = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
 
   if (!user || user.role !== 'student') {
-    return <div>Access denied. Student privileges required.</div>;
+    return <div>{t('access_denied')}. {t('student')} {t('privileges_required')}.</div>;
   }
 
   const getStatusIcon = (status: AttendanceStatus) => {
@@ -74,7 +76,7 @@ const ViewAttendance = () => {
 
     return (
       <Badge className={`${variants[status]} capitalize`}>
-        {status}
+        {t(status)}
       </Badge>
     );
   };
@@ -89,8 +91,8 @@ const ViewAttendance = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Attendance Record</h1>
-        <p className="text-muted-foreground">Track your attendance across all classes</p>
+        <h1 className="text-3xl font-bold">{t('attendance_record')}</h1>
+        <p className="text-muted-foreground">{t('track_your_attendance_across_all_classes')}</p>
       </div>
 
       {/* Summary Cards */}
@@ -103,11 +105,11 @@ const ViewAttendance = () => {
             <Card key={status}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm capitalize font-medium">{status}</div>
+                  <div className="text-sm capitalize font-medium">{t(status)}</div>
                   {getStatusIcon(status)}
                 </div>
                 <div className="mt-2 text-2xl font-bold">{count}</div>
-                <div className="text-xs text-muted-foreground">{percentage}% of total</div>
+                <div className="text-xs text-muted-foreground">{percentage}% {t('of_total')}</div>
               </CardContent>
             </Card>
           );
@@ -119,19 +121,19 @@ const ViewAttendance = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-student" />
-            Recent Attendance
+            {t('recent_attendance')}
           </CardTitle>
-          <CardDescription>Your attendance record for the past few days</CardDescription>
+          <CardDescription>{t('your_attendance_record_for_the_past_few_days')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Period</TableHead>
-                <TableHead>Teacher</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t('date')}</TableHead>
+                <TableHead>{t('subject')}</TableHead>
+                <TableHead>{t('period')}</TableHead>
+                <TableHead>{t('teacher')}</TableHead>
+                <TableHead>{t('status')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

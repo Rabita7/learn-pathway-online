@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { User, Mail, Phone, MapPin, Edit, Save, X, Users } from 'lucide-react';
 import {
   Card,
@@ -18,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const ParentEditProfile = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -32,14 +34,14 @@ const ParentEditProfile = () => {
   });
 
   if (!user || user.role !== 'parent') {
-    return <div>Access denied. Parent privileges required.</div>;
+    return <div>{t('access_denied')}. {t('parent')} {t('privileges_required')}.</div>;
   }
 
   const handleSave = () => {
     setIsEditing(false);
     toast({
-      title: "Profile updated",
-      description: "Your profile has been successfully updated.",
+      title: t('profile_updated_successfully'),
+      description: t('your_profile_has_been_successfully_updated'),
     });
   };
 
@@ -59,23 +61,23 @@ const ParentEditProfile = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Edit Profile</h1>
-          <p className="text-muted-foreground">Manage your personal information and settings</p>
+          <h1 className="text-3xl font-bold">{t('edit')} {t('profile')}</h1>
+          <p className="text-muted-foreground">{t('manage_your_personal_information_and_settings')}</p>
         </div>
         {!isEditing ? (
           <Button onClick={() => setIsEditing(true)} className="flex items-center gap-2">
             <Edit className="h-4 w-4" />
-            Edit Profile
+            {t('edit')} {t('profile')}
           </Button>
         ) : (
           <div className="flex gap-2">
             <Button onClick={handleSave} className="flex items-center gap-2">
               <Save className="h-4 w-4" />
-              Save
+              {t('save')}
             </Button>
             <Button variant="outline" onClick={handleCancel} className="flex items-center gap-2">
               <X className="h-4 w-4" />
-              Cancel
+              {t('cancel')}
             </Button>
           </div>
         )}
@@ -95,7 +97,7 @@ const ParentEditProfile = () => {
               <Users className="h-5 w-5" />
               {profileData.name}
             </CardTitle>
-            <CardDescription>Parent/Guardian</CardDescription>
+            <CardDescription>{t('parent')}/{t('guardian')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-2 text-sm">
@@ -115,13 +117,13 @@ const ParentEditProfile = () => {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>Your personal details and contact information</CardDescription>
+            <CardTitle>{t('personal_information')}</CardTitle>
+            <CardDescription>{t('your_personal_details_and_contact_information')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">{t('full_name')}</Label>
                 <Input
                   id="name"
                   value={profileData.name}
@@ -130,7 +132,7 @@ const ParentEditProfile = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
+                <Label htmlFor="email">{t('email')} {t('address')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -140,7 +142,7 @@ const ParentEditProfile = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">{t('phone')} {t('number')}</Label>
                 <Input
                   id="phone"
                   value={profileData.phone}
@@ -149,7 +151,7 @@ const ParentEditProfile = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="childName">Child's Name</Label>
+                <Label htmlFor="childName">{t('childs_name')}</Label>
                 <Input
                   id="childName"
                   value={profileData.childName}
@@ -160,7 +162,7 @@ const ParentEditProfile = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
+              <Label htmlFor="address">{t('address')}</Label>
               <Textarea
                 id="address"
                 value={profileData.address}
@@ -172,7 +174,7 @@ const ParentEditProfile = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="emergencyContact">Emergency Contact Name</Label>
+                <Label htmlFor="emergencyContact">{t('emergency_contact_name')}</Label>
                 <Input
                   id="emergencyContact"
                   value={profileData.emergencyContact}
@@ -181,7 +183,7 @@ const ParentEditProfile = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="emergencyPhone">Emergency Phone</Label>
+                <Label htmlFor="emergencyPhone">{t('emergency_phone')}</Label>
                 <Input
                   id="emergencyPhone"
                   value={profileData.emergencyPhone}
@@ -192,14 +194,14 @@ const ParentEditProfile = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">{t('bio')}</Label>
               <Textarea
                 id="bio"
                 value={profileData.bio}
                 onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
                 disabled={!isEditing}
                 rows={3}
-                placeholder="Tell us about yourself..."
+                placeholder={t('tell_us_about_yourself')}
               />
             </div>
           </CardContent>

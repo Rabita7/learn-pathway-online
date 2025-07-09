@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import {
   Card,
   CardContent,
@@ -20,9 +21,10 @@ import {
 
 const TeacherDashboard = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
 
   if (!user || user.role !== 'teacher') {
-    return <div>Access denied. Teacher privileges required.</div>;
+    return <div>{t('access_denied')}. {t('teacher')} {t('privileges_required')}.</div>;
   }
 
   const upcomingClasses = [
@@ -46,8 +48,8 @@ const TeacherDashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Welcome, {user.name}</h1>
-        <p className="text-gray-500">Today is {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        <h1 className="text-3xl font-bold">{t('welcome')}, {user.name}</h1>
+        <p className="text-gray-500">{t('today_is')} {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
       </div>
 
       {/* Top Cards */}
@@ -55,42 +57,42 @@ const TeacherDashboard = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Today's Classes
+              {t('todays_classes')}
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">3</div>
             <p className="text-xs text-muted-foreground">
-              Next class in 30 minutes
+              {t('next_class_in_30_minutes')}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Pending Assignments
+              {t('pending_assignments')}
             </CardTitle>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">28</div>
             <p className="text-xs text-muted-foreground">
-              Submissions to grade
+              {t('submissions_to_grade')}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Average Attendance
+              {t('average_attendance')}
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">92%</div>
             <p className="text-xs text-muted-foreground">
-              Across all your classes
+              {t('across_all_your_classes')}
             </p>
           </CardContent>
         </Card>
@@ -100,8 +102,8 @@ const TeacherDashboard = () => {
         {/* Schedule */}
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Today's Schedule</CardTitle>
-            <CardDescription>Your upcoming classes</CardDescription>
+            <CardTitle>{t('todays_schedule')}</CardTitle>
+            <CardDescription>{t('your_upcoming_classes')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -113,7 +115,7 @@ const TeacherDashboard = () => {
                     </div>
                     <div>
                       <p className="font-medium">{classItem.name}</p>
-                      <p className="text-xs text-muted-foreground">{classItem.room} • {classItem.students} students</p>
+                      <p className="text-xs text-muted-foreground">{classItem.room} • {classItem.students} {t('students')}</p>
                     </div>
                   </div>
                   <div className="text-sm font-medium">{classItem.time}</div>
@@ -126,8 +128,8 @@ const TeacherDashboard = () => {
         {/* Assignments */}
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Active Assignments</CardTitle>
-            <CardDescription>Assignments due soon</CardDescription>
+            <CardTitle>{t('active_assignments')}</CardTitle>
+            <CardDescription>{t('assignments_due_soon')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -135,11 +137,11 @@ const TeacherDashboard = () => {
                 <div key={index} className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
                   <div className="flex justify-between mb-1">
                     <h4 className="font-medium">{assignment.title}</h4>
-                    <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">Due {assignment.dueDate}</span>
+                    <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">{t('due')} {assignment.dueDate}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-muted-foreground">{assignment.class}</span>
-                    <span className="text-muted-foreground">Submissions: {assignment.submissions}</span>
+                    <span className="text-muted-foreground">{t('submissions')}: {assignment.submissions}</span>
                   </div>
                 </div>
               ))}
@@ -151,8 +153,8 @@ const TeacherDashboard = () => {
       {/* Attendance Overview */}
       <Card>
         <CardHeader>
-          <CardTitle>Attendance Overview</CardTitle>
-          <CardDescription>Last 30 days across all classes</CardDescription>
+          <CardTitle>{t('attendance_overview')}</CardTitle>
+          <CardDescription>{t('last_30_days_across_all_classes')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-3 gap-4">
@@ -161,7 +163,7 @@ const TeacherDashboard = () => {
                 <CheckCircle className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Present</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('present')}</p>
                 <p className="text-2xl font-bold">{attendanceStats.present}%</p>
               </div>
             </div>
@@ -170,7 +172,7 @@ const TeacherDashboard = () => {
                 <XCircle className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Absent</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('absent')}</p>
                 <p className="text-2xl font-bold">{attendanceStats.absent}%</p>
               </div>
             </div>
@@ -179,7 +181,7 @@ const TeacherDashboard = () => {
                 <Clock className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Tardy</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('tardy')}</p>
                 <p className="text-2xl font-bold">{attendanceStats.tardy}%</p>
               </div>
             </div>

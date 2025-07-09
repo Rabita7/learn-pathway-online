@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import { Book, Filter } from 'lucide-react';
 import { StudentAssignment } from '@/types/grades';
 import { mockStudentAssignments, mockTeacherSubjects } from '@/data/mockStudentGrades';
@@ -30,6 +31,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ViewAssignments = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const [selectedAssignment, setSelectedAssignment] = useState<StudentAssignment | null>(null);
   const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>('');
@@ -62,7 +64,7 @@ const ViewAssignments = () => {
   }, [selectedSubject]);
 
   if (!user || user.role !== 'teacher') {
-    return <div>Access denied. Teacher privileges required.</div>;
+    return <div>{t('access_denied')}. {t('teacher')} {t('privileges_required')}.</div>;
   }
 
   const handleViewAssignment = (assignment: StudentAssignment) => {
@@ -74,8 +76,8 @@ const ViewAssignments = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Student Assignments</h1>
-          <p className="text-muted-foreground">View and grade student assignments</p>
+          <h1 className="text-3xl font-bold">{t('student_assignments')}</h1>
+          <p className="text-muted-foreground">{t('view_and_grade_student_assignments')}</p>
         </div>
       </div>
 
@@ -83,7 +85,7 @@ const ViewAssignments = () => {
         <Filter className="h-5 w-5 text-muted-foreground" />
         <Select value={selectedSubject} onValueChange={setSelectedSubject}>
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Select Subject" />
+            <SelectValue placeholder={t('select_subject')} />
           </SelectTrigger>
           <SelectContent>
             {teacherSubjects.map(subject => (
@@ -97,10 +99,10 @@ const ViewAssignments = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Book className="h-5 w-5 text-teacher" />
-            Assignments
+            {t('assignments')}
           </CardTitle>
           <CardDescription>
-            Student submissions for {selectedSubject}
+            {t('student_submissions_for')} {selectedSubject}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -116,37 +118,37 @@ const ViewAssignments = () => {
           <DialogHeader>
             <DialogTitle>{selectedAssignment?.title}</DialogTitle>
             <DialogDescription>
-              Submitted by {selectedAssignment?.studentName} for {selectedAssignment?.subject}
+              {t('submitted_by')} {selectedAssignment?.studentName} {t('for')} {selectedAssignment?.subject}
             </DialogDescription>
           </DialogHeader>
 
           <Tabs defaultValue="submission">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="submission">Submission</TabsTrigger>
-              <TabsTrigger value="grading">Grading</TabsTrigger>
+              <TabsTrigger value="submission">{t('submission')}</TabsTrigger>
+              <TabsTrigger value="grading">{t('grading')}</TabsTrigger>
             </TabsList>
             <TabsContent value="submission" className="p-4">
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold">Status</h3>
+                  <h3 className="font-semibold">{t('status')}</h3>
                   <p>{selectedAssignment?.status}</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold">Due Date</h3>
+                  <h3 className="font-semibold">{t('due_date')}</h3>
                   <p>{selectedAssignment?.dueDate}</p>
                 </div>
                 {selectedAssignment?.submittedDate && (
                   <div>
-                    <h3 className="font-semibold">Submitted Date</h3>
+                    <h3 className="font-semibold">{t('submitted_date')}</h3>
                     <p>{selectedAssignment.submittedDate}</p>
                   </div>
                 )}
                 <div>
-                  <h3 className="font-semibold">Submission Content</h3>
+                  <h3 className="font-semibold">{t('submission_content')}</h3>
                   <p className="text-muted-foreground">
                     {selectedAssignment?.status === 'submitted' || selectedAssignment?.status === 'late' || selectedAssignment?.status === 'graded'
-                      ? "Student submission would appear here in a real application."
-                      : "No submission yet."
+                      ? t('student_submission_would_appear_here')
+                      : t('no_submission_yet')
                     }
                   </p>
                 </div>
@@ -155,13 +157,13 @@ const ViewAssignments = () => {
             <TabsContent value="grading" className="p-4">
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold">Current Grade</h3>
-                  <p>{selectedAssignment?.grade || "Not graded yet"}</p>
+                  <h3 className="font-semibold">{t('current_grade')}</h3>
+                  <p>{selectedAssignment?.grade || t('not_graded_yet')}</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold">Feedback</h3>
+                  <h3 className="font-semibold">{t('feedback')}</h3>
                   <p className="text-muted-foreground">
-                    Feedback functionality would be implemented here in a real application.
+                    {t('feedback_functionality_would_be_implemented_here')}
                   </p>
                 </div>
               </div>

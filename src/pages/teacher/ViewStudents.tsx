@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLocalization } from '@/context/LocalizationContext';
 import {
   Card,
   CardContent,
@@ -34,32 +35,33 @@ const mockStudents = [
 
 const ViewStudents = () => {
   const { user } = useAuth();
+  const { t } = useLocalization();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClass, setSelectedClass] = useState('All Classes');
+  const [selectedClass, setSelectedClass] = useState(t('all_classes'));
 
   if (!user || user.role !== 'teacher') {
-    return <div>Access denied. Teacher privileges required.</div>;
+    return <div>{t('access_denied')}. {t('teacher')} {t('privileges_required')}.</div>;
   }
 
   // Filter students based on search term and selected class
   const filteredStudents = mockStudents.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesClass = selectedClass === 'All Classes' || student.subjects.includes(selectedClass);
+    const matchesClass = selectedClass === t('all_classes') || student.subjects.includes(selectedClass);
     return matchesSearch && matchesClass;
   });
 
-  const classes = ['All Classes', 'Biology', 'Chemistry', 'Physics', 'Advanced Biology'];
+  const classes = [t('all_classes'), 'Biology', 'Chemistry', 'Physics', 'Advanced Biology'];
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">View Students</h1>
-          <p className="text-muted-foreground">Manage and view information about your students</p>
+          <h1 className="text-3xl font-bold">{t('view_students')}</h1>
+          <p className="text-muted-foreground">{t('manage_and_view_information_about_your_students')}</p>
         </div>
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-teacher" />
-          <span className="font-medium text-lg">{mockStudents.length} Total Students</span>
+          <span className="font-medium text-lg">{mockStudents.length} {t('total_students')}</span>
         </div>
       </div>
 
@@ -67,7 +69,7 @@ const ViewStudents = () => {
         <div className="relative w-full md:w-72">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search students..."
+            placeholder={t('search_students')}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -91,22 +93,22 @@ const ViewStudents = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <GraduationCap className="h-5 w-5 text-teacher" />
-            Student List
+            {t('student_list')}
           </CardTitle>
           <CardDescription>
-            {filteredStudents.length} students in {selectedClass}
+            {filteredStudents.length} {t('students')} {t('in')} {selectedClass}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Grade</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Attendance</TableHead>
-                <TableHead>Avg. Grade</TableHead>
-                <TableHead>Subjects</TableHead>
+                <TableHead>{t('name')}</TableHead>
+                <TableHead>{t('grade')}</TableHead>
+                <TableHead>{t('email')}</TableHead>
+                <TableHead>{t('attendance')}</TableHead>
+                <TableHead>{t('avg_grade')}</TableHead>
+                <TableHead>{t('subjects')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -131,7 +133,7 @@ const ViewStudents = () => {
               {filteredStudents.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                    No students found matching your criteria
+                    {t('no_students_found_matching_your_criteria')}
                   </TableCell>
                 </TableRow>
               )}
