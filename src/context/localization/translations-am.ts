@@ -1,3 +1,4 @@
+
 export const translationsAm = {
   // Common
   'welcome': 'እንኳን ደህና መጡ',
@@ -59,6 +60,7 @@ export const translationsAm = {
   'section': 'ክፍል',
   'course': 'ኮርስ',
   'not_found': 'አልተገኘም',
+  'bio': 'መግለጫ',
   
   // Auth
   'sign_in': 'ግባ',
@@ -145,6 +147,7 @@ export const translationsAm = {
   'total_classes': 'ጠቅላላ ክፍሎች',
   'classes_attended': 'የተገኙ ክፍሎች',
   'classes_missed': 'ያመለጡ ክፍሎች',
+  'tardy': 'መዘግየት',
   
   // Assignment Management
   'assignment': 'ምድብ',
@@ -263,7 +266,6 @@ export const translationsAm = {
   // Manager Dashboard
   'events': 'ክስተቶች',
   'tasks': 'ስራዎች',
-  'next': 'ቀጣይ',
   'field_trip': 'የመስክ ጉዞ',
   'overdue': 'ያረጀ',
   'recent_activity': 'የቅርብ ጊዜ እንቅስቃሴ',
@@ -343,7 +345,6 @@ export const translationsAm = {
   'this_letter_is_to_address': 'ይህ ደብዳቤ ለመፍትሄ የተዘጋጀ ነው',
   
   // View Students
-  'view_students': 'ተማሪዎችን ይመልከቱ',
   'manage_and_view_information_about_your_students': 'ስለ ተማሪዎችዎ መረጃ ያስተዳድሩ እና ይመልከቱ',
   'search_students': 'ተማሪዎችን ፈልግ...',
   'all_classes': 'ሁሉም ክፍሎች',
@@ -360,7 +361,6 @@ export const translationsAm = {
   'recent_attendance': 'የቅርብ ጊዜ ተሳትፎ',
   'your_attendance_record_for_the_past_few_days': 'ባለፉት ጥቂት ቀናት የእርስዎ የተሳትፎ መዝገብ',
   'period': 'ጊዜ',
-  'tardy': 'መዘግየት',
   
   // Assignments
   'student_assignments': 'የተማሪዎች ስራዎች',
@@ -381,18 +381,15 @@ export const translationsAm = {
   // Common
   'welcome_back': 'እንኳን በደህና መጡ',
   'grade': 'ክፍል',
-  'teacher': 'መምህር',
-  'clear': 'አጽዳ',
+  'school': 'ትምህርት ቤት',
+  'number': 'ቁጥር',
   
   // Profile Management
   'manage_your_personal_information_and_settings': 'የግል መረጃዎን እና ቅንብሮችን ያስተዳድሩ',
   'personal_information': 'የግል መረጃ',
   'your_personal_details_and_contact_information': 'የእርስዎ የግል ዝርዝሮች እና የመገናኛ መረጃ',
-  'full_name': 'ሙሉ ስም',
-  'number': 'ቁጥር',
   'tell_us_about_yourself': 'ስለራስዎ ይንገሩን...',
   'your_profile_has_been_successfully_updated': 'የእርስዎ መገለጫ በተሳካ ሁኔታ ተዘምኗል።',
-  'school': 'ትምህርት ቤት',
   
   // Staff Management Extended
   'manage_teacher_information_and_assignments': 'የመምህራን መረጃ እና ስራዎችን ያስተዳድሩ',

@@ -1,3 +1,4 @@
+
 export const translationsEn = {
   // Common
   'welcome': 'Welcome',
@@ -59,6 +60,7 @@ export const translationsEn = {
   'section': 'section',
   'course': 'course',
   'not_found': 'not found',
+  'bio': 'Bio',
   
   // Auth
   'sign_in': 'Sign In',
@@ -145,6 +147,7 @@ export const translationsEn = {
   'total_classes': 'Total Classes',
   'classes_attended': 'Classes Attended',
   'classes_missed': 'Classes Missed',
+  'tardy': 'Tardy',
   
   // Assignment Management
   'assignment': 'Assignment',
@@ -263,7 +266,6 @@ export const translationsEn = {
   // Manager Dashboard
   'events': 'Events',
   'tasks': 'Tasks',
-  'next': 'Next',
   'field_trip': 'Field Trip',
   'overdue': 'Overdue',
   'recent_activity': 'Recent Activity',
@@ -343,7 +345,6 @@ export const translationsEn = {
   'this_letter_is_to_address': 'This letter is to address',
   
   // View Students
-  'view_students': 'View Students',
   'manage_and_view_information_about_your_students': 'Manage and view information about your students',
   'search_students': 'Search students...',
   'all_classes': 'All Classes',
@@ -360,7 +361,6 @@ export const translationsEn = {
   'recent_attendance': 'Recent Attendance',
   'your_attendance_record_for_the_past_few_days': 'Your attendance record for the past few days',
   'period': 'Period',
-  'tardy': 'Tardy',
   
   // Assignments
   'student_assignments': 'Student Assignments',
@@ -381,18 +381,15 @@ export const translationsEn = {
   // Common
   'welcome_back': 'Welcome back',
   'grade': 'Grade',
-  'teacher': 'Teacher',
-  'clear': 'Clear',
+  'school': 'School',
+  'number': 'Number',
 
   // Profile Management
   'manage_your_personal_information_and_settings': 'Manage your personal information and settings',
   'personal_information': 'Personal Information',
   'your_personal_details_and_contact_information': 'Your personal details and contact information',
-  'full_name': 'Full Name',
-  'number': 'Number',
   'tell_us_about_yourself': 'Tell us about yourself...',
   'your_profile_has_been_successfully_updated': 'Your profile has been successfully updated.',
-  'school': 'School',
   
   // Staff Management Extended
   'manage_teacher_information_and_assignments': 'Manage teacher information and assignments',
