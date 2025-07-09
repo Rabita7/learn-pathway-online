@@ -1,3 +1,4 @@
+
 export const translationsAm = {
   // Common
   'welcome': 'እንኳን ደህና መጡ',
@@ -472,7 +473,6 @@ export const translationsAm = {
   'system_will_be_down_for_maintenance': 'ሲስተሙ በዚህ ሳምንት መጨረሻ ለጥገና ይዘጋል።',
   'new_curriculum_update': 'አዲስ የሥርዓተ ትምህርት ዝማኔ',
   'new_curriculum_updates_have_been_released': 'አዳዲስ የሥርዓተ ትምህርት ዝማኔዎች ተለቀዋል።',
-  'heres_whats_happening_in_your_school': 'በትምህርት ቤትዎ ውስጥ የሚሆነው ነገር ይህ ነው',
   'heres_whats_happening_in_your_school': 'በትምህርት ቤትዎ ውስጥ የሚሆነው ነገር ይህ ነው',
   'recent_announcements': 'የቅርብ ጊዜ ማስታወቂያዎች',
   'latest_announcements_posted_in_system': 'በሲስተሙ ውስጥ የቀረቡ የቅርብ ጊዜ ማስታወቂያዎች',
