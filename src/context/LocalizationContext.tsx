@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language, LocalizationContextType, LocalizationProviderProps } from './localization/types';
-import { translationsEn } from './localization/translations-en';
+import { translationsEn } from './localization/translations/en';
 import { translationsAm } from './localization/translations-am';
 
 const LocalizationContext = createContext<LocalizationContextType | undefined>(undefined);
@@ -47,3 +47,4 @@ export const LocalizationProvider: React.FC<LocalizationProviderProps> = ({ chil
 
 // Re-export types for backward compatibility
 export type { Language };
+
