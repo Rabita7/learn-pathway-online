@@ -1,4 +1,3 @@
-
 export const translationsEn = {
   // Common
   'welcome': 'Welcome',
@@ -573,4 +572,47 @@ export const translationsEn = {
   'load_more': 'Load more',
   'no_results': 'No results',
   'try_different_criteria': 'Try different criteria',
+  
+  // Home Page Localization
+  'everything_you_need_in_one_place': 'Everything You Need in One Place',
+  'all_in_one_school_management': 'All-in-one School Management',
+  'manage_students_teachers_classes_grades_attendance': 'Manage students, teachers, classes, grades, and attendance in one unified platform.',
+  'role_based_access_secure': 'Role-based Access',
+  'different_interfaces_for_roles': 'Different interfaces for administrators, teachers, students, and parents.',
+  'scheduling_easy_to_use': 'Scheduling',
+  'easy_class_scheduling_calendar_management': 'Easy-to-use class scheduling and calendar management for everyone.',
+  'communication_streamlined': 'Communication',
+  'streamlined_communication_between_stakeholders': 'Streamlined communication between all stakeholders in the education process.',
+  'ready_to_get_started': 'Ready to Get Started?',
+  'join_bright_future_school_today': 'Join Bright Future School today and experience a better way to manage education.',
+  'create_your_account': 'Create Your Account',
+  'learn_about_our_services': 'Learn About Our Services',
+  'go_to_dashboard': 'Go to Dashboard',
+  'sign_in': 'Sign In',
+  'create_account': 'Create Account',
+  'a_comprehensive_platform_connecting': 'A comprehensive platform connecting students, teachers, parents, and administrators for a seamless educational experience.',
+  
+  // Actor Dashboard Titles
+  'admin_panel': 'Admin Panel',
+  'teacher_panel': 'Teacher Panel', 
+  'student_panel': 'Student Panel',
+  'parent_panel': 'Parent Panel',
+  'director_panel': 'Director Panel',
+  'welcome_to_dashboard': 'Welcome to your dashboard',
+  'overview_of_activities': 'Here\'s an overview of your activities',
+  'manage_your_role': 'Manage your role responsibilities',
+  
+  // Dashboard Welcome Messages
+  'welcome_to_admin_dashboard': 'Welcome to your admin dashboard',
+  'welcome_to_teacher_dashboard': 'Welcome to your teacher dashboard',
+  'welcome_to_student_dashboard': 'Welcome to your student dashboard', 
+  'welcome_to_parent_dashboard': 'Welcome to your parent dashboard',
+  'welcome_to_director_dashboard': 'Welcome to your director dashboard',
+  
+  // Dashboard Descriptions
+  'admin_dashboard_description': 'Manage the entire school system from here',
+  'teacher_dashboard_description': 'Access your classes, students, and teaching resources',
+  'student_dashboard_description': 'View your assignments, grades, and school updates',
+  'parent_dashboard_description': 'Monitor your child\'s academic progress and school activities',
+  'director_dashboard_description': 'Oversee school operations and strategic management',
 };
